@@ -1,0 +1,10 @@
+{
+  "description": "Create stunning mobile interfaces with complex UI animations, enhancing user engagement and experience for sports-related applications.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

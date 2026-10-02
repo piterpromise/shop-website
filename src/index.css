@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+
+
+/* CSS personnalisé pour les inputs animés */
+.input-effect {
+  position: relative;
+  width: 100%;
+}
+.effect-20 {
+  border: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+}
+.effect-20 ~ .focus-border:before,
+.effect-20 ~ .focus-border:after {
+  content: ""; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 0; 
+  height: 1px; 
+  background-color: #000; /* Adapté au thème */
+  transition: 0.3s;
+}
+.effect-20 ~ .focus-border:after {
+  top: auto; 
+  bottom: 0; 
+  left: auto; 
+  right: 0;
+}
+.effect-20 ~ .focus-border i:before,
+.effect-20 ~ .focus-border i:after {
+  content: ""; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 1px; 
+  height: 0; 
+  background-color: #000; 
+  transition: 0.4s;
+}
+.effect-20 ~ .focus-border i:after {
+  left: auto; 
+  right: 0; 
+  top: auto; 
+  bottom: 0;
+}
+.effect-20:focus ~ .focus-border:before,
+.effect-20:focus ~ .focus-border:after,
+.has-content.effect-20 ~ .focus-border:before,
+.has-content.effect-20 ~ .focus-border:after {
+  width: 100%; 
+  transition: 0.3s;
+}
+.effect-20:focus ~ .focus-border i:before,
+.effect-20:focus ~ .focus-border i:after,
+.has-content.effect-20 ~ .focus-border i:before,
+.has-content.effect-20 ~ .focus-border i:after {
+  height: 100%; 
+  transition: 0.4s;
+}
+.effect-20 ~ label {
+  position: absolute; 
+  left: 0; 
+  width: 100%; 
+  top: 10px; 
+  color: #aaa; 
+  transition: 0.3s; 
+  z-index: -1; 
+  letter-spacing: 0.5px;
+}
+.effect-20:focus ~ label, 
+.has-content.effect-20 ~ label {
+  top: -18px; 
+  left: 0; 
+  font-size: 12px; 
+  color: #000; 
+  transition: 0.3s;
+}
+
+@keyframes drawArrow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  10% {
+    stroke-dashoffset: 0;
+  }
+  95% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  98% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+}
+
+.animate-draw-arrow path,
+.animate-draw-arrow polyline,
+.animate-draw-arrow line {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawArrow 10s infinite;
+}

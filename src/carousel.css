@@ -1,0 +1,167 @@
+@property --p {
+	syntax: '<number>';
+	initial-value: 0;
+	inherits: true;
+}
+
+@property --v {
+	syntax: '<number>';
+	initial-value: 0;
+	inherits: true;
+}
+
+.carousel-section {
+	--p: var(--k);
+	--abs-p: abs(var(--k) - var(--p));
+	--end: clamp(0, var(--abs-p) - 1, 1);
+	--dir: calc((1 - 2*var(--end))*sign(var(--k) - var(--p)));
+	--fwd: calc(.5*(1 + var(--dir)));
+	--v: var(--k);
+	--abs-v: abs(var(--v) - var(--p));
+	--prg: calc(var(--abs-v)/(1 - var(--end) + var(--end)*(var(--n) - 1)));
+	grid-gap: 0.5em;
+	grid-template:
+		340px
+		/* Row 1: Image stack */
+		max-content
+		/* Row 2: Title */
+		max-content
+		/* Row 3: Dots */
+		max-content / 1fr;
+	/* Row 4: Description */
+	place-self: center;
+	color: #ffffff;
+	font: 1em poppins, sans-serif;
+	counter-reset: k calc(1 + var(--k)) n var(--n);
+	transition: --p 0s 0.8s, --v 0.8s;
+	display: grid;
+	width: 100%;
+	max-width: 440px;
+}
+
+@supports not (scale: Abs(-2)) {
+	.carousel-section {
+		--abs-p: max(var(--k) - var(--p), var(--p) - var(--k));
+		--abs-v: max(var(--v) - var(--p), var(--p) - var(--v));
+	}
+}
+
+@supports not (scale: Sign(-2)) {
+	.carousel-section {
+		--dir: clamp(-1, (var(--k) - var(--p))*100000, 1);
+	}
+}
+
+.carousel-section article {
+	--abs-top: abs(var(--k) - var(--i));
+	--not-top: min(1, var(--abs-top));
+	--top: calc(1 - var(--not-top));
+	--val-mov: ((1 - var(--fwd))*var(--p) + var(--fwd)*var(--k) - var(--i));
+	--abs-mov: abs(var(--val-mov));
+	--not-mov: min(1, var(--abs-mov));
+	--mov: calc(1 - var(--not-mov));
+	grid-area: 1/ 1/ -1/ -1;
+	grid-template: subgrid/ subgrid;
+	display: grid;
+	z-index: mod(calc(var(--n) - 1 + var(--i) - var(--k)), var(--n));
+	transition: z-index 0.8s cubic-bezier(1, -.9, 0, 1.9);
+}
+
+@supports not (scale: Abs(-2)) {
+	.carousel-section article {
+		--abs-top: max(var(--k) - var(--i), var(--i) - var(--k));
+		--abs-mov: max(var(--val-mov), -1*var(--val-mov));
+	}
+}
+
+.carousel-section h2,
+.carousel-section em {
+	translate: 0 calc(var(--not-top)*1lh);
+	opacity: var(--top);
+	transition: 0.4s calc(var(--top)*0.4s);
+	transition-property: translate, opacity;
+	text-align: center;
+}
+
+.carousel-section h2 {
+	grid-area: 2/ 1;
+	font-size: 2.25rem;
+	font-weight: 700;
+	color: #ffffff;
+	margin-top: 12rem;
+}
+
+.carousel-section em {
+	grid-area: 4/ 1;
+	font-style: normal;
+	font-size: 1.1rem;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.carousel-section img {
+	--sin: sin(var(--prg)*.5turn);
+	grid-area: 1/ 1;
+	border: none;
+	height: 480px;
+	width: 500px;
+	object-fit: cover;
+	border-radius: 1.5em;
+	translate: calc(-150%*var(--mov)*sqrt(var(--sin)));
+	rotate: calc((1 - var(--sin))*var(--a));
+}
+
+.carousel-dots-container {
+	display: flex;
+	gap: 0.75rem;
+	grid-area: 3/ 1;
+	justify-content: center;
+	align-items: center;
+	z-index: calc((1 - min(1, var(--abs-p)))*var(--n) + 10);
+	margin: 1rem 0 0.5rem 0;
+}
+
+.carousel-dot-btn {
+	border: none;
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+	background-color: rgba(255, 255, 255, 0.3);
+	transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s;
+	cursor: pointer;
+	padding: 0;
+}
+
+.carousel-dot-btn.active {
+	width: 36px;
+	background-color: #ffffff;
+}
+
+.carousel-arrow-btn {
+	background: rgba(255, 255, 255, 0.15);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+	padding: 0;
+	margin: 0 0.25rem;
+}
+
+.carousel-arrow-btn:hover {
+	background-color: #D2FF72;
+	color: #000000;
+	border-color: #D2FF72;
+	transform: scale(1.12);
+	box-shadow: 0 4px 15px rgba(210, 255, 114, 0.4);
+}
+
+.carousel-arrow-btn:active {
+	transform: scale(0.92);
+}

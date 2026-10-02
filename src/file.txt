@@ -1,0 +1,262 @@
+Pug :
+- let cats = {
+- 	'Tiger': {
+- 		name: 'Panthera tigris', 
+- 		code: '1501705388883-4ed8a543392c', 
+- 		desc: 'tiger in the water'
+- 	}, 
+- 	'Lion': {
+- 		name: 'Panthera leo', 
+- 		code: '1519066629447-267fffa62d4b', 
+- 		desc: 'lion and lioness resting on a rock in the sun'
+- 	}, 
+- 	'Leopard': {
+- 		name: 'Panthera pardus', 
+- 		code: '1566489564594-f2163930c034', 
+- 		desc: 'blue-eyed leopard resting high up with its head on its front paws'
+- 	}, 
+- 	'Jaguar': {
+- 		name: 'Panthera onca', 
+- 		code: '1601544359642-c76c4f7c3221', 
+- 		desc: 'jaguar closeup'
+- 	}, 
+- 	'Snow leopard': {
+- 		name: 'Panthera uncia', 
+- 		code: '1689847190291-f8e0823f13ab', 
+-			desc: 'snow leopard lying low on some rocks, its fur blending in perfecty'
+- 	}, 
+- 	'Cheetah': {
+- 		name: 'Acinonyx jubatus', 
+- 		code: '1693702366986-cbfbd1cf0450', 
+- 		desc: 'cheetah in the grass at dusk'
+- 	}, 
+- 	'Cougar': {
+- 		name: 'Puma concolor', 
+- 		code: '1661004527094-07d861089aed', 
+- 		desc: 'cougar walking through the snow'
+- 	}
+- };
+- let e = Object.entries(cats), n = e.length;
+- let m = 15;
+
+- function rand(max, min, prc = 2)
+	- return +(min + (max - min)*Math.random()).toFixed(2)
+
+section(style=`--n: ${n}; --k: 0`)
+	- for(let i = 0 ; i < n; i++)
+		- let v = e[i][1];
+		article(style=`--i: ${i}; --a: ${rand(m, -1*m)}deg`)
+			h2 #{e[i][0]}
+			em #{v.name}
+			img(src=`https://images.unsplash.com/photo-${v.code}?w=400` alt=v.desc)
+	div
+		button(aria-label='previous' data-inc='-1')
+		button(aria-label='next' data-inc='1')
+
+
+
+
+SCSS :
+$t: .8s;
+
+/* register these two so they can be transitioned */
+/* index of previous top item during the animation
+ * after another has been selected */
+@property --p {
+	syntax: '<number>';
+	initial-value: 0;
+	inherits: true
+}
+/* animated index of top item from previous to current */
+@property --v {
+	syntax: '<number>';
+	initial-value: 0;
+	inherits: true
+}
+
+* { margin: 0 } /* poor man's reset */
+/* grid everything! */
+html, body, section, article, button { display: grid }
+/* full viewport height container for stack section */
+html { min-height: 100% }
+body { background: #070410 }
+
+section {
+	/* set previous top item index to current top index
+	 * 0s duration delayed transition ensures switch happens 
+	 * after the switching top item transtion */
+	--p: var(--k);
+	/* abs of difference between current & previous top item indices
+	 * 0 if not during animation, 
+	 * 1 during animation not between two ends, 
+	 * n - 1 > 1 (if n > 2) during animation from one end to another */
+	--abs-p: abs(var(--k) - var(--p));
+	/* animation from one end of the n > 2 length list to another?
+	 * 0 if no, 1 if yes */
+	--end: clamp(0, var(--abs-p) - 1, 1);
+	/* direction we're going in given by 
+	 * sign of difference between current & previous top item indices
+	 * -1 backwards, 1 forwards, 0 no animation;
+	 * switch sign IF we're going from an end to another */
+	--dir: calc((1 - 2*var(--end))*sign(var(--k) - var(--p)));
+	/*  forward direction flag: 0 backwards, 1 forwards */
+	--fwd: calc(.5*(1 + var(--dir)));
+	/* set animated value of top item index to current top index
+	 * a transition ensures switch doesn't happen instantly */
+	--v: var(--k);
+	/* absolute value of difference between animated & previous top index */
+	--abs-v: abs(var(--v) - var(--p));
+	/* animation progress as a decimal value */
+	--prg: calc(var(--abs-v)/(1 - var(--end) + var(--end)*(var(--n) - 1)));
+	/* bigger space between the two columns (image stack & all else) */
+	grid-gap: .5em 4em;
+	grid-template: /* 4 row, 2 col grid */
+		repeat(2, max-content) 1fr max-content/ 
+		max-content 1fr;
+	place-self: center;
+	color: #f1f5f9;
+	font: 1em poppins, sans-serif;
+	counter-reset: k calc(1 + var(--k)) n var(--n);
+	/* transition previous & animated top item indices 
+	 * so they don't change instantly like the current one */
+	transition: --p 0s $t, --v $t;
+	
+	/* counter & binomial name faded */
+	&::before, em { color: RGB(from currentColor r g b/ .6) }
+	
+	&::before { /* counter */
+		grid-area: 1/ 2; /* all grid areas need to be set manually */
+		width: 3ch;
+		text-align: right;
+		content: counter(k) '/' counter(n)
+	}
+	
+	/* this ridiculousness needed for Chrome without flag */
+	/* for reference
+	 * https://css-tricks.com/using-absolute-value-sign-rounding-and-modulo-in-css-today/ */
+	@supports not (scale: Abs(-2)) {
+		--abs-p: max(var(--k) - var(--p), var(--p) - var(--k));
+		--abs-v: max(var(--v) - var(--p), var(--p) - var(--v))
+	}
+	
+	@supports not (scale: Sign(-2)) {
+		--dir: clamp(-1, (var(--k) - var(--p))*100000, 1)
+	}
+}
+
+article {
+	/* absolute value difference between 
+	 * currently top item index and current item index */
+	--abs-top: abs(var(--k) - var(--i));
+	/* not top item if the absoute value difference ≥ 1
+	 * top if the difference is 0 */
+	--not-top: min(1, var(--abs-top));
+	/* top flag is the negation */
+	--top: calc(1 - var(--not-top));
+	/* difference between moving image index which is 
+	 * previous top item index --p if going backwards, 
+	 * current top item index --k if going forwards 
+	 * and current item index --i */
+	--val-mov: ((1 - var(--fwd))*var(--p) + var(--fwd)*var(--k) - var(--i));
+	--abs-mov: abs(var(--val-mov));
+	/* not moving image if the absoute value difference > 1
+	 * moving image if the difference is 0 */
+	--not-mov: min(1, var(--abs-mov));
+	/* moving flag is the negation */
+	--mov: calc(1 - var(--not-mov));
+	grid-area: 1/ 1/ -1/ -1; /* stack to occupy entire parent grid */
+	grid-template: subgrid/ subgrid; /* and inherit template */
+	/* debatable whether z-index is the best way 
+	 * maybe CSS 3D transforms would be a better idea */
+	/* depends on number of items, its own index and top item index */
+	z-index: mod(calc(var(--n) - 1 + var(--i) - var(--k)), var(--n));
+	/* transition z-index */
+	transition: z-index $t cubic-bezier(1, -.9, 0, 1.9);
+	
+	/* this ridiculousness needed for Chrome without flag */
+	@supports not (scale: Abs(-2)) {
+		--abs-top: max(var(--k) - var(--i), var(--i) - var(--k));
+		--abs-mov: max(var(--val-mov), -1*var(--val-mov));
+	}
+}
+
+h2, em {
+	/* fade out and slide down when not top item anymore,
+	 * delayed fade in and slide up when becoming top item */
+	translate: 0 calc(var(--not-top)*1lh);
+	opacity: var(--top);
+	transition: .5*$t calc(var(--top)*.5*#{$t});
+	transition-property: translate, opacity
+}
+
+/* need to specify grid-area for all */
+h2 { grid-area: 2/ 2 }
+em { grid-area: 3/ 2 }
+
+img {
+	/* value that grows from 0 to 1, then goes back to 0 
+	 * during the switching top items transition */
+	--sin: sin(var(--prg)*.5turn);
+	grid-area: 1/ 1/ -1; /* occupy entire first column */
+	/* slight glow effect */
+	border: solid 2px rgba(82, 82, 122, .5);
+	/* whatever, maybe better ways for setting dims */
+	height: 13em;
+	aspect-ratio: 1;
+	object-fit: cover; /* fill with no distortion */
+	border-radius: .75em;
+	/* slide just moving image out & back in */
+	translate: calc(-150%*var(--mov)*sqrt(var(--sin)));
+	/* random rotation, but not during slide out & back in transition */
+	rotate: calc((1 - var(--sin))*var(--a))
+}
+
+div { /* button wrapper */
+	display: flex;
+	gap: 2em;
+	grid-area: 4/ 2;
+	/* prevent button clicks during animation */
+	z-index: calc((1 - min(1, var(--abs-p)))*var(--n))
+}
+
+button { /* prettify button */
+	--sgn: -1;
+	--prc: calc(var(--hov, 0)*100%);
+	--c: color-mix(in hsl, #818cf8 var(--prc), #52527a);
+	border: none;
+	width: 1lh;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: RGB(from var(--c) r g b/ .2);
+	color: color-mix(in hsl, #818cf8 var(--prc), currentcolor);
+	font: 900 2em/ 1.5 sans-serif;
+	transition: .3s ease-out;
+	transition-property: background-color, color;
+	
+	&::before { /* arrow, SVG likely better, whatever */
+		place-self: center;
+		border: solid 2px;
+		border-width: 2px 2px 0 0;
+		width: 35%;
+		aspect-ratio: 1;
+		translate: calc(var(--sgn)*-15%);
+		rotate: 45deg;
+		scale: var(--sgn);
+		content: ''
+	}
+	
+	&[data-inc='1'] { --sgn: 1; }
+	&:is(:hover, :focus) { --hov: 1 }
+}
+
+JS :
+/* all the JS does is update current top item index */
+const S = document.querySelector('section').style /* wrapper style */, 
+			N = +S.getPropertyValue('--n') /* number of items */;
+
+let k = +S.getPropertyValue('--k') /* idx of current top item */;
+
+addEventListener('click', e => {
+	let v = +e.target.dataset.inc /* value (±1) to change top idx by */;
+	if(v) S.setProperty('--k', k = ((k + v + N)%N))
+})
