@@ -6,204 +6,565 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Poppins', sans-serif;
 }
 
 .onboarding-container {
   width: 100%;
   height: 100dvh;
   position: relative;
-  background-color: black;
+  background-color: #050507;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 0.55rem;
+  box-sizing: border-box;
 }
 
-.images-container {
-  flex: 1;
-  width: 100%;
-  padding: 1rem;
-  gap: 1rem;
-  display: flex;
-  min-height: 0;
-}
+/* ==========================================================================
+   SCÈNE BENTO DYNAMIQUE : ÉTIREMENT & EXTENSION D'IMAGE EN ENTIER (10s)
+   ========================================================================== */
 
-.col-left,
-.col-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  height: 100%;
-  min-height: 0;
-}
-
-.img-card {
-  background-color: #1f2937;
-  border-radius: 1.5rem;
-  overflow: hidden;
+.onboarding-bento-stage {
   position: relative;
-  min-height: 0;
-}
-
-.img-card.tall {
-  flex: 1.5;
-  min-height: 0;
-}
-
-.img-card.short {
-  flex: 1;
-  min-height: 0;
-}
-
-.img-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
-.bottom-section {
-  display: flex;
-  gap: 1rem;
-  padding: 0 1rem 1rem;
-  flex-shrink: 0;
+.bento-cell-wrapper {
+  position: absolute;
+  padding: 0.45rem;
+  box-sizing: border-box;
+  will-change: top, left, width, height, opacity, transform;
+}
+
+.bento-cell-wrapper.is-neighbor {
+  cursor: pointer;
+}
+
+.bento-cell-wrapper.is-hidden {
+  pointer-events: none;
+}
+
+.bento-card-inner {
   position: relative;
-  z-index: 10;
-  align-items: stretch;
-  height: 38%;
-}
-
-.green-card-wrapper {
-  width: 30%;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
-  display: flex;
-}
-
-.bottom-image-wrapper {
-  flex: 1;
-  border-radius: 2rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.75rem;
   overflow: hidden;
-  position: relative;
+  background-color: #0b0d11;
+  border: 1.5px solid #181b22;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
-.bottom-image {
+.bento-cell-wrapper.is-expanded .bento-card-inner {
+  border-color: #232730;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.68);
+}
+
+.bento-cell-wrapper.is-neighbor:hover .bento-card-inner {
+  border-color: #2b303c;
+}
+
+/* Image principale : width 100% & height 100% plein cadre (zéro marge interne) */
+.bento-img-main {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 22%;
   display: block;
+  transition: object-position 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.6s ease;
+}
+
+.bento-cell-wrapper.is-neighbor .bento-img-main {
+  object-fit: cover;
+  object-position: center 22%;
+  filter: brightness(0.88);
+}
+
+.bento-cell-wrapper.is-neighbor:hover .bento-img-main {
+  filter: brightness(0.98);
+}
+
+.bento-cell-wrapper.is-expanded .bento-img-main {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(1.02);
+}
+
+.bento-cell-wrapper.is-expanded .bento-img-main.is-landscape {
+  object-position: center center;
+}
+
+/* Voile dégradé subtil pour la lisibilité des badges et légendes */
+.bento-card-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 7, 0.38) 0%,
+    rgba(5, 5, 7, 0) 26%,
+    rgba(5, 5, 7, 0.04) 64%,
+    rgba(5, 5, 7, 0.76) 100%
+  );
+  pointer-events: none;
+}
+
+/* Légende & Barre de Progression 10s sur l'image active étirée */
+.bento-expanded-caption {
+  position: absolute;
+  left: 1.35rem;
+  right: 1.35rem;
+  bottom: 1.25rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1.2rem;
+  background-color: rgba(10, 12, 16, 0.72);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+}
+
+.bento-caption-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.bento-caption-cat {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #D2FF72;
+}
+
+.bento-caption-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.bento-caption-sub {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.76);
+  margin: 0;
+}
+
+.bento-timer-track {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.bento-timer-fill {
+  height: 100%;
+  background-color: #D2FF72;
+  border-radius: 999px;
+}
+
+/* ==========================================================================
+   DOCK FLOTTANT & MINI-BOUTON DU BOX VERT (Toujours accessible sans attendre)
+   ========================================================================== */
+
+.onboarding-floating-dock {
+  position: fixed;
+  left: 1.6rem;
+  bottom: 1.5rem;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.green-launcher-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem;
+  border-radius: 999px;
+  background-color: rgba(10, 12, 16, 0.86);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(210, 255, 114, 0.35);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55);
+}
+
+.green-mini-trigger-btn {
+  position: relative;
+  appearance: none;
+  border: none;
+  background-color: #D2FF72;
+  color: #0b0d11;
+  padding: 0.58rem 1rem;
+  border-radius: 999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(210, 255, 114, 0.28);
+}
+
+.mini-trigger-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #0b0d11;
+  animation: greenPulseDot 2s infinite ease-in-out;
+}
+
+@keyframes greenPulseDot {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+.mini-trigger-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mini-trigger-badge {
+  padding: 0.14rem 0.48rem;
+  border-radius: 999px;
+  background-color: rgba(11, 13, 17, 0.12);
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.green-quick-start-btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-color: #14171f;
+  color: #ffffff;
+  padding: 0.58rem 1rem;
+  border-radius: 999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.green-quick-start-btn:hover {
+  background-color: #ffffff;
+  color: #0b0d11;
+  border-color: #ffffff;
+}
+
+/* Sélecteur de diapositives 01..05 + Pause */
+.onboarding-step-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.32rem 0.45rem;
+  border-radius: 999px;
+  background-color: rgba(10, 12, 16, 0.82);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.onboarding-step-pill {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.62);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.onboarding-step-pill:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.onboarding-step-pill.active {
+  background-color: #D2FF72;
+  color: #0b0d11;
+}
+
+.onboarding-pause-btn {
+  appearance: none;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.onboarding-pause-btn:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+/* ==========================================================================
+   POPOVER DU BOX VERT COMPLET (Déployé au clic sur le mini-bouton)
+   ========================================================================== */
+
+.green-card-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background-color: rgba(3, 7, 18, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.green-card-floating-popover {
+  position: fixed;
+  left: 1.6rem;
+  bottom: 5.2rem;
+  z-index: 50;
+  width: min(410px, calc(100vw - 3.2rem));
 }
 
 .green-card {
+  position: relative;
   background-color: #D2FF72;
-  color: black;
-  padding: 2rem;
+  color: #0b0d11;
+  padding: 2rem 1.85rem 1.85rem;
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.9rem;
   align-items: center;
   text-align: center;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+.green-card-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(11, 13, 17, 0.1);
+  color: #0b0d11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.green-card-close-btn:hover {
+  background-color: rgba(11, 13, 17, 0.2);
+  transform: scale(1.06);
+}
+
+.green-card-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  background-color: rgba(11, 13, 17, 0.1);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
 }
 
 .green-card h1 {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+  font-size: 1.95rem;
+  line-height: 1.15;
   font-weight: 800;
   letter-spacing: -0.025em;
-  margin-top: 0.5rem;
+  margin: 0;
 }
 
 .green-card p {
-  color: #374151;
+  color: #27303f;
+  font-size: 0.9rem;
   font-weight: 500;
-  line-height: 1.625;
-  max-width: 260px;
+  line-height: 1.55;
+  max-width: 310px;
+  margin: 0;
 }
 
-.green-card button {
+.green-card-active-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.55);
+  font-size: 0.74rem;
+  color: #111827;
+}
+
+.green-card-active-preview .preview-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #111827;
+}
+
+.green-card-cta-btn {
   width: 100%;
-  margin-top: 1rem;
-  background-color: black;
-  color: white;
+  margin-top: 0.35rem;
+  background-color: #0b0d11;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   border-radius: 9999px;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 1rem 1.4rem;
   font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
   font-family: 'Poppins', sans-serif;
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.2s ease;
 }
 
-.green-card button:hover {
-  transform: scale(1.05);
+.green-card-cta-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
 }
 
-.green-card button:active {
-  transform: scale(0.95);
+.green-card-cta-btn:active {
+  transform: scale(0.97);
 }
 
-/* Responsive design for Onboarding page */
-@media (max-width: 1024px) {
-  .green-card-wrapper {
-    width: 40%;
-  }
-  .green-card h1 {
-    font-size: 1.75rem;
-    line-height: 2rem;
-  }
-}
-
+/* Responsive mobile / tablette (95% de largeur sur téléphone) */
 @media (max-width: 768px) {
   .onboarding-container {
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
+    width: 95%;
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 0.45rem 0;
   }
-  .images-container {
-    height: 380px;
-    flex-shrink: 0;
-  }
-  .bottom-section {
-    flex-direction: column;
-    height: auto;
-    gap: 1rem;
-  }
-  .green-card-wrapper {
-    width: 100%;
-  }
-  .green-card {
-    padding: 1.5rem;
-    width: 100%;
-  }
-  .green-card h1 {
-    font-size: 1.5rem;
-    line-height: 1.75rem;
-  }
-  .bottom-image-wrapper {
-    height: 200px;
-    width: 100%;
-  }
-}
 
-@media (max-width: 480px) {
-  .images-container {
-    height: 300px;
-    padding: 0.5rem;
-    gap: 0.5rem;
+  .bento-cell-wrapper {
+    padding: 0.25rem;
   }
+
+  .bento-card-inner {
+    border-radius: 1.35rem;
+  }
+
+  .onboarding-floating-dock {
+    left: 2.5%;
+    right: 2.5%;
+    bottom: 0.85rem;
+    justify-content: space-between;
+    gap: 0.45rem;
+  }
+
+  .green-launcher-group {
+    padding: 0.24rem;
+    gap: 0.3rem;
+    max-width: 100%;
+  }
+
+  .green-mini-trigger-btn {
+    padding: 0.48rem 0.72rem;
+    font-size: 0.7rem;
+    gap: 0.35rem;
+  }
+
+  .mini-trigger-badge {
+    display: none;
+  }
+
+  .green-quick-start-btn {
+    padding: 0.48rem 0.75rem;
+    font-size: 0.7rem;
+  }
+
+  .onboarding-step-pills {
+    padding: 0.24rem 0.35rem;
+    gap: 0.2rem;
+  }
+
+  .onboarding-step-pill,
+  .onboarding-pause-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.62rem;
+  }
+
+  .bento-expanded-caption {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.85rem;
+    padding: 0.7rem 0.9rem;
+    gap: 0.45rem;
+    border-radius: 1rem;
+  }
+
+  .bento-caption-cat {
+    font-size: 0.56rem;
+  }
+
+  .bento-caption-title {
+    font-size: 0.98rem;
+  }
+
+  .bento-caption-sub {
+    font-size: 0.7rem;
+    line-height: 1.35;
+  }
+
+  .green-card-floating-popover {
+    left: 2.5%;
+    right: 2.5%;
+    bottom: 4.5rem;
+    width: 95%;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  .green-card {
+    padding: 1.5rem 1.25rem 1.35rem;
+    border-radius: 1.5rem;
+  }
+
   .green-card h1 {
-    font-size: 1.35rem;
-    line-height: 1.6rem;
+    font-size: 1.45rem;
   }
+
   .green-card p {
-    font-size: 0.875rem;
+    font-size: 0.82rem;
   }
 }

@@ -165,3 +165,40 @@
 .carousel-arrow-btn:active {
 	transform: scale(0.92);
 }
+
+@media (max-width: 768px) {
+	.carousel-section {
+		grid-template:
+			335px
+			max-content
+			max-content
+			max-content / 1fr;
+		grid-gap: 1.1rem;
+		max-width: 100%;
+		margin-top: 0.75rem;
+		padding-top: 0.5rem;
+	}
+
+	.carousel-section img {
+		width: min(285px, 78vw);
+		height: 305px;
+		place-self: center;
+		border-radius: 1.35em;
+	}
+
+	.carousel-section h2 {
+		font-size: 1.7rem;
+		margin-top: 0.75rem;
+		margin-bottom: 0;
+	}
+
+	.carousel-section em {
+		font-size: 0.98rem;
+		margin-top: 0.15rem;
+	}
+
+	.carousel-dots-container {
+		gap: 0.65rem;
+		margin: 0.35rem 0;
+	}
+}
