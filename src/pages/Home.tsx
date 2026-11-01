@@ -531,6 +531,98 @@ const testimonials: Testimonial[] = [
   },
 ]
 
+interface ExclusiveCollectionItem {
+  id: number
+  title: string
+  kicker: string
+  text: string
+  btnText: string
+  bg: string
+}
+
+const EXCLUSIVE_COLLECTIONS: ExclusiveCollectionItem[] = [
+  {
+    id: 1,
+    title: "Sérénade Étoilée",
+    kicker: "Robe de Gala Broderie Main",
+    text: "Tulle illusion rebrodé de cristaux facettés et corsage sculpté pour une allure nocturne inoubliable.",
+    btnText: "Découvrir le Modèle",
+    bg: "/couture/party-dress13.webp",
+  },
+  {
+    id: 2,
+    title: "Velours Impérial",
+    kicker: "Soirée Haute Couture",
+    text: "Drapé asymétrique en soie sauvage et bustier baleiné épousant chaque courbe avec une précision d'orfèvre.",
+    btnText: "Voir les Détails",
+    bg: "/couture/party-dress14.webp",
+  },
+  {
+    id: 3,
+    title: "Aurore de Satin",
+    kicker: "Coupe Sirène Fluide",
+    text: "Satin duchesse coupé dans le biais offrant une fluidité lumineuse et un dos nu vertigineux.",
+    btnText: "Explorer la Création",
+    bg: "/couture/party-dress15.webp",
+  },
+  {
+    id: 4,
+    title: "Éclat de Perles",
+    kicker: "Dentelle & Perlage d'Art",
+    text: "Plus de trois mille perles nacrées posées au crochet de Lunéville sur une dentelle florale aérienne.",
+    btnText: "Admirer le Perlage",
+    bg: "/couture/party-dress16.webp",
+  },
+  {
+    id: 5,
+    title: "Murmure d'Organza",
+    kicker: "Volants Architecturaux",
+    text: "Superposition de volants d'organza de soie roulottés main pour un volume vaporeux et gracieux.",
+    btnText: "Commander Sur-Mesure",
+    bg: "/couture/party-dress17.webp",
+  },
+  {
+    id: 6,
+    title: "Silhouette Palais",
+    kicker: "Robe d'Apparat",
+    text: "L'alliance parfaite entre la noblesse d'un taffetas craquant et la finesse d'une encolure bateau sculptée.",
+    btnText: "Voir la Collection",
+    bg: "/couture/party-dress18.webp",
+  },
+  {
+    id: 7,
+    title: "Grâce Minimaliste",
+    kicker: "Crêpe Georgette Pur",
+    text: "Lignes pures, coutures anglaises invisibles et tombé lourd qui accompagne chaque pas avec majesté.",
+    btnText: "En Savoir Plus",
+    bg: "/couture/party-dress19.webp",
+  },
+  {
+    id: 8,
+    title: "Reflet d'Orfèvre",
+    kicker: "Brocart & Fil d'Or",
+    text: "Jacquard de soie tissé de fils métallisés subtils, structuré par un juponnage invisible d'atelier.",
+    btnText: "Découvrir l'Étoffe",
+    bg: "/couture/party-dress20.webp",
+  },
+  {
+    id: 9,
+    title: "Poésie Nocturne",
+    kicker: "Mousseline Plissée",
+    text: "Plissé soleil exécuté sur-mesure et taille marquée d'un galon de satin rebrodé à la main.",
+    btnText: "Découvrir le Style",
+    bg: "/couture/party-dress21.webp",
+  },
+  {
+    id: 10,
+    title: "Apothéose Couture",
+    kicker: "Pièce Maîtresse d'Atelier",
+    text: "Le chef-d'œuvre de notre saison réunissant dentelle chantilly, corsetage traditionnel et traîne royale.",
+    btnText: "Réserver un Essayage",
+    bg: "/couture/party-dress22.webp",
+  },
+]
+
 interface CarouselShoe {
   name: string
   image: string
@@ -1968,6 +2060,8 @@ export default function Home() {
   const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(0)
   const [showAllProducts, setShowAllProducts] = useState<boolean>(false)
   const [activeTestimonialId, setActiveTestimonialId] = useState<number>(1)
+  const [activeExclusiveIdx, setActiveExclusiveIdx] = useState<number>(0)
+  const [touchStartX, setTouchStartX] = useState<number | null>(null)
 
   const currentCategory = DRESS_CATEGORIES[activeCategoryIdx] || DRESS_CATEGORIES[0]
   const activeTrendingTab = showAllProducts ? DRESS_CATEGORIES.length : activeCategoryIdx
@@ -2770,12 +2864,14 @@ export default function Home() {
 
       gsap.killTweensOf([cardEl, imgEl, overlayEl].filter(Boolean))
 
+      const isMobileScreen = window.innerWidth <= 768
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: cardEl,
-          start: "top 88%",
-          end: "bottom 12%",
-          toggleActions: "play reverse play reverse",
+          start: isMobileScreen ? "top 95%" : "top 88%",
+          end: isMobileScreen ? undefined : "bottom 12%",
+          toggleActions: isMobileScreen ? "play none none none" : "play reverse play reverse",
+          once: isMobileScreen,
         },
       })
 
@@ -2852,6 +2948,7 @@ export default function Home() {
 
   useGSAP(
     () => {
+      ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true })
       // Hero Animation
       gsap.from(".hero-element", {
         y: 30,
@@ -2944,6 +3041,7 @@ export default function Home() {
         }
 
         updateEventCardsVisibility = () => {
+          if (window.innerWidth <= 768) return
           const vw = window.innerWidth
           const vh = window.innerHeight
           const easeOut = gsap.parseEase("power2.out")
@@ -3117,6 +3215,7 @@ export default function Home() {
         }
 
         updateWhyCardsVisibility = () => {
+          if (window.innerWidth <= 768) return
           const vw = window.innerWidth
           const vh = window.innerHeight
           const easeOut = gsap.parseEase("power2.out")
@@ -3232,10 +3331,16 @@ export default function Home() {
         )
       }
 
-      // Continuous vertical scroll listener so scroll-down and scroll-up entry/exit before & after pinning is 100% real-time
+      // Continuous vertical scroll listener so scroll-down and scroll-up entry/exit before & after pinning is 100% real-time (throttled with rAF)
+      let rAFId: number | null = null
       const handleVerticalScrollReveal = () => {
-        updateEventCardsVisibility()
-        updateWhyCardsVisibility()
+        if (window.innerWidth <= 768) return
+        if (rAFId !== null) return
+        rAFId = requestAnimationFrame(() => {
+          updateEventCardsVisibility()
+          updateWhyCardsVisibility()
+          rAFId = null
+        })
       }
       window.addEventListener("scroll", handleVerticalScrollReveal, { passive: true })
       window.addEventListener("resize", handleVerticalScrollReveal, { passive: true })
@@ -3722,8 +3827,8 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Floating Avatars Layer */}
-            <div className="testimonials-avatars-layer">
+            {/* Desktop Floating Avatars Layer (Constellation plein écran originale) */}
+            <div className="testimonials-avatars-layer desktop-only">
               {testimonials.map((item) => {
                 const isActive = item.id === activeTestimonialId
 
@@ -3812,6 +3917,86 @@ export default function Home() {
                 )
               })}
             </div>
+
+            {/* Showcase Témoignages Dédié & Aéré Spécial Mobile */}
+            <div className="testimonials-mobile-showcase mobile-only">
+              <div className="testimonial-mobile-card">
+                <div className="testimonial-mobile-top">
+                  <div className="testimonial-mobile-user">
+                    <img
+                      src={activeTestimonial.avatar}
+                      alt={activeTestimonial.name}
+                      className="testimonial-mobile-avatar"
+                    />
+                    <div>
+                      <h4 className="testimonial-mobile-name">{activeTestimonial.name}</h4>
+                      <p className="testimonial-mobile-role">{activeTestimonial.role}</p>
+                    </div>
+                  </div>
+                  <div className="testimonial-mobile-stars" aria-label="5 étoiles">
+                    ★★★★★
+                  </div>
+                </div>
+
+                <p className="testimonial-mobile-quote">
+                  "{activeTestimonial.quote}"
+                </p>
+
+                <div className="testimonial-mobile-nav">
+                  <span className="testimonial-mobile-count">
+                    0{testimonials.findIndex((t) => t.id === activeTestimonialId) + 1} / 0{testimonials.length}
+                  </span>
+                  <div className="testimonial-mobile-arrows">
+                    <button
+                      type="button"
+                      className="testimonial-mobile-arrow-btn"
+                      onClick={() => {
+                        const currentIdx = testimonials.findIndex((t) => t.id === activeTestimonialId)
+                        const prevIdx = (currentIdx - 1 + testimonials.length) % testimonials.length
+                        setActiveTestimonialId(testimonials[prevIdx].id)
+                      }}
+                      aria-label="Témoignage précédent"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      className="testimonial-mobile-arrow-btn"
+                      onClick={() => {
+                        const currentIdx = testimonials.findIndex((t) => t.id === activeTestimonialId)
+                        const nextIdx = (currentIdx + 1) % testimonials.length
+                        setActiveTestimonialId(testimonials[nextIdx].id)
+                      }}
+                      aria-label="Témoignage suivant"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Barre de sélection d'avatars tactile fluide */}
+              <div className="testimonials-mobile-avatars-bar">
+                {testimonials.map((item) => {
+                  const isActive = item.id === activeTestimonialId
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`testimonials-mobile-thumb-btn ${isActive ? "active" : ""}`}
+                      onClick={() => setActiveTestimonialId(item.id)}
+                      aria-label={`Voir le témoignage de ${item.name}`}
+                    >
+                      <img
+                        src={item.avatar}
+                        alt={item.name}
+                        className="testimonials-mobile-thumb-img"
+                      />
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -3825,138 +4010,24 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mzaCarousel" id="mzaCarousel" aria-roledescription="carousel" aria-label="Featured cards">
+          {/* Desktop 3D Coverflow Original Carousel */}
+          <div className="mzaCarousel desktop-only" id="mzaCarousel" aria-roledescription="carousel" aria-label="Featured cards">
             <div className="mzaCarousel-viewport" tabIndex={0}>
               <div className="mzaCarousel-track">
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="1 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress13.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Sérénade Étoilée</h2>
-                      <p className="mzaCard-kicker">Robe de Gala Broderie Main</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Tulle illusion rebrodé de cristaux facettés et corsage sculpté pour une allure nocturne inoubliable.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Découvrir le Modèle</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="2 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress14.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Velours Impérial</h2>
-                      <p className="mzaCard-kicker">Soirée Haute Couture</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Drapé asymétrique en soie sauvage et bustier baleiné épousant chaque courbe avec une précision d'orfèvre.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Voir les Détails</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="3 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress15.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Aurore de Satin</h2>
-                      <p className="mzaCard-kicker">Coupe Sirène Fluide</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Satin duchesse coupé dans le biais offrant une fluidité lumineuse et un dos nu vertigineux.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Explorer la Création</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="4 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress16.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Éclat de Perles</h2>
-                      <p className="mzaCard-kicker">Dentelle &amp; Perlage d'Art</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Plus de trois mille perles nacrées posées au crochet de Lunéville sur une dentelle florale aérienne.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Admirer le Perlage</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="5 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress17.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Murmure d'Organza</h2>
-                      <p className="mzaCard-kicker">Volants Architecturaux</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Superposition de volants d'organza de soie roulottés main pour un volume vaporeux et gracieux.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Commander Sur-Mesure</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="6 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress18.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Silhouette Palais</h2>
-                      <p className="mzaCard-kicker">Robe d'Apparat</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">L'alliance parfaite entre la noblesse d'un taffetas craquant et la finesse d'une encolure bateau sculptée.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Voir la Collection</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="7 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress19.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Grâce Minimaliste</h2>
-                      <p className="mzaCard-kicker">Crêpe Georgette Pur</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Lignes pures, coutures anglaises invisibles et tombé lourd qui accompagne chaque pas avec majesté.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">En Savoir Plus</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="8 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress20.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Reflet d'Orfèvre</h2>
-                      <p className="mzaCard-kicker">Brocart &amp; Fil d'Or</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Jacquard de soie tissé de fils métallisés subtils, structuré par un juponnage invisible d'atelier.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Découvrir l'Étoffe</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="9 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress21.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Poésie Nocturne</h2>
-                      <p className="mzaCard-kicker">Mousseline Plissée</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Plissé soleil exécuté sur-mesure et taille marquée d'un galon de satin rebrodé à la main.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Découvrir le Style</button>
-                    </footer>
-                  </div>
-                </article>
-
-                <article className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="10 of 10">
-                  <div className="mzaCard" style={{ "--mzaCard-bg": "url('/couture/party-dress22.webp')" } as React.CSSProperties}>
-                    <header className="mzaCard-head mzaPar-1">
-                      <h2 className="mzaCard-title">Apothéose Couture</h2>
-                      <p className="mzaCard-kicker">Pièce Maîtresse d'Atelier</p>
-                    </header>
-                    <p className="mzaCard-text mzaPar-2">Le chef-d'œuvre de notre saison réunissant dentelle chantilly, corsetage traditionnel et traîne royale.</p>
-                    <footer className="mzaCard-actions mzaPar-3">
-                      <button className="mzaBtn">Réserver un Essayage</button>
-                    </footer>
-                  </div>
-                </article>
+                {EXCLUSIVE_COLLECTIONS.map((col, idx) => (
+                  <article key={col.id} className="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label={`${idx + 1} of ${EXCLUSIVE_COLLECTIONS.length}`}>
+                    <div className="mzaCard" style={{ "--mzaCard-bg": `url('${col.bg}')` } as React.CSSProperties}>
+                      <header className="mzaCard-head mzaPar-1">
+                        <h2 className="mzaCard-title">{col.title}</h2>
+                        <p className="mzaCard-kicker">{col.kicker}</p>
+                      </header>
+                      <p className="mzaCard-text mzaPar-2">{col.text}</p>
+                      <footer className="mzaCard-actions mzaPar-3">
+                        <button className="mzaBtn">{col.btnText}</button>
+                      </footer>
+                    </div>
+                  </article>
+                ))}
               </div>
             </div>
 
@@ -3970,6 +4041,97 @@ export default function Home() {
             </div>
 
             <div className="mzaCarousel-pagination" role="tablist" aria-label="Slide navigation"></div>
+          </div>
+
+          {/* Slider Collections Exclusives Dédié & Aéré Spécial Mobile */}
+          <div
+            className="exclusive-mobile-slider mobile-only"
+            onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+            onTouchEnd={(e) => {
+              if (touchStartX === null) return
+              const diff = e.changedTouches[0].clientX - touchStartX
+              if (diff > 45) {
+                setActiveExclusiveIdx((prev) => (prev > 0 ? prev - 1 : EXCLUSIVE_COLLECTIONS.length - 1))
+              } else if (diff < -45) {
+                setActiveExclusiveIdx((prev) => (prev < EXCLUSIVE_COLLECTIONS.length - 1 ? prev + 1 : 0))
+              }
+              setTouchStartX(null)
+            }}
+          >
+            {(() => {
+              const currentEx = EXCLUSIVE_COLLECTIONS[activeExclusiveIdx] || EXCLUSIVE_COLLECTIONS[0]
+              return (
+                <>
+                  <div className="exclusive-mobile-card">
+                    <img
+                      src={currentEx.bg}
+                      alt={currentEx.title}
+                      className="exclusive-mobile-card-img"
+                    />
+                    <div className="exclusive-mobile-badge">
+                      PIÈCE D'ATELIER 0{activeExclusiveIdx + 1} / {EXCLUSIVE_COLLECTIONS.length}
+                    </div>
+                    <div className="exclusive-mobile-scrim" />
+                    <div className="exclusive-mobile-content">
+                      <span className="exclusive-mobile-kicker">{currentEx.kicker}</span>
+                      <h3 className="exclusive-mobile-title">{currentEx.title}</h3>
+                      <p className="exclusive-mobile-desc">{currentEx.text}</p>
+                      <button
+                        type="button"
+                        className="exclusive-mobile-btn"
+                        onClick={() => {
+                          const matchedProduct = products.find((p) => p.name.toLowerCase().includes(currentEx.title.toLowerCase())) || products[0]
+                          openProductModal(matchedProduct)
+                        }}
+                      >
+                        <span>{currentEx.btnText}</span>
+                        <ArrowUpRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="exclusive-mobile-controls">
+                    <button
+                      type="button"
+                      className="exclusive-mobile-arrow-btn"
+                      onClick={() =>
+                        setActiveExclusiveIdx((prev) =>
+                          prev > 0 ? prev - 1 : EXCLUSIVE_COLLECTIONS.length - 1
+                        )
+                      }
+                      aria-label="Modèle précédent"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+
+                    <div className="exclusive-mobile-dots">
+                      {EXCLUSIVE_COLLECTIONS.map((_, dotIdx) => (
+                        <button
+                          key={dotIdx}
+                          type="button"
+                          className={`exclusive-mobile-dot ${dotIdx === activeExclusiveIdx ? "active" : ""}`}
+                          onClick={() => setActiveExclusiveIdx(dotIdx)}
+                          aria-label={`Aller au modèle ${dotIdx + 1}`}
+                        />
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="exclusive-mobile-arrow-btn"
+                      onClick={() =>
+                        setActiveExclusiveIdx((prev) =>
+                          prev < EXCLUSIVE_COLLECTIONS.length - 1 ? prev + 1 : 0
+                        )
+                      }
+                      aria-label="Modèle suivant"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                </>
+              )
+            })()}
           </div>
         </section>
 

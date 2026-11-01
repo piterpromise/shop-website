@@ -6002,7 +6002,17 @@
    VERSION MOBILE PARFAITEMENT COHÉRENTE (95% WIDTH SUR TÉLÉPHONE)
    Conserve 100% des animations GSAP, ScrollTrigger, défilements & popups
    ========================================================================== */
+.mobile-only {
+  display: none !important;
+}
+
 @media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: flex !important;
+  }
   .home-page {
     overflow-x: hidden;
   }
@@ -6300,58 +6310,176 @@
     font-size: 0.92rem;
   }
 
-  /* 5. Section Témoignages (Constellation Interactive) */
+  /* 5. Section Témoignages (Refactorisation Mobile Spécifique & Aérée) */
   .testimonials-section {
-    margin-top: 2.75rem;
-    margin-bottom: 2.75rem;
+    margin-top: 2.25rem;
+    margin-bottom: 2.25rem;
   }
 
   .testimonials-container {
-    min-height: 540px;
+    min-height: auto;
     border-radius: 2rem;
-    padding: 2rem 1rem;
+    padding: 2.25rem 1.25rem 1.85rem;
+    background: radial-gradient(ellipse at 50% 25%, #1f2937 0%, #111827 100%);
   }
 
   .testimonials-title {
-    font-size: clamp(1.35rem, 5.6vw, 1.85rem);
-    line-height: 1.38;
+    font-size: clamp(1.45rem, 6.2vw, 1.95rem);
+    line-height: 1.25;
+    margin-bottom: 0.4rem;
   }
 
   .testimonials-subtitle {
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 1.5rem;
   }
 
-  .testimonial-avatar-wrapper,
-  .avatar-circle {
-    width: 46px;
-    height: 46px;
+  .testimonials-mobile-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+    width: 100%;
   }
 
-  .active-rings-container,
-  .wave-ring {
-    width: 46px;
-    height: 46px;
+  .testimonial-mobile-card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 22px;
+    padding: 1.55rem 1.35rem;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    color: #111827;
   }
 
-  .testimonial-card-popover,
-  .testimonial-card-popover.direction-left,
-  .testimonial-card-popover.direction-right {
-    left: 50%;
-    right: auto;
-    top: auto;
-    bottom: calc(100% + 12px);
-    width: min(250px, 80vw);
-    padding: 0.95rem 1rem;
-    transform: translateX(-50%) scale(0.92);
+  .testimonial-mobile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
-  .testimonial-card-popover.active,
-  .testimonial-card-popover.direction-left.active,
-  .testimonial-card-popover.direction-right.active {
-    transform: translateX(-50%) scale(1);
+  .testimonial-mobile-user {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
   }
 
-  /* 6. Sections ScrollTrigger Pinned Horizontal (Ateliers & Pourquoi Nous Choisir) */
+  .testimonial-mobile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #D2FF72;
+    box-shadow: 0 4px 10px rgba(210, 255, 114, 0.4);
+    flex-shrink: 0;
+  }
+
+  .testimonial-mobile-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 0.15rem;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .testimonial-mobile-role {
+    font-size: 0.76rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .testimonial-mobile-stars {
+    color: #f59e0b;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+  }
+
+  .testimonial-mobile-quote {
+    font-size: 1.02rem;
+    line-height: 1.55;
+    color: #1f2937;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .testimonial-mobile-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  .testimonial-mobile-count {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #9ca3af;
+    letter-spacing: 0.08em;
+  }
+
+  .testimonial-mobile-arrows {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .testimonial-mobile-arrow-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111827;
+    cursor: pointer;
+  }
+
+  .testimonials-mobile-avatars-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.4rem 0.2rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .testimonials-mobile-avatars-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonials-mobile-thumb-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .testimonials-mobile-thumb-btn.active {
+    border-color: #D2FF72;
+    transform: scale(1.15);
+  }
+
+  .testimonials-mobile-thumb-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* 6. Sections ScrollTrigger Pinned Horizontal (Ateliers & Salons Privés) */
   .events-left-panel {
     left: 2.5vw;
     width: 95vw;
@@ -6376,15 +6504,45 @@
     gap: 1.25rem;
   }
 
+  /* Salons Privés & Défilés (Plein bord, zéro marge interne sur l'image) */
   .event-card {
     width: 85vw;
     height: 64vh;
-    padding: 1.65rem;
-    border-radius: 30px;
+    padding: 0 !important;
+    border-radius: 28px;
+    overflow: hidden;
+  }
+
+  .event-card-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  .event-card-overlay {
+    opacity: 1 !important;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.08) 42%, rgba(0, 0, 0, 0.92) 100%) !important;
+  }
+
+  .event-card-header {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    top: 1.35rem;
+    left: 1.35rem;
+    right: 1.35rem;
   }
 
   .event-card-title {
     font-size: 1.55rem;
+  }
+
+  .event-card-footer {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    bottom: 1.35rem;
+    left: 1.35rem;
+    right: 1.35rem;
   }
 
   .why-choose-right-panel {
@@ -6428,6 +6586,8 @@
     width: 85vw;
     height: 64vh;
     border-radius: 30px;
+    padding: 0;
+    overflow: hidden;
   }
 
   .why-card-content {
@@ -6505,44 +6665,194 @@
     padding: 1.25rem 1.15rem;
   }
 
-  /* 8. Carrousel Coverflow 3D (95vw sur mobile) */
+  /* 8. Carrousel Collections Exclusives (Refactorisation Mobile Spécifique & Aérée) */
   .featured-carousel-section {
     width: 95vw;
     margin-left: -47.5vw;
     margin-right: -47.5vw;
     border-radius: 26px;
-    margin-top: 2.5rem;
-    margin-bottom: 3rem;
+    margin-top: 2.25rem;
+    margin-bottom: 2.5rem;
+    padding: 2.25rem 1.25rem;
   }
 
-  .mzaCarousel {
-    height: 76vh;
-    min-height: 510px;
+  .featured-carousel-title {
+    font-size: clamp(1.65rem, 6.5vw, 2.15rem);
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
   }
 
-  /* 9. Sections Éditoriales : Lookbook (01), Salons Privés (02), Anatomie Couture (03) */
-  .lookbook-editorial-section,
-  .flagship-studios-section,
-  .craft-anatomy-section {
-    padding: 2rem 1.1rem;
+  .featured-carousel-subtitle {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .exclusive-mobile-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    width: 100%;
+  }
+
+  .exclusive-mobile-card {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+    background-color: #111827;
+  }
+
+  .exclusive-mobile-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .exclusive-mobile-badge {
+    position: absolute;
+    top: 1.15rem;
+    left: 1.15rem;
+    background: rgba(17, 24, 39, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.38rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    z-index: 3;
+  }
+
+  .exclusive-mobile-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.05) 35%, rgba(0, 0, 0, 0.94) 100%);
+    z-index: 2;
+  }
+
+  .exclusive-mobile-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1.3rem;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    color: #ffffff;
+  }
+
+  .exclusive-mobile-kicker {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #D2FF72;
+  }
+
+  .exclusive-mobile-title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .exclusive-mobile-desc {
+    font-size: 0.86rem;
+    line-height: 1.48;
+    color: rgba(255, 255, 255, 0.82);
+    margin: 0 0 0.5rem;
+  }
+
+  .exclusive-mobile-btn {
+    width: 100%;
+    padding: 0.95rem 1.4rem;
+    background: #D2FF72;
+    color: #000000;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 8px 20px rgba(210, 255, 114, 0.35);
+  }
+
+  .exclusive-mobile-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.25rem;
+  }
+
+  .exclusive-mobile-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .exclusive-mobile-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    padding: 0;
+    transition: all 0.25s ease;
+  }
+
+  .exclusive-mobile-dot.active {
+    width: 22px;
+    border-radius: 999px;
+    background: #D2FF72;
+  }
+
+  .exclusive-mobile-arrow-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  /* 9. Sections Éditoriales Aérées & Épurées : Lookbook (01), Salons Privés (02), Anatomie Couture (03) */
+
+  /* Section 1: Lookbook Éditorial — Aéré & Épuré sur Mobile */
+  .lookbook-editorial-section {
+    padding: 2.25rem 1.15rem;
     border-radius: 26px;
-    margin-top: 2.5rem;
-    margin-bottom: 2.75rem;
+    margin-top: 2.25rem;
+    margin-bottom: 2.5rem;
   }
 
-  .lookbook-header-bar,
-  .flagship-header-bar,
-  .craft-header-bar {
+  .lookbook-header-bar {
     grid-template-columns: 1fr;
-    gap: 1.35rem;
-    margin-bottom: 1.65rem;
-    padding-bottom: 1.35rem;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
   }
 
-  .lookbook-main-title,
-  .flagship-main-title,
-  .craft-main-title {
+  .lookbook-main-title {
     font-size: clamp(1.75rem, 6.8vw, 2.25rem);
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
   }
 
   .lookbook-silhouette-switcher {
@@ -6554,7 +6864,7 @@
 
   .lookbook-stage-grid {
     grid-template-columns: 1fr;
-    border-radius: 20px;
+    gap: 1.25rem;
   }
 
   .lookbook-photo-column {
@@ -6564,8 +6874,9 @@
   }
 
   .lookbook-photo-frame {
-    min-height: 440px;
-    height: 440px;
+    height: 460px !important;
+    min-height: 460px !important;
+    border-radius: 22px !important;
   }
 
   .lookbook-hotspot-tag {
@@ -6583,9 +6894,9 @@
   }
 
   .lookbook-sheet-column {
-    padding: 1.25rem 1.05rem;
+    padding: 1.35rem 1.1rem;
     min-height: auto;
-    gap: 1.2rem;
+    gap: 1.25rem;
   }
 
   .lookbook-sheet-top {
@@ -6594,16 +6905,29 @@
     gap: 0.75rem;
   }
 
+  .lookbook-nomenclature-list {
+    display: none !important;
+  }
+
   .lookbook-atelier-metrics-ribbon {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.35rem !important;
+    padding: 0.75rem 0.6rem !important;
+  }
+
+  .lookbook-metric-key {
+    font-size: 0.62rem !important;
+  }
+
+  .lookbook-metric-val {
+    font-size: 0.92rem !important;
   }
 
   .lookbook-spotlight-card {
     grid-template-columns: 1fr;
     gap: 1rem;
-    padding: 1rem;
-    border-radius: 16px;
+    padding: 1.15rem;
+    border-radius: 18px;
   }
 
   .lookbook-spotlight-media {
@@ -6612,13 +6936,14 @@
   }
 
   .lookbook-spotlight-specs-grid {
-    grid-template-columns: 1fr;
+    display: none !important;
   }
 
   .lookbook-spotlight-variants-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.85rem;
+    padding-top: 0.5rem;
   }
 
   .lookbook-spotlight-size-pills {
@@ -6628,12 +6953,7 @@
   .lookbook-spotlight-actions {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .lookbook-nomenclature-row {
-    grid-template-columns: 24px 40px 1fr auto;
-    gap: 0.5rem;
-    padding: 0.55rem 0.65rem;
+    gap: 0.65rem;
   }
 
   .lookbook-sheet-footer-bar {
@@ -6647,12 +6967,45 @@
     justify-content: center;
   }
 
-  /* Salons Privés & Ateliers (02) */
+  /* Section 2: Parcours de Création & Expérience Atelier — Aéré & Épuré sur Mobile */
+  .flagship-studios-section {
+    padding: 2.25rem 1.15rem;
+    border-radius: 26px;
+    margin-top: 2.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .flagship-header-bar {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .flagship-main-title {
+    font-size: clamp(1.75rem, 6.8vw, 2.25rem);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .flagship-header-desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+  }
+
   .flagship-city-pills {
     width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     flex-wrap: nowrap;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.35rem;
+    gap: 0.5rem;
+    scrollbar-width: none;
+  }
+
+  .flagship-city-pills::-webkit-scrollbar {
+    display: none;
   }
 
   .flagship-city-pill {
@@ -6660,22 +7013,87 @@
   }
 
   .flagship-accordion-track {
+    display: flex;
+    flex-direction: column;
     min-height: auto;
-    gap: 0.75rem;
+    gap: 0;
+    margin-top: 1rem;
+  }
+
+  /* Sur mobile, on cache les monolithes inactifs pour que le panneau actif respire en grand format ! */
+  .flagship-monolith-panel.collapsed {
+    display: none !important;
+  }
+
+  .flagship-monolith-panel.expanded {
+    flex: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 540px !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
   }
 
   .flagship-expanded-dossier {
-    padding: 1.2rem;
-    gap: 1rem;
+    padding: 1.6rem 1.3rem !important;
+    gap: 1.25rem !important;
+    pointer-events: auto !important;
+    justify-content: space-between !important;
+  }
+
+  .flagship-dossier-top,
+  .flagship-dossier-district,
+  .flagship-dossier-city,
+  .flagship-dossier-address,
+  .flagship-spec-grid,
+  .flagship-dossier-footer {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .flagship-telemetry-coords,
+  .flagship-dossier-address,
+  .flagship-spec-cell-wide,
+  .flagship-spaces-list {
+    display: none !important;
+  }
+
+  .flagship-dossier-district {
+    font-size: 0.74rem !important;
+    color: #D2FF72 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
   }
 
   .flagship-dossier-city {
-    font-size: 1.85rem;
+    font-size: 1.85rem !important;
+    line-height: 1.2 !important;
+    margin: 0.35rem 0 0.85rem !important;
   }
 
   .flagship-spec-grid {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem !important;
+    background: rgba(17, 24, 39, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    padding: 1rem 1.15rem !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    margin-bottom: 0.85rem !important;
+  }
+
+  .flagship-spec-label {
+    font-size: 0.64rem !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .flagship-spec-val {
+    font-size: 0.88rem !important;
+    color: #ffffff !important;
   }
 
   .flagship-dossier-footer {
@@ -6685,11 +7103,34 @@
   }
 
   .flagship-visit-btn {
-    width: 100%;
-    justify-content: center;
+    width: 100% !important;
+    padding: 1rem 1.35rem !important;
+    font-size: 0.92rem !important;
+    border-radius: 999px !important;
+    justify-content: center !important;
   }
 
-  /* Anatomie d'une Pièce (03) */
+  /* Section 3: Noblesse des Étoffes & Savoir-Faire — Aéré & Épuré sur Mobile */
+  .craft-anatomy-section {
+    padding: 2.25rem 1.15rem;
+    border-radius: 26px;
+    margin-top: 2.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .craft-header-bar {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .craft-main-title {
+    font-size: clamp(1.75rem, 6.8vw, 2.25rem);
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+
   .craft-layer-tabs {
     width: 100%;
     grid-template-columns: 1fr;
@@ -6698,17 +7139,19 @@
 
   .craft-stage-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .craft-comparator-column {
-    min-height: 420px;
+    min-height: 380px;
     border-right: none;
     border-bottom: 1px solid rgba(20, 20, 19, 0.12);
   }
 
   .craft-comparator-viewport {
-    min-height: 420px;
-    height: 420px;
+    height: 380px !important;
+    min-height: 380px !important;
+    border-radius: 20px !important;
   }
 
   .craft-callout-card {
@@ -6730,28 +7173,74 @@
   }
 
   .craft-dossier-column {
-    padding: 1.25rem 1.05rem;
+    padding: 1.35rem 1.1rem;
     min-height: auto;
-    gap: 1.15rem;
+    gap: 1.25rem;
+  }
+
+  .craft-benchmarks-block,
+  .craft-protocol-box {
+    display: none !important;
+  }
+
+  .craft-callouts-ledger {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .craft-couture-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem !important;
+  }
+
+  .craft-couture-pillar-card {
+    padding: 1rem 1.15rem !important;
+    border-radius: 16px !important;
   }
 
   .craft-specs-strip {
-    grid-template-columns: 1fr;
-    gap: 0.55rem;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.45rem !important;
+    margin-top: 0.85rem !important;
+  }
+
+  .craft-spec-pill-box {
+    padding: 0.65rem 0.45rem !important;
+    border-radius: 14px !important;
+  }
+
+  .craft-spec-key {
+    font-size: 0.62rem !important;
+  }
+
+  .craft-spec-value {
+    font-size: 0.82rem !important;
   }
 
   .craft-counters-ledger {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+    margin-top: 1.75rem !important;
   }
 
   .craft-counter-card {
-    padding: 1.35rem 1.15rem;
-    border-right: none;
-    border-bottom: 1px solid rgba(20, 20, 19, 0.12);
+    padding: 1.35rem 1rem !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(20, 20, 19, 0.08) !important;
+    background: rgba(255, 255, 255, 0.7) !important;
   }
 
-  .craft-counter-card:last-child {
-    border-bottom: none;
+  .craft-counter-num {
+    font-size: 1.95rem !important;
+  }
+
+  .craft-counter-label {
+    font-size: 0.88rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .craft-counter-detail {
+    font-size: 0.74rem !important;
+    line-height: 1.35 !important;
   }
 
   /* 10. Footer & Panier Latéral */
