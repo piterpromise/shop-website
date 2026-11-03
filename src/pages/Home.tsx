@@ -37,7 +37,15 @@ interface ColorOption {
   hex: string
 }
 
-export type DressCategoryKey = "wedding" | "party" | "cocktail" | "bespoke"
+export type DressCategoryKey =
+  | "wedding"
+  | "party"
+  | "cocktail"
+  | "bespoke"
+  | "veil"
+  | "henna"
+  | "cortege"
+  | "corsetry"
 
 interface DressCategoryTab {
   key: DressCategoryKey
@@ -50,30 +58,58 @@ interface DressCategoryTab {
 const DRESS_CATEGORIES: DressCategoryTab[] = [
   {
     key: "wedding",
-    label: "Mariée",
+    label: "Robes de Mariée",
     subtitle: "Dentelle impériale, satin duchesse & traînes majestueuses",
-    accent: "#d4af37",
+    accent: "#74634f",
     count: 4,
   },
   {
     key: "party",
     label: "Soirée & Gala",
     subtitle: "Silhouettes fendues, fourreaux perlés & drapés de soie",
-    accent: "#e11d48",
+    accent: "#3f2028",
     count: 4,
   },
   {
     key: "cocktail",
-    label: "Cocktail",
+    label: "Cocktail & Cérémonie",
     subtitle: "Coupes audacieuses, organza aérien & bustiers sculptés",
-    accent: "#9333ea",
+    accent: "#29251c",
     count: 4,
   },
   {
     key: "bespoke",
-    label: "Sur-Mesure",
+    label: "Créations Sur-Mesure",
     subtitle: "Pièces uniques dessinées et cousues selon vos mesures",
-    accent: "#0d9488",
+    accent: "#74634f",
+    count: 4,
+  },
+  {
+    key: "veil",
+    label: "Voiles & Traînes",
+    subtitle: "Tulle de soie rebrodé main, dentelle chantilly & parures",
+    accent: "#d8c8b8",
+    count: 4,
+  },
+  {
+    key: "henna",
+    label: "Henné & Orient",
+    subtitle: "Broderies au fil d'or, velours profonds & capes royales",
+    accent: "#3f2028",
+    count: 4,
+  },
+  {
+    key: "cortege",
+    label: "Cortège & Demoiselles",
+    subtitle: "Harmonie de nuances sur-mesure pour vos invitées d'honneur",
+    accent: "#74634f",
+    count: 4,
+  },
+  {
+    key: "corsetry",
+    label: "Corseterie d'Art",
+    subtitle: "Bustiers baleinés souples, galbe haute précision & laçage soie",
+    accent: "#29251c",
     count: 4,
   },
 ]
@@ -426,6 +462,330 @@ const products: Product[] = [
     rating: 5.0,
     reviewsCount: 128,
   },
+
+  // CATÉGORIE 5 : VOILES & TRAÎNES (wedding11 .. wedding14)
+  {
+    id: 17,
+    name: 'Voile Cathédrale "Dentelle d\'Alençon"',
+    price: "Sur-Mesure · 320 €",
+    category: "Voiles & Traînes",
+    categoryKey: "veil",
+    color: "bg-gradient-product-1",
+    image: "/couture/wedding11.webp",
+    badge: "Fait Main",
+    description: "Tulle de soie aérien bordé d'une guipure florale incrustée point par point à l'atelier.",
+    longDescription: "Un voile de 3,20 mètres d'une transparence cristalline, dont chaque fleur de dentelle est découpée et appliquée à la main sans couture visible.",
+    model: "VOIL-ALE-17",
+    sizes: ["3m20 Cathédrale", "2m40 Chapelle", "Sur-Mesure"],
+    colors: [
+      { name: "Ivoire Pur", hex: "#fcfaf2" },
+      { name: "Linen Mist", hex: "#d8c8b8" },
+    ],
+    rating: 5.0,
+    reviewsCount: 64,
+  },
+  {
+    id: 18,
+    name: 'Traîne Amovible "Duchesse Royale"',
+    price: "Sur-Mesure · 450 €",
+    category: "Voiles & Traînes",
+    categoryKey: "veil",
+    color: "bg-gradient-product-2",
+    image: "/couture/wedding12.webp",
+    badge: "2-en-1 Couture",
+    description: "Sur-jupe à plis creux en satin duchesse se fixant invisiblement à la taille pour la cérémonie.",
+    longDescription: "Offrez-vous l'amplitude spectaculaire d'une traîne royale lors de votre entrée, puis détachez-la en un geste pour révéler votre robe fourreau en soirée.",
+    model: "VOIL-DUC-18",
+    sizes: ["Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Ivoire Satin", hex: "#fdfbf7" },
+      { name: "Champagne Doux", hex: "#e8dfd5" },
+    ],
+    rating: 4.9,
+    reviewsCount: 58,
+  },
+  {
+    id: 19,
+    name: 'Cape Nuptiale "Brume d\'Organza"',
+    price: "Sur-Mesure · 390 €",
+    category: "Voiles & Traînes",
+    categoryKey: "veil",
+    color: "bg-gradient-product-3",
+    image: "/couture/wedding13.webp",
+    description: "Cape d'épaules fluide en organza de soie rebrodé de perles nacrées sur l'encolure.",
+    longDescription: "Alternative contemporaine au voile traditionnel, cette cape vaporeuse enlace les épaules avec délicatesse et ondule au moindre souffle.",
+    model: "VOIL-CAP-19",
+    sizes: ["Sur-Mesure", "Longueur Sol", "Longueur Traîne"],
+    colors: [
+      { name: "Perle d'Ivoire", hex: "#f8f5f0" },
+      { name: "Taupe Rosé", hex: "#d8c8b8" },
+    ],
+    rating: 5.0,
+    reviewsCount: 49,
+  },
+  {
+    id: 20,
+    name: 'Voile Perlé "Pluie d\'Étoiles"',
+    price: "Sur-Mesure · 360 €",
+    category: "Voiles & Traînes",
+    categoryKey: "veil",
+    color: "bg-gradient-product-4",
+    image: "/couture/wedding14.webp",
+    badge: "Atelier",
+    description: "Semis de perles d'eau douce et cristaux sertis à la main sur tulle illusion ultra-souple.",
+    longDescription: "Chaque perle est fixée individuellement pour capter la lumière naturelle et entourer le visage d'un halo doux et précieux.",
+    model: "VOIL-ETO-20",
+    sizes: ["Sur-Mesure", "Chapelle", "Cathédrale"],
+    colors: [
+      { name: "Ivoire Lumière", hex: "#ffffff" },
+      { name: "Sable Nacré", hex: "#e6dcd2" },
+    ],
+    rating: 4.9,
+    reviewsCount: 73,
+  },
+
+  // CATÉGORIE 6 : HENNÉ & ORIENT (other-robes17 .. other-robes20)
+  {
+    id: 21,
+    name: 'Création Henné "Sultane d\'Or"',
+    price: "Sur-Mesure · 780 €",
+    category: "Henné & Orient",
+    categoryKey: "henna",
+    color: "bg-gradient-product-1",
+    image: "/couture/other-robes17.webp",
+    badge: "Orfèvrerie Textile",
+    description: "Velours profond rebrodé au fil d'or véritable, ceinture sculptée et manches drapées.",
+    longDescription: "Une pièce d'apparat conjuguant le savoir-faire ancestral de la broderie au fil d'or et le cintrage haute couture de notre atelier.",
+    model: "HENN-SUL-21",
+    sizes: ["100% Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Mulberry Wine", hex: "#3f2028" },
+      { name: "Olive Oscuro", hex: "#29251c" },
+    ],
+    rating: 5.0,
+    reviewsCount: 112,
+  },
+  {
+    id: 22,
+    name: 'Robe d\'Apparat "Palais d\'Ambre"',
+    price: "Sur-Mesure · 720 €",
+    category: "Henné & Orient",
+    categoryKey: "henna",
+    color: "bg-gradient-product-2",
+    image: "/couture/other-robes18.webp",
+    badge: "Pièce Maîtresse",
+    description: "Brocart de soie tressé, cape impériale amovible et incrustations de cristaux ambrés.",
+    longDescription: "Dessinée pour illuminer votre cérémonie de henné ou de fiançailles, cette silhouette offre une allure royale tout en préservant une aisance parfaite.",
+    model: "HENN-PAL-22",
+    sizes: ["100% Sur-Mesure", "Essayage Privé"],
+    colors: [
+      { name: "Moss Taupe & Or", hex: "#74634f" },
+      { name: "Linen Mist", hex: "#d8c8b8" },
+    ],
+    rating: 4.9,
+    reviewsCount: 95,
+  },
+  {
+    id: 23,
+    name: 'Silhouette "Jardin de Grenade"',
+    price: "Sur-Mesure · 690 €",
+    category: "Henné & Orient",
+    categoryKey: "henna",
+    color: "bg-gradient-product-3",
+    image: "/couture/other-robes19.webp",
+    description: "Corsage ajusté à arabesques perlées et jupe à godets fluides en satin duchesse.",
+    longDescription: "Les motifs floraux orientaux sont tracés sur-mesure selon votre morphologie puis brodés au crochet de Lunéville.",
+    model: "HENN-GRE-23",
+    sizes: ["100% Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Velvet Plum", hex: "#2a171d" },
+      { name: "Or Antique", hex: "#b89b72" },
+    ],
+    rating: 5.0,
+    reviewsCount: 88,
+  },
+  {
+    id: 24,
+    name: 'Parure Royale "Zéphyr d\'Orient"',
+    price: "Sur-Mesure · 810 €",
+    category: "Henné & Orient",
+    categoryKey: "henna",
+    color: "bg-gradient-product-4",
+    image: "/couture/other-robes20.webp",
+    badge: "Haute Broderie",
+    description: "Ensemble deux pièces sur-mesure en soie sauvage et tulle brodé de perles fines.",
+    longDescription: "Une création lumineuse aux finitions gansées main, accompagnée de son voile d'épaules assorti pour une entrée inoubliable.",
+    model: "HENN-ZEP-24",
+    sizes: ["100% Sur-Mesure", "Essayage Atelier"],
+    colors: [
+      { name: "Olive Smoke", hex: "#3f3d30" },
+      { name: "Champagne Doré", hex: "#d8c8b8" },
+    ],
+    rating: 5.0,
+    reviewsCount: 104,
+  },
+
+  // CATÉGORIE 7 : CORTÈGE & DEMOISELLES (party-dress13 .. party-dress16)
+  {
+    id: 25,
+    name: 'Robe Demoiselle "Harmonie de Soie"',
+    price: "Sur-Mesure · 340 €",
+    category: "Cortège & Demoiselles",
+    categoryKey: "cortege",
+    color: "bg-gradient-product-1",
+    image: "/couture/party-dress13.webp",
+    badge: "Nuancier Cortège",
+    description: "Drapé fluide en crêpe Georgette avec encolure personnalisable selon chaque morphologie.",
+    longDescription: "Coupées dans le même bain de teinture pour une unité chromatique absolue, tout en permettant à chaque demoiselle d'honneur de choisir son décolleté.",
+    model: "CORT-HAR-25",
+    sizes: ["Sur-Mesure", "34 / 36", "38 / 40", "42 / 44", "46+"],
+    colors: [
+      { name: "Linen Mist", hex: "#d8c8b8" },
+      { name: "Moss Taupe", hex: "#74634f" },
+      { name: "Mulberry Wine", hex: "#3f2028" },
+    ],
+    rating: 5.0,
+    reviewsCount: 91,
+  },
+  {
+    id: 26,
+    name: 'Robe Longue "Sauge & Velours"',
+    price: "Sur-Mesure · 360 €",
+    category: "Cortège & Demoiselles",
+    categoryKey: "cortege",
+    color: "bg-gradient-product-2",
+    image: "/couture/party-dress14.webp",
+    description: "Taille empire délicatement froncée, dos goutte d'eau et jupe aérienne coupée dans le biais.",
+    longDescription: "Légère et infroissable, cette robe accompagne vos témoins et demoiselles d'honneur du matin jusqu'au bout de la nuit.",
+    model: "CORT-SAU-26",
+    sizes: ["Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Olive Smoke", hex: "#3f3d30" },
+      { name: "Sable Chaud", hex: "#d8c8b8" },
+    ],
+    rating: 4.9,
+    reviewsCount: 67,
+  },
+  {
+    id: 27,
+    name: 'Silhouette "Rose d\'Atelier"',
+    price: "Sur-Mesure · 350 €",
+    category: "Cortège & Demoiselles",
+    categoryKey: "cortege",
+    color: "bg-gradient-product-3",
+    image: "/couture/party-dress15.webp",
+    badge: "Coup de Cœur",
+    description: "Bustier cache-cœur drapé main et ceinture ruban en satin duchesse coordonné.",
+    longDescription: "Un modèle universellement flatteur qui souligne la taille en douceur et s'adapte à toutes les silhouettes de votre cortège.",
+    model: "CORT-ROS-27",
+    sizes: ["Sur-Mesure", "34 / 36", "38 / 40", "42 / 44", "46+"],
+    colors: [
+      { name: "Rose Brume", hex: "#d8c8b8" },
+      { name: "Prune Douce", hex: "#3f2028" },
+    ],
+    rating: 4.9,
+    reviewsCount: 82,
+  },
+  {
+    id: 28,
+    name: 'Robe Cortège "Aube Dorée"',
+    price: "Sur-Mesure · 375 €",
+    category: "Cortège & Demoiselles",
+    categoryKey: "cortege",
+    color: "bg-gradient-product-4",
+    image: "/couture/party-dress16.webp",
+    description: "Encolure bateau raffinée, manches papillon en mousseline et tombé fluide.",
+    longDescription: "Pensée pour les mariages champêtres comme pour les réceptions en château, avec essayage groupé privatisé au boudoir.",
+    model: "CORT-AUB-28",
+    sizes: ["Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Taupe Doré", hex: "#74634f" },
+      { name: "Ivoire Chaud", hex: "#f5efe6" },
+    ],
+    rating: 5.0,
+    reviewsCount: 74,
+  },
+
+  // CATÉGORIE 8 : CORSETERIE D'ART (party-dress17 .. party-dress20)
+  {
+    id: 29,
+    name: 'Bustier Sculpté "Maison d\'Or"',
+    price: "Sur-Mesure · 460 €",
+    category: "Corseterie d'Art",
+    categoryKey: "corsetry",
+    color: "bg-gradient-product-1",
+    image: "/couture/party-dress17.webp",
+    badge: "Savoir-Faire",
+    description: "Corset à 14 baleines spirales souples, entoilage soie et laçage dos au ruban de satin.",
+    longDescription: "Façonné selon les règles de la haute corseterie parisienne, ce bustier galbe la taille sans jamais comprimer et soutient le port de tête.",
+    model: "CORS-MAI-29",
+    sizes: ["100% Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Noir Earth", hex: "#111312" },
+      { name: "Linen Mist", hex: "#d8c8b8" },
+    ],
+    rating: 5.0,
+    reviewsCount: 96,
+  },
+  {
+    id: 30,
+    name: 'Robe Corset "Dentelle & Baleinage"',
+    price: "Sur-Mesure · 590 €",
+    category: "Corseterie d'Art",
+    categoryKey: "corsetry",
+    color: "bg-gradient-product-2",
+    image: "/couture/party-dress18.webp",
+    badge: "Haute Précision",
+    description: "Jeu de transparence en tulle illusion, goussets debaleines gansés de satin et jupe drapée.",
+    longDescription: "L'architecture intérieure du vêtement devient un élément esthétique majeur, soulignant chaque ligne du buste avec une finesse d'orfèvre.",
+    model: "CORS-DEN-30",
+    sizes: ["100% Sur-Mesure", "34 / 36", "38 / 40", "42 / 44"],
+    colors: [
+      { name: "Mulberry Wine", hex: "#3f2028" },
+      { name: "Olive Oscuro", hex: "#29251c" },
+    ],
+    rating: 4.9,
+    reviewsCount: 84,
+  },
+  {
+    id: 31,
+    name: 'Fourreau Bustier "Galbe Impérial"',
+    price: "Sur-Mesure · 630 €",
+    category: "Corseterie d'Art",
+    categoryKey: "corsetry",
+    color: "bg-gradient-product-3",
+    image: "/couture/party-dress19.webp",
+    description: "Décolleté cœur architectural en crêpe lourd et boutonnage dos recouvert de perles de soie.",
+    longDescription: "Grâce à sa ceinture de maintien interne invisible, cette robe bustier reste parfaitement en place tout au long de votre réception.",
+    model: "CORS-GAL-31",
+    sizes: ["100% Sur-Mesure", "34 / 36", "38 / 40", "42 / 44", "46+"],
+    colors: [
+      { name: "Moss Taupe", hex: "#74634f" },
+      { name: "Noir Couture", hex: "#111312" },
+    ],
+    rating: 5.0,
+    reviewsCount: 110,
+  },
+  {
+    id: 32,
+    name: 'Création Corsetée "Velours & Guipure"',
+    price: "Sur-Mesure · 670 €",
+    category: "Corseterie d'Art",
+    categoryKey: "corsetry",
+    color: "bg-gradient-product-4",
+    image: "/couture/party-dress20.webp",
+    badge: "Pièce Signature",
+    description: "Bustier en velours de soie rebrodé de guipure ancienne et jupe fendue à drapé asymétrique.",
+    longDescription: "Alliance d'un maintien sculptural et d'une douceur seconde peau grâce à sa doublure intégrale en pongé de soie naturelle.",
+    model: "CORS-VEL-32",
+    sizes: ["100% Sur-Mesure", "Essayage Privé"],
+    colors: [
+      { name: "Velvet Plum", hex: "#2a171d" },
+      { name: "Linen Mist", hex: "#d8c8b8" },
+    ],
+    rating: 5.0,
+    reviewsCount: 99,
+  },
 ]
 
 interface Testimonial {
@@ -632,11 +992,11 @@ interface CarouselShoe {
 }
 
 const CAROUSEL_SHOES: CarouselShoe[] = [
-  { name: "MARIÉE ROYALE", image: "/couture/wedding4.webp", desc: "Dentelle & Traîne Cathédrale", a: -12, bg: "#1c1917" },
-  { name: "GALA ÉTOILÉ", image: "/couture/party-dress3.webp", desc: "Fourreau Perlé Main", a: -6, bg: "#1e1b4b" },
-  { name: "DRAPÉ COUTURE", image: "/couture/other-robes3.webp", desc: "Soie Sauvage Sur-Mesure", a: 0, bg: "#171717" },
-  { name: "DENTELLE D'OR", image: "/couture/wedding6.webp", desc: "Création Mariage Impérial", a: 6, bg: "#31102f" },
-  { name: "SOIRÉE VELOURS", image: "/couture/party-dress4.webp", desc: "Silhouette Haute Couture", a: 12, bg: "#064e3b" },
+  { name: "Mariée Royale", image: "/couture/wedding4.webp", desc: "Dentelle & Traîne Cathédrale", a: -12, bg: "#29251c" },
+  { name: "Gala Étoilé", image: "/couture/party-dress3.webp", desc: "Fourreau Perlé Main", a: -6, bg: "#74634f" },
+  { name: "Drapé Couture", image: "/couture/other-robes3.webp", desc: "Soie Sauvage Sur-Mesure", a: 0, bg: "#3f2028" },
+  { name: "Dentelle d'Or", image: "/couture/wedding6.webp", desc: "Création Mariage Impérial", a: 6, bg: "#111312" },
+  { name: "Soirée Velours", image: "/couture/party-dress4.webp", desc: "Silhouette Haute Couture", a: 12, bg: "#3f3d30" },
 ]
 
 interface EventItem {
@@ -2501,6 +2861,38 @@ export default function Home() {
           structureNote: "Bustier structuré haute tenue, volants aériens coupés au fil et ourlet roulotté à la main.",
           leadTime: "Confection sur-mesure sous 2 à 3 semaines",
         }
+      case "veil":
+        return {
+          fabric: "Tulle Illusion de Soie & Dentelle",
+          craftHours: "50 à 70h de Broderie",
+          fittings: "2 Séances d'Ajustement",
+          structureNote: "Bordure festonnée rebrodée au fil de soie, peigne d'orfèvre dissimulé et chute cathédrale aérienne.",
+          leadTime: "Confection sur-mesure sous 2 à 4 semaines",
+        }
+      case "henna":
+        return {
+          fabric: "VeloursImpérial & Fil d'Or",
+          craftHours: "85 à 110h d'Orfèvrerie Textile",
+          fittings: "3 Séances Privées",
+          structureNote: "Broderie sfifa et maâlem façonnée main, doublure satinée fluide et ceinture sculptée sur-mesure.",
+          leadTime: "Confection sur-mesure sous 4 à 6 semaines",
+        }
+      case "cortege":
+        return {
+          fabric: "Mousseline & Crêpe de Soie",
+          craftHours: "40 à 55h d'Atelier",
+          fittings: "2 Essayages Harmonie",
+          structureNote: "Drapé fluide harmonisé au cortège nuptial, maintien interne discret et finitions couture main.",
+          leadTime: "Confection sur-mesure sous 2 à 3 semaines",
+        }
+      case "corsetry":
+        return {
+          fabric: "Satin Duchesse & Baleines Acier",
+          craftHours: "65 à 80h de Corseterie",
+          fittings: "3 Séances Techniques",
+          structureNote: "14 baleines spiralées gainées de soie, laçage dos réglable au millimètre et galbe architectural.",
+          leadTime: "Confection sur-mesure sous 3 à 5 semaines",
+        }
       default:
         return {
           fabric: "Soie Sauvage & Guipure",
@@ -2830,15 +3222,24 @@ export default function Home() {
     }
   }, [selectedProduct, productModalOrigin])
 
-  // Mesure dynamique du bouton actif pour faire glisser de façon fluide le fond coloré
+  // Mesure dynamique du bouton actif pour faire glisser de façon fluide le fond coloré et centrer l'onglet dans la barre scrollable
   useEffect(() => {
     const updateGlider = () => {
       const activeBtn = trendingTabRefs.current[activeTrendingTab]
+      const navEl = segmentedNavRef.current
       if (activeBtn) {
         setTrendingGlider({
           left: activeBtn.offsetLeft,
           width: activeBtn.offsetWidth,
         })
+        if (navEl) {
+          const targetScrollLeft =
+            activeBtn.offsetLeft - navEl.clientWidth / 2 + activeBtn.offsetWidth / 2
+          navEl.scrollTo({
+            left: Math.max(0, targetScrollLeft),
+            behavior: "smooth",
+          })
+        }
       }
     }
     updateGlider()
@@ -3572,7 +3973,7 @@ export default function Home() {
           <span><FontAwesomeIcon icon={faCircle} style={{ fontSize: '0.75em' }} /></span>
           <span><FontAwesomeIcon icon={faTruck} /> Accompagnement Personnalisé jusqu'au Jour J</span>
           <span><FontAwesomeIcon icon={faCircle} style={{ fontSize: '0.75em' }} /></span>
-          <span><FontAwesomeIcon icon={faFireFlameSimple} style={{ color: '#D2FF72' }} /> Prise de Mesures Privée Offerte sur Rendez-Vous en Salon</span>
+          <span><FontAwesomeIcon icon={faFireFlameSimple} style={{ color: '#d8c8b8' }} /> Prise de Mesures Privée Offerte sur Rendez-Vous en Salon</span>
           <span><FontAwesomeIcon icon={faCircle} style={{ fontSize: '0.75em' }} /></span>
           <span><FontAwesomeIcon icon={faTruck} /> Soies Naturelles, Dentelle de Calais &amp; Broderies Façonnées Main</span>
         </div>
@@ -3666,13 +4067,20 @@ export default function Home() {
         {/* Product Grid — Trending Now with Unified Segmented Pill Bar & Sliding Background Glider */}
         <section className="trending-now-section">
           <div className="home-section-header trending-header-upgraded">
-            <h2 className="home-section-title">Trending Now</h2>
+            <h2 className="home-section-title">
+              Catalogue <span className="calligraphy-title-accent">Couture</span>
+            </h2>
 
             <div
               ref={segmentedNavRef}
               className="trending-segmented-nav"
               role="tablist"
               aria-label="Catégories de modèles de robes"
+              onWheel={(e) => {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                  e.currentTarget.scrollLeft += e.deltaY
+                }
+              }}
             >
               <span
                 className="trending-segmented-glider"
@@ -3787,13 +4195,13 @@ export default function Home() {
               />
             </defs>
 
-            {/* Thin 1.2px Black Top & Bottom Borders */}
-            <use href="#ribbonTopBorder" stroke="#111827" strokeWidth="1.2" fill="none" />
-            <use href="#ribbonBottomBorder" stroke="#111827" strokeWidth="1.2" fill="none" />
+            {/* Thin 1.2px Earthen Top & Bottom Borders */}
+            <use href="#ribbonTopBorder" stroke="#29251c" strokeWidth="1.2" fill="none" />
+            <use href="#ribbonBottomBorder" stroke="#29251c" strokeWidth="1.2" fill="none" />
 
             {/* Scrolling Couture Ribbon Text */}
             <text
-              fill="#000000ff"
+              fill="#29251c"
               fontSize="20"
               fontWeight="700"
               letterSpacing="1px"
@@ -3821,7 +4229,9 @@ export default function Home() {
             {/* Central Testimonials Title Header */}
             <div className="testimonials-header">
               <span className="testimonials-pill-badge">Témoignages Clientes</span>
-              <h2 className="testimonials-title">L'Émotion du Sur-Mesure</h2>
+              <h2 className="testimonials-title">
+                L'Émotion du <span className="calligraphy-title-accent">Sur-Mesure</span>
+              </h2>
               <p className="testimonials-subtitle">
                 Découvrez les confidences de nos mariées et clientes sur la coupe, le tombé parfait et l'accompagnement de notre atelier.
               </p>
@@ -4004,7 +4414,9 @@ export default function Home() {
         <section className="featured-carousel-section">
           <div className="featured-carousel-header">
             <span className="testimonials-pill-badge carousel-badge">Défilé &amp; Pièces Uniques</span>
-            <h2 className="featured-carousel-title">Collections Exclusives</h2>
+            <h2 className="featured-carousel-title">
+              Collections <span className="calligraphy-title-accent">Exclusives</span>
+            </h2>
             <p className="featured-carousel-subtitle">
               Explorez nos robes d'apparat et silhouettes couture façonnées à la main dans nos étoffes les plus précieuses.
             </p>
@@ -4218,7 +4630,7 @@ export default function Home() {
             <div className="why-choose-right-panel">
               <span className="why-choose-badge">— L'Excellence du Sur-Mesure</span>
               <h2 className="why-choose-title">
-                Façonné pour votre silhouette<br />
+                Façonné pour votre <span className="calligraphy-title-accent">Silhouette</span><br />
                 Pensé autour de votre allure.
               </h2>
 

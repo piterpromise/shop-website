@@ -144,7 +144,7 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #D2FF72;
+  color: #d8c8b8;
 }
 
 .bento-caption-title {
@@ -171,7 +171,7 @@
 
 .bento-timer-fill {
   height: 100%;
-  background-color: #D2FF72;
+  background-color: #d8c8b8;
   border-radius: 999px;
 }
 
@@ -198,7 +198,7 @@
   border-radius: 999px;
   background-color: rgba(10, 12, 16, 0.86);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(210, 255, 114, 0.35);
+  border: 1px solid rgba(216, 200, 184, 0.35);
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55);
 }
 
@@ -206,8 +206,8 @@
   position: relative;
   appearance: none;
   border: none;
-  background-color: #D2FF72;
-  color: #0b0d11;
+  background-color: #d8c8b8;
+  color: #111312;
   padding: 0.58rem 1rem;
   border-radius: 999px;
   font-family: 'Poppins', sans-serif;
@@ -310,8 +310,8 @@
 }
 
 .onboarding-step-pill.active {
-  background-color: #D2FF72;
-  color: #0b0d11;
+  background-color: #d8c8b8;
+  color: #111312;
 }
 
 .onboarding-pause-btn {
@@ -355,8 +355,8 @@
 
 .green-card {
   position: relative;
-  background-color: #D2FF72;
-  color: #0b0d11;
+  background-color: #d8c8b8;
+  color: #111312;
   padding: 2rem 1.85rem 1.85rem;
   border-radius: 2rem;
   display: flex;

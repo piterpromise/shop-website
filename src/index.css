@@ -1,4 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Pinyon+Script&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Earthen Elegance Palette */
+  --earthen-olive-oscuro: #29251c;
+  --earthen-moss-taupe: #74634f;
+  --earthen-linen-mist: #d8c8b8;
+  --earthen-mulberry-wine: #3f2028;
+  --earthen-noir-earth: #111312;
+  --earthen-olive-smoke: #3f3d30;
+  --earthen-velvet-plum: #2a171d;
+
+  /* Wedding Calligraphy & Editorial Typography */
+  --font-calligraphy: 'Pinyon Script', 'Great Vibes', 'Alex Brush', cursive;
+  --font-wedding-serif: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
+  --font-sans: 'Poppins', sans-serif;
+}
 
 *, *::before, *::after {
   margin: 0;
@@ -13,8 +29,8 @@ html, body {
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f8f9fa;
-  color: #1a1a1a;
+  background-color: #f6f2ed;
+  color: #111312;
   overflow-x: hidden;
 }
 

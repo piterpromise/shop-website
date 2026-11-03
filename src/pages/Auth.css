@@ -139,7 +139,7 @@
 }
 
 .auth-mode-pill-tab.active {
-  color: #D2FF72;
+  color: #d8c8b8;
 }
 
 .auth-mode-pill-slider {
@@ -263,7 +263,7 @@
 .auth-toggle-row.is-checked .auth-toggle-icon-box {
   background-color: #111827;
   border-color: #111827;
-  color: #D2FF72;
+  color: #d8c8b8;
 }
 
 .auth-toggle-text {
@@ -324,7 +324,7 @@
 
 .auth-switch-track.active .auth-switch-thumb {
   transform: translateX(18px);
-  background-color: #D2FF72;
+  background-color: #d8c8b8;
 }
 
 /* ==========================================================================
@@ -335,7 +335,7 @@
   width: 100%;
   height: 56px;
   background-color: #0f0f0f;
-  color: #D2FF72;
+  color: #d8c8b8;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-size: 0.98rem;
@@ -378,7 +378,7 @@
   right: 0;
   bottom: 0;
   height: 2px;
-  background: linear-gradient(90deg, rgba(210, 255, 114, 0.2), #D2FF72);
+  background: linear-gradient(90deg, rgba(216, 200, 184, 0.2), #d8c8b8);
   transform-origin: left center;
 }
 
@@ -393,7 +393,7 @@
 .auth-minimal-spinner {
   width: 19px;
   height: 19px;
-  color: #D2FF72;
+  color: #d8c8b8;
   animation: authMinimalSpin 0.85s linear infinite;
 }
 
@@ -549,7 +549,7 @@
   margin-bottom: 1.5rem;
   letter-spacing: -0.025em;
 }
-.auth-right-title span { color: #D2FF72; }
+.auth-right-title span { color: #d8c8b8; }
 .auth-right-desc {
   color: #d1d5db;
   font-size: 1.25rem;

@@ -85,17 +85,24 @@
 
 .carousel-section h2 {
 	grid-area: 2/ 1;
-	font-size: 2.25rem;
-	font-weight: 700;
-	color: #ffffff;
+	font-family: var(--font-calligraphy, 'Pinyon Script', 'Great Vibes', cursive);
+	font-size: 3.15rem;
+	font-weight: 400;
+	letter-spacing: 0.02em;
+	color: #d8c8b8;
 	margin-top: 12rem;
+	line-height: 1.1;
 }
 
 .carousel-section em {
 	grid-area: 4/ 1;
+	font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
 	font-style: normal;
-	font-size: 1.1rem;
-	color: rgba(255, 255, 255, 0.7);
+	font-size: 1.05rem;
+	font-weight: 600;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(216, 200, 184, 0.85);
 }
 
 .carousel-section img {
@@ -133,13 +140,13 @@
 
 .carousel-dot-btn.active {
 	width: 36px;
-	background-color: #ffffff;
+	background-color: #d8c8b8;
 }
 
 .carousel-arrow-btn {
-	background: rgba(255, 255, 255, 0.15);
-	border: 1px solid rgba(255, 255, 255, 0.3);
-	color: #ffffff;
+	background: rgba(216, 200, 184, 0.14);
+	border: 1px solid rgba(216, 200, 184, 0.35);
+	color: #d8c8b8;
 	width: 32px;
 	height: 32px;
 	border-radius: 50%;
@@ -155,11 +162,11 @@
 }
 
 .carousel-arrow-btn:hover {
-	background-color: #D2FF72;
-	color: #000000;
-	border-color: #D2FF72;
+	background-color: #d8c8b8;
+	color: #111312;
+	border-color: #d8c8b8;
 	transform: scale(1.12);
-	box-shadow: 0 4px 15px rgba(210, 255, 114, 0.4);
+	box-shadow: 0 4px 15px rgba(216, 200, 184, 0.35);
 }
 
 .carousel-arrow-btn:active {
@@ -187,13 +194,14 @@
 	}
 
 	.carousel-section h2 {
-		font-size: 1.7rem;
+		font-size: 2.35rem;
 		margin-top: 0.75rem;
 		margin-bottom: 0;
 	}
 
 	.carousel-section em {
-		font-size: 0.98rem;
+		font-size: 0.88rem;
+		letter-spacing: 0.18em;
 		margin-top: 0.15rem;
 	}
 
