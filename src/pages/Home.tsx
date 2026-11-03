@@ -1403,6 +1403,17 @@ interface LookbookHotspot {
   techSpec: string
   weightSpec: string
   stylingNote: string
+  materialName: string
+  countryOrigin: string
+  countryFlag: string
+  atelierName: string
+  composition: string
+  textureTouch: string
+  lightReflect: string
+  durabilityBreathability: string
+  whySpecial: string
+  artisanSecret: string
+  careGuidance: string
 }
 
 interface LookbookSilhouette {
@@ -1426,64 +1437,100 @@ const LOOKBOOK_SILHOUETTES: LookbookSilhouette[] = [
     id: 1,
     code: "SILHOUETTE 01",
     title: "Souveraine d'Ivoire",
-    serifSubtitle: "Robe de Mariée — Dentelle & Traîne",
+    serifSubtitle: "Robe de Mariée — Dentelle de Calais & Pur Lin",
     seasonNote: "Haute Couture Nuptiale",
     image: "/couture/wedding14.webp",
     photographer: "Confection : 100% Sur-Mesure à l'Atelier",
     totalPrice: "980 €",
     hoursOfWork: "85 Heures",
-    fabricMeterage: "12 Mètres d'Étoffe",
+    fabricMeterage: "12 Mètres d'Étoffe Noble",
     fittingsCount: "3 Essayages Privés",
     editorialNote:
-      "Une création nuptiale majestueuse dont chaque détail est pensé pour illuminer la mariée : bustier rebrodé de dentelle florale, taille sculptée et traîne fluide qui s'anime à chaque pas.",
+      "Une création nuptiale majestueuse célébrant la noblesse des fibres naturelles : dentelle de Caudry-Calais ajourée, corset en soie de Côme et traîne royale façonnée en pur lin normand peigné.",
     hotspots: [
       {
         id: 101,
         indexLabel: "01",
         productId: 1,
-        x: 49,
+        x: 32,
         y: 28,
         partLabel: "Corsage & Décolleté",
-        zoneTitle: "Bustier Dentelle & Perlage Main",
-        materialNote: "Dentelle de Calais & tulle illusion",
+        zoneTitle: "Dentelle de Caudry-Calais & Tulle Illusion",
+        materialNote: "Dentelle Leavers de Calais (France) · Tulle soyeux invisible",
         archiveRef: "ATELIER / COR-01",
         craftOrigin: "Incrustation Main · Point Invisible",
         techSpec: "14 Baleines Souples · Bonnets Intégrés",
-        weightSpec: "38 Heures de Broderie",
+        weightSpec: "38 Heures de Broderie Fine",
         stylingNote:
-          "Les motifs floraux de la dentelle sont découpés aux ciseaux fins puis réappliqués à la main sur le décolleté sans aucune couture visible.",
+          "Les motifs floraux de la dentelle sont découpés aux ciseaux fins puis réappliqués à la main sur le décolleté sans aucune couture apparente.",
+        materialName: "Dentelle de Caudry-Calais sur Tulle Illusion",
+        countryOrigin: "France (Hauts-de-France)",
+        countryFlag: "🇫🇷",
+        atelierName: "Maison Dentellière Fondée en 1887 — Calais-Caudry",
+        composition: "78% Coton d'Égypte peigné extra-long · 22% Soie naturelle de mûrier",
+        textureTouch: "D'une légèreté vaporeuse, caresse aérienne sur la peau sans aucune sensation de grattage ni raideur.",
+        lightReflect: "Fini poudré mat qui absorbe la lumière naturelle sans reflet parasite, idéal pour les photographies de mariage.",
+        durabilityBreathability: "Trame aérée respirante à 100%, maintenant une fraîcheur totale sous le bustier durant toute la journée.",
+        whySpecial:
+          "Tissée sur les légendaires métiers Leavers du XIXe siècle (qui ne sont plus construits aujourd'hui), cette dentelle nécessite plus de 5 000 fils de chaîne entrelacés selon un tracé mécanique d'une précision microscopique. Chaque arabesque florale est ensuite découpée et réappliquée au point invisible par une brodeuse d'art sur le tulle illusion, donnant l'impression magique que les fleurs de dentelle fleurissent à même la peau de la mariée.",
+        artisanSecret: "Incrustation point par point sans couture visible : 38 heures de travail manuel rien que pour ce décolleté.",
+        careGuidance: "Conservation sur cintre rembourré en soie, nettoyage exclusivement chez un maître teinturier spécialisé haute couture.",
       },
       {
         id: 102,
         indexLabel: "02",
         productId: 2,
-        x: 46,
+        x: 31,
         y: 48,
         partLabel: "Cintrage & Taille",
-        zoneTitle: "Ceinture Sculptée & Drapé Fin",
-        materialNote: "Satin duchesse & entoilage soie",
+        zoneTitle: "Satin Duchesse & Crêpe de Soie de Côme",
+        materialNote: "100% Pure Soie de Côme (Italie) · Baleinage souple",
         archiveRef: "ATELIER / TAI-02",
-        craftOrigin: "Moulage sur Mannequin",
-        techSpec: "Maintien Interne · Fermeture Perles",
-        weightSpec: "Ajustement au Millimètre",
+        craftOrigin: "Moulage sur Mannequin Vivant",
+        techSpec: "Maintien Interne · Fermeture Perles Nacrées",
+        weightSpec: "Ajustement au Millimètre Près",
         stylingNote:
-          "La ligne de taille est subtilement galbée en V pour élancer le buste et marquer la cambrure avec une aisance absolue.",
+          "La ligne de taille est subtilement galbée en V pour élancer le buste et marquer la cambrure avec une aisance et une souplesse absolues.",
+        materialName: "Satin Duchesse & Crêpe de Soie de Côme",
+        countryOrigin: "Italie (Lombardie, Lac de Côme)",
+        countryFlag: "🇮🇹",
+        atelierName: "Tissages Soyeux Historiques de Côme — Fondés en 1902",
+        composition: "100% Pure Soie de Mûrier biologique (42 mommes)",
+        textureTouch: "Toucher liquide et soyeux, enveloppant le corps avec une douceur incomparable et un maintien ferme mais voluptueux.",
+        lightReflect: "Éclat subtilement nacré, captant la douce lueur des bougies et du soleil couchant.",
+        durabilityBreathability: "Thermorégulation naturelle : la soie évacue l'humidité et procure une sensation de fraîcheur continue.",
+        whySpecial:
+          "Le satin duchesse de Côme est réputé dans le monde entier comme le saint des saints des soies nuptiales. Grâce à une densité exceptionnelle de fils de soie ultra-fins battus sur des métiers Jacquard séculaires, il possède une 'mémoire de forme' unique qui galbe et sculpte la taille sans nécessiter de corset rigide étouffant. La cambrure naturelle de la mariée est magnifiée tout en lui laissant une liberté de mouvement et de respiration absolue.",
+        artisanSecret: "Entoilage interne en pongé de soie pure et 14 baleines souples à mémoire de forme épousant chaque respiration.",
+        careGuidance: "Défroissage doux à la vapeur verticale basse pression, mise sous housse respirante en coton non blanchi.",
       },
       {
         id: 103,
         indexLabel: "03",
         productId: 3,
-        x: 52,
-        y: 78,
+        x: 40,
+        y: 76,
         partLabel: "Jupe & Traîne",
-        zoneTitle: "Amplitude & Ourlet Brodée",
-        materialNote: "Mousseline de soie & organza",
+        zoneTitle: "Pur Lin de Normandie & Voile d'Organza",
+        materialNote: "Lin normand peigné (France) · Organza de soie pure",
         archiveRef: "ATELIER / TRA-03",
         craftOrigin: "Coupe en Plein Biais · Roulotté Main",
         techSpec: "Attache-Traîne Invisible Inclus",
-        weightSpec: "8,5 Mètres de Dentelle d'Ourlet",
+        weightSpec: "8,5 Mètres de Dentelle & Lin d'Ourlet",
         stylingNote:
           "La traîne se déploie avec majesté lors de la cérémonie puis se relève en un geste grâce au bouton nacré dissimulé pour la soirée.",
+        materialName: "Pur Lin de Normandie & Organza de Soie Aérienne",
+        countryOrigin: "France (Normandie) & Flandres",
+        countryFlag: "🇫🇷",
+        atelierName: "Filatures Traditionnelles de Normandie — Label Masters of Linen",
+        composition: "65% Lin Normand peigné longue fibre · 35% Organza de Soie naturelle",
+        textureTouch: "Souplesse texturée au tombé sculptural, conférant à la jupe et à la traîne un mouvement noble et aérien.",
+        lightReflect: "Texture brute raffinée rehaussée de reflets ivoire changeants au gré des pas.",
+        durabilityBreathability: "Résistance extrême à la déchirure lors de la marche et tombé lourd infroissable qui ne s'écrase jamais.",
+        whySpecial:
+          "Le lin cultivé sur les terres côtières de Normandie bénéficie d'un climat océanique unique au monde qui confère à ses fibres une longueur et une souplesse incomparables. Marié en trame serrée avec l'organza de soie, il permet à la traîne royale d'avoir une ampleur sculpturale sans être alourdie par des jupons synthétiques rigides. La robe ondule avec une grâce majestueuse à chaque pas vers l'autel, tout en restant remarquablement fraîche et légère.",
+        artisanSecret: "Coupe en plein biais avec ourlet roulotté main et bouton nacré dissimulé pour relever la traîne le soir du bal.",
+        careGuidance: "Housse anti-UV fournie avec papier de soie au pH neutre pour une préservation patrimoniale sur plusieurs générations.",
       },
     ],
   },
@@ -1491,13 +1538,13 @@ const LOOKBOOK_SILHOUETTES: LookbookSilhouette[] = [
     id: 2,
     code: "SILHOUETTE 02",
     title: "Impératrice de Gala",
-    serifSubtitle: "Robe du Soir — Soie & Éclat",
+    serifSubtitle: "Robe du Soir — Pongé & Crêpe de Soie de Lyon",
     seasonNote: "Collection Gala & Réception",
     image: "/couture/party-dress27.webp",
     photographer: "Confection : Patron Individuel Sur-Mesure",
     totalPrice: "640 €",
     hoursOfWork: "55 Heures",
-    fabricMeterage: "6,5 Mètres de Soie",
+    fabricMeterage: "6,5 Mètres de Soie Pure",
     fittingsCount: "2 à 3 Essayages",
     editorialNote:
       "L'équilibre parfait entre glamour sculptural et fluidité couture. Taillée dans une étoffe précieuse qui capte la lumière du soir, cette silhouette magnifie la démarche.",
@@ -1507,48 +1554,84 @@ const LOOKBOOK_SILHOUETTES: LookbookSilhouette[] = [
         indexLabel: "01",
         productId: 5,
         x: 50,
-        y: 26,
+        y: 56,
         partLabel: "Épaules & Encolure",
-        zoneTitle: "Ligne d'Épaule & Décolleté Couture",
-        materialNote: "Satin envers crêpe & perles fines",
+        zoneTitle: "Pongé de Soie Pure & Finition Glacée",
+        materialNote: "Soie d'élevage de Lyon (France) certifiée Oeko-Tex",
         archiveRef: "GALA / ENC-01",
         craftOrigin: "Bâtissage sur Buste · Finition Glacée",
-        techSpec: "Tenue Sans Bretelles · Anti-Glisse",
+        techSpec: "Tenue Sans Bretelles · Ruban Anti-Glisse",
         weightSpec: "Doublure 100% Pongé de Soie",
         stylingNote:
           "L'encolure est renforcée d'un ruban de maintien invisible qui épouse le décolleté sans jamais bâiller, même en mouvement.",
+        materialName: "Pongé de Soie Pure de Lyon & Perles Fines",
+        countryOrigin: "France (Auvergne-Rhône-Alpes, Lyon)",
+        countryFlag: "🇫🇷",
+        atelierName: "Ateliers Soyeux de la Croix-Rousse — Lyon",
+        composition: "100% Soie Pongée Naturelle (55 g/m²)",
+        textureTouch: "Finesse caressante d'une absolue légèreté, régulant thermiquement le contact avec le buste.",
+        lightReflect: "Reflets profonds et soyeux sous les projecteurs de soirée.",
+        durabilityBreathability: "Confort respirant incomparable évitant tout échauffement lors des réceptions.",
+        whySpecial:
+          "Héritier du savoir-faire des Canuts lyonnais, ce pongé de soie possède une finesse de filature que seuls les tisseurs de la région Rhône-Alpes maîtrisent. Sa souplesse permet un plaquage parfait sur la peau sans faux plis.",
+        artisanSecret: "Montage sur ruban de sergé sous-jacent pour un maintien sans faille sans armature métallique gênante.",
+        careGuidance: "Nettoyage délicat à sec, pressage à fer tiède sans vapeur directe.",
       },
       {
         id: 202,
         indexLabel: "02",
         productId: 6,
         x: 48,
-        y: 50,
+        y: 71,
         partLabel: "Drapé Oblique",
-        zoneTitle: "Plissé Main en Éventail",
-        materialNote: "Crêpe de soie lourd 4 plis",
+        zoneTitle: "Crêpe de Soie Lourd 4 Plis & Perles de Murano",
+        materialNote: "Crêpe de soie lourd de Côme (Italie) & Perles de Murano",
         archiveRef: "GALA / DRA-02",
         craftOrigin: "Épinglage Vivant à l'Atelier",
         techSpec: "Plis Fixés Point par Point",
         weightSpec: "Tombé Liquide Infroissable",
         stylingNote:
           "Les plis convergent vers la hanche pour dessiner une taille de guêpe et créer un jeu d'ombres et de lumière flatteur.",
+        materialName: "Crêpe de Soie Lourd 4 Plis & Verre de Murano",
+        countryOrigin: "Italie (Lombardie & Vénétie)",
+        countryFlag: "🇮🇹",
+        atelierName: "Maison Tessile Lombarda — Côme",
+        composition: "100% Crêpe de Soie Lourd torsadé 4 brins (220 g/m²)",
+        textureTouch: "Grain crêpé inimitable, dense, avec un effet drapant lourd et voluptueux.",
+        lightReflect: "Matité profonde créant un contraste saisissant avec les perles de verre soufflé de Murano.",
+        durabilityBreathability: "Tombé infroissable même après plusieurs heures assise.",
+        whySpecial:
+          "Ce crêpe lourd 4 plis utilise des fils de soie fortement surtorsadés qui lui confèrent une élasticité naturelle sans un gramme d'élasthanne synthétique. Le vêtement bouge comme du mercure liquide.",
+        artisanSecret: "Chaque pli est fixé un par un au point de chausson sur un ruban intérieur en gros-grain.",
+        careGuidance: "Suspension sur cintre large rembourré pour préserver le volume des plis.",
       },
       {
         id: 203,
         indexLabel: "03",
         productId: 8,
-        x: 54,
-        y: 80,
+        x: 50,
+        y: 88,
         partLabel: "Tombé & Fente",
-        zoneTitle: "Jupe Fourreau & Mouvement Fluide",
-        materialNote: "Ourlet invisible au point de chausson",
+        zoneTitle: "Satin Envers Crêpe Liquide & Roulotté Main",
+        materialNote: "Satin italien (Biella) · Ourlet invisible au point de chausson",
         archiveRef: "GALA / JUP-03",
-        craftOrigin: "Coupe Haute Précision",
-        techSpec: "hauteur de Fente Personnalisable",
-        weightSpec: "Fluidité 360°",
+        craftOrigin: "Coupe Haute Précision au Millimètre",
+        techSpec: "Hauteur de Fente Personnalisable",
+        weightSpec: "Fluidité Dynamique 360°",
         stylingNote:
           "Chaque ourlet est cousu à la main au fil de soie assorti afin qu'aucune piqûre machine ne vienne briser la souplesse du tombé.",
+        materialName: "Satin Envers Crêpe Liquide de Biella",
+        countryOrigin: "Italie (Piémont, Biella)",
+        countryFlag: "🇮🇹",
+        atelierName: "Lanificio & Setificio Storico di Biella",
+        composition: "100% Soie d'exception double face satin/crêpe",
+        textureTouch: "Face extérieure satinée brillante et glissante, envers crêpé doux contre la peau.",
+        lightReflect: "Lustre chatoyant qui capte l'éclairage feutré des salons de gala.",
+        durabilityBreathability: "Tissage serré très résistant aux accrocs lors des déplacements.",
+        whySpecial:
+          "L'eau pure des Alpes biellaises utilisée pour le rinçage des fils confère à ce satin envers crêpe une brillance naturelle sans aucun additif chimique. Le tombé est si fluide qu'il accompagne la démarche avec une prestance cinématographique.",
+        artisanSecret: "Ourlet exécuté à l'aiguille fine n°10 avec un fil de soie pure tiré de la lisière même du tissu.",
+        careGuidance: "Housse de protection en soie noire fournie pour éviter toute décoloration.",
       },
     ],
   },
@@ -1556,64 +1639,100 @@ const LOOKBOOK_SILHOUETTES: LookbookSilhouette[] = [
     id: 3,
     code: "SILHOUETTE 03",
     title: "Légende d'Orient",
-    serifSubtitle: "Création d'Apparat — Broderie d'Or",
+    serifSubtitle: "Création d'Apparat — Broderie d'Or & Soie Mikado",
     seasonNote: "Édition Prestige Sur-Mesure",
     image: "/couture/other-robes22.webp",
     photographer: "Confection : Broderie & Couture Main",
     totalPrice: "780 €",
     hoursOfWork: "72 Heures",
-    fabricMeterage: "9 Mètres d'Étoffe",
+    fabricMeterage: "9 Mètres d'Étoffe d'Apparat",
     fittingsCount: "3 Essayages Privés",
     editorialNote:
-      "Une robe de cérémonie d'une richesse ornementale remarquable, mariant la noblesse des broderies artisanales à une coupe cintrée moderne et aérienne.",
+      "Une robe de cérémonie d'une richesse ornementale remarquable, mariant la noblesse des broderies artisanales au fil d'or 24 carats et la tenue sculpturale de la soie Mikado impériale.",
     hotspots: [
       {
         id: 301,
         indexLabel: "01",
         productId: 13,
-        x: 48,
-        y: 27,
+        x: 51,
+        y: 35,
         partLabel: "Parure de Buste",
-        zoneTitle: "Plastron Brodé Fil d'Or & Cristaux",
-        materialNote: "Canetille dorée, perles & soie",
+        zoneTitle: "Canetille de Fil d'Or 24ct & Cristaux de Bohême",
+        materialNote: "Fil d'or d'artisanat français · Cristaux de Bohême posés main",
         archiveRef: "PRESTIGE / BRO-01",
-        craftOrigin: "Broderie au Crochet & Aiguille",
-        techSpec: "Plus de 2 400 Perles Posées Main",
-        weightSpec: "Doublure Douce Sans Frottement",
+        craftOrigin: "Broderie au Crochet de Lunéville & Aiguille",
+        techSpec: "Plus de 2 400 Perles & Cristaux Posés Main",
+        weightSpec: "Doublure Douce Anti-Frottement",
         stylingNote:
-          "Les arabesques brodées encadrent le visage et illuminent le port de tête tel un véritable bijou cousu à même l'étoffe.",
+          "Les arabesques brodées encadrent le bustier et illuminent le port de tête tel un véritable bijou cousu à même l'étoffe.",
+        materialName: "Canetille d'Or Pur & Cristaux de Bohême",
+        countryOrigin: "France (Lyon) & République Tchèque (Bohême)",
+        countryFlag: "🇫🇷 / 🇨🇿",
+        atelierName: "Maison Broderie d'Or de Lunéville & Ateliers Lyonnais",
+        composition: "Fil de cuivre gainé d'or pur 24 carats · Cristaux facettés de Bohême",
+        textureTouch: "Relief précieux sans aspérité blessante, doublé de mousseline de soie douce.",
+        lightReflect: "Scintillement éclatant sous tous les angles de lumière.",
+        durabilityBreathability: "Fil d'or inoxydable inaltérable à l'humidité.",
+        whySpecial:
+          "Chaque centimètre carré de ce plastron est brodé selon la technique séculaire du crochet de Lunéville. La canetille d'or est un ressort hélicoïdal microscopique coupé à la pince millimétrique et enfilé un à un pour former les arabesques royales.",
+        artisanSecret: "Plus de 2 400 perles et cristaux sertis à la main avec du fil de soie ciré haute résistance.",
+        careGuidance: "Conserver à plat dans sa boîte d'atelier capitonnée de soie avant port.",
       },
       {
         id: 302,
         indexLabel: "02",
         productId: 14,
         x: 50,
-        y: 49,
+        y: 50,
         partLabel: "Ceinture & Galbe",
-        zoneTitle: "Taille Cintrée & Finition Orfèvre",
-        materialNote: "Galon tressé & passementerie fine",
+        zoneTitle: "Soie Mikado Impériale & Passementerie d'Or",
+        materialNote: "Mikado de soie pure (Italie) · Passementerie orfèvre",
         archiveRef: "PRESTIGE / CEI-02",
-        craftOrigin: "Façonnage Sur-Mesure",
-        techSpec: "Agrafes Couture Invisibles",
-        weightSpec: "Maintien Souple & Confortable",
+        craftOrigin: "Façonnage et Cintrage Sur-Mesure",
+        techSpec: "Agrafes Couture Invisibles Doublées",
+        weightSpec: "Maintien Sculptural & Souple",
         stylingNote:
           "La ceinture souligne la taille tout en structurant la transition entre le bustier perlé et le volume généreux de la jupe.",
+        materialName: "Soie Mikado Impériale & Galon Tressé d'Or",
+        countryOrigin: "Italie (Lombardie, Lac de Côme)",
+        countryFlag: "🇮🇹",
+        atelierName: "Setificio Reale di Como",
+        composition: "100% Soie Mikado à armure diagonale lourde (280 g/m²)",
+        textureTouch: "Grain ferme et structuré, offrant une tenue architecturale incomparable.",
+        lightReflect: "Reflet semi-mat poudré très noble et distingué.",
+        durabilityBreathability: "Rigidité noble naturelle sans renfort cartonné synthétique.",
+        whySpecial:
+          "La soie Mikado est la reine des étoffes de cour : sa structure sergée serée lui confère un maintien tridimensionnel sans équivalent dans le monde textile. Elle galbe le ventre et les hanches tout en restant légère et respirante.",
+        artisanSecret: "Entoilage au crin de cheval naturel traditionnel pour une tenue perpétuelle.",
+        careGuidance: "Repassage à sec sur l'envers uniquement avec pattemouille.",
       },
       {
         id: 303,
         indexLabel: "03",
         productId: 16,
-        x: 47,
-        y: 79,
+        x: 52,
+        y: 76,
         partLabel: "Jupe & Panneaux",
-        zoneTitle: "Godets Majestueux & Bordure Brodée",
-        materialNote: "Satin impérial & tulle brodé",
+        zoneTitle: "Tulle Aérien Plissé Soleil & Soie Végétale",
+        materialNote: "Voile de soie et tulle de Lyon (France) · Finition orfèvre",
         archiveRef: "PRESTIGE / PAN-03",
-        craftOrigin: "Assemblage Artisanal",
+        craftOrigin: "Assemblage et Plissage Traditionnel au Carton",
         techSpec: "Tombé Symétrique Haut Volume",
-        weightSpec: "Finitions Biais de Soie",
+        weightSpec: "Finitions Biais de Soie Pure",
         stylingNote:
           "Les panneaux s'ouvrent avec grâce à chaque pas, dévoilant la finesse des motifs jusqu'au bas de la robe.",
+        materialName: "Tulle de Soie Aérien & Crêpe Plissé Soleil",
+        countryOrigin: "France (Auvergne-Rhône-Alpes)",
+        countryFlag: "🇫🇷",
+        atelierName: "Atelier Plisseur d'Art de Paris & Lyon",
+        composition: "70% Tulle de Soie d'élevage · 30% Mousseline légère de soie",
+        textureTouch: "Volutes d'air d'une légèreté presque immatérielle.",
+        lightReflect: "Transparence délicate laissant transparaître la couleur profonde de la doublure de soie.",
+        durabilityBreathability: "Aération maximale permettant une aisance totale durant les danses.",
+        whySpecial:
+          "Le plissé soleil de cette jupe est réalisé à l'aide de moules en carton kraft fabriqués à la main et passés à l'étuve de vapeur. Les plis s'évasent en éventail de la taille jusqu'à l'ourlet, créant un volume royal sans jamais alourdir la silhouette.",
+        artisanSecret: "Montage des panneaux en biais pour que chaque pli s'ouvre comme une aile d'oiseau lors de la marche.",
+        careGuidance: "Ne jamais repasser les plis directement : utiliser un défroisseur vapeur vertical à distance.",
       },
     ],
   },
@@ -2401,6 +2520,7 @@ export default function Home() {
   })
   const [k, setK] = useState(0)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [selectedMaterialHotspot, setSelectedMaterialHotspot] = useState<LookbookHotspot | null>(null)
   const [productModalOrigin, setProductModalOrigin] = useState<{
     left: number
     top: number
@@ -2479,7 +2599,7 @@ export default function Home() {
   const n = CAROUSEL_SHOES.length
 
   useEffect(() => {
-    if (selectedProduct || selectedEvent) {
+    if (selectedProduct || selectedEvent || selectedMaterialHotspot) {
       document.body.style.overflow = "hidden"
     } else {
       document.body.style.overflow = ""
@@ -2487,7 +2607,17 @@ export default function Home() {
     return () => {
       document.body.style.overflow = ""
     }
-  }, [selectedProduct, selectedEvent])
+  }, [selectedProduct, selectedEvent, selectedMaterialHotspot])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedMaterialHotspot) {
+        setSelectedMaterialHotspot(null)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [selectedMaterialHotspot])
 
   const openWhyCardModal = (card: WhyChooseCard, e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -4830,21 +4960,25 @@ export default function Home() {
                   {/* Interactive Numbered Hotspots on the Silhouette */}
                   {currentLook.hotspots.map((spot, idx) => {
                     const isSpotActive = idx === activeHotspotIdx
+                    const isFlipLeft = spot.x > 50
                     return (
                       <button
                         key={spot.id}
                         type="button"
-                        className={`lookbook-hotspot-pin ${isSpotActive ? "active" : ""}`}
+                        className={`lookbook-hotspot-pin ${isSpotActive ? "active" : ""} ${isFlipLeft ? "pin-flip-left" : ""}`}
                         style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
                         onMouseEnter={() => setActiveHotspotIdx(idx)}
-                        onClick={() => setActiveHotspotIdx(idx)}
-                        aria-label={`Zone ${spot.indexLabel} : ${spot.zoneTitle}`}
+                        onClick={() => {
+                          setActiveHotspotIdx(idx)
+                          setSelectedMaterialHotspot(spot)
+                        }}
+                        aria-label={`Zone ${spot.indexLabel} : ${spot.materialName} (${spot.countryOrigin})`}
                       >
                         <span className="lookbook-hotspot-pulse" />
                         <span className="lookbook-hotspot-core">{spot.indexLabel}</span>
                         <span className="lookbook-hotspot-tag">
-                          <span className="lookbook-hotspot-tag-part">{spot.partLabel}</span>
-                          <span className="lookbook-hotspot-tag-name">{spot.zoneTitle}</span>
+                          <span className="lookbook-hotspot-tag-part">{spot.partLabel} · {spot.countryFlag}</span>
+                          <span className="lookbook-hotspot-tag-name">{spot.materialName}</span>
                         </span>
                       </button>
                     )
@@ -4899,20 +5033,35 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Active Couture Zone Card with Live Optical Loupe (No Duplicate Product Image!) */}
+                {/* Active Couture Zone Card with Live Optical Loupe (100% Precise Geometric Centering) */}
                 <div className="lookbook-spotlight-card lookbook-couture-dossier-card" key={currentHotspot.id}>
-                  <div className="lookbook-spotlight-media lookbook-loupe-media">
+                  <div
+                    className="lookbook-spotlight-media lookbook-loupe-media"
+                    onClick={() => setSelectedMaterialHotspot(currentHotspot)}
+                    style={{ cursor: "pointer" }}
+                    title="Cliquer pour ouvrir le dossier matière détaillé"
+                  >
                     <span className="lookbook-spotlight-index-badge">LOUPE {currentHotspot.indexLabel}</span>
                     <div
                       className="lookbook-optical-loupe"
-                      style={{
-                        backgroundImage: `url(${currentLook.image})`,
-                        backgroundPosition: `${currentHotspot.x}% ${currentHotspot.y}%`,
-                        backgroundSize: "290%",
-                      }}
                       role="img"
-                      aria-label={`Détail optique : ${currentHotspot.zoneTitle}`}
+                      aria-label={`Détail optique : ${currentHotspot.zoneTitle} (${currentHotspot.materialName})`}
                     >
+                      <img
+                        src={currentLook.image}
+                        alt={currentHotspot.zoneTitle}
+                        className="lookbook-loupe-zoomed-img"
+                        style={{
+                          position: "absolute",
+                          left: "50%",
+                          top: "50%",
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          transformOrigin: `${currentHotspot.x}% ${currentHotspot.y}%`,
+                          transform: `translate(-${currentHotspot.x}%, -${currentHotspot.y}%) scale(3.2)`,
+                        }}
+                      />
                       <div className="lookbook-loupe-crosshair">
                         <span className="loupe-ring" />
                         <span className="loupe-dot" />
@@ -4920,7 +5069,7 @@ export default function Home() {
                     </div>
                     <div className="lookbook-spotlight-media-foot">
                       <span className="lookbook-spotlight-ref-code">{currentHotspot.archiveRef}</span>
-                      <span className="lookbook-spotlight-stock-dot">FAIT MAIN</span>
+                      <span className="lookbook-spotlight-inspect-hint">🔍 Zoom Précision 100%</span>
                     </div>
                   </div>
 
@@ -4928,11 +5077,15 @@ export default function Home() {
                     <div className="lookbook-spotlight-top-group">
                       <div className="lookbook-spotlight-meta-top">
                         <span className="lookbook-spotlight-part">{currentHotspot.partLabel}</span>
-                        <span className="lookbook-spotlight-price">{currentLook.totalPrice}</span>
+                        <span className="lookbook-spotlight-origin-badge">
+                          {currentHotspot.countryFlag} {currentHotspot.countryOrigin}
+                        </span>
                       </div>
 
-                      <h4 className="lookbook-spotlight-name">{currentHotspot.zoneTitle}</h4>
-                      <p className="lookbook-spotlight-material">{currentHotspot.materialNote}</p>
+                      <h4 className="lookbook-spotlight-name">{currentHotspot.materialName}</h4>
+                      <p className="lookbook-spotlight-material">
+                        <strong className="text-[#29251c]">{currentHotspot.zoneTitle}</strong> · {currentHotspot.materialNote}
+                      </p>
                       <p className="lookbook-spotlight-desc">{currentHotspot.stylingNote}</p>
                     </div>
 
@@ -4983,10 +5136,11 @@ export default function Home() {
                     <div className="lookbook-spotlight-actions">
                       <button
                         type="button"
-                        className="lookbook-inspect-btn"
-                        onClick={() => openProductModal(currentHotspotProduct)}
+                        className="lookbook-inspect-btn lookbook-material-dossier-btn"
+                        onClick={() => setSelectedMaterialHotspot(currentHotspot)}
                       >
-                        <span>Voir la fiche couture</span>
+                        <Sparkles size={16} />
+                        <span>Fiche Matière &amp; Origine</span>
                         <ArrowUpRight size={17} />
                       </button>
                       <button
@@ -5001,22 +5155,21 @@ export default function Home() {
                         }}
                       >
                         {quickAddedLookbookItems.includes(currentHotspot.id)
-                          ? "Essayage sélectionné ✓"
+                          ? "Zone Sélectionnée ✓"
                           : "+ Demander un essayage"}
                       </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Complete 3-Zone Couture Anatomy List (with Mini Optical Loupes — Zero Duplicate Images) */}
+                {/* Complete 3-Zone Couture Anatomy List (with 100% Precise Mini Optical Loupes) */}
                 <div className="lookbook-nomenclature-list">
                   <div className="lookbook-nomenclature-head">
                     <span>ARCHITECTURE DES 3 ZONES DE LA ROBE</span>
-                    <span>INSPECTION DIRECTE</span>
+                    <span>FICHE MATIÈRE &amp; ORIGINE (CLIQUEZ POUR DÉTAIL)</span>
                   </div>
 
                   {currentLook.hotspots.map((spot, idx) => {
-                    const itemProd = products.find((p) => p.id === spot.productId) || products[0]
                     const isRowActive = idx === activeHotspotIdx
                     return (
                       <div
@@ -5025,28 +5178,46 @@ export default function Home() {
                         tabIndex={0}
                         className={`lookbook-nomenclature-row ${isRowActive ? "active" : ""}`}
                         onMouseEnter={() => setActiveHotspotIdx(idx)}
-                        onClick={() => setActiveHotspotIdx(idx)}
+                        onClick={() => {
+                          setActiveHotspotIdx(idx)
+                          setSelectedMaterialHotspot(spot)
+                        }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault()
                             setActiveHotspotIdx(idx)
+                            setSelectedMaterialHotspot(spot)
                           }
                         }}
                       >
                         <span className="lookbook-row-index">{spot.indexLabel}</span>
                         <div
                           className="lookbook-row-thumb-wrap lookbook-row-loupe-thumb"
-                          style={{
-                            backgroundImage: `url(${currentLook.image})`,
-                            backgroundPosition: `${spot.x}% ${spot.y}%`,
-                            backgroundSize: "320%",
-                          }}
+                          style={{ position: "relative", overflow: "hidden" }}
                           aria-hidden="true"
-                        />
+                        >
+                          <img
+                            src={currentLook.image}
+                            alt=""
+                            style={{
+                              position: "absolute",
+                              left: "50%",
+                              top: "50%",
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              transformOrigin: `${spot.x}% ${spot.y}%`,
+                              transform: `translate(-${spot.x}%, -${spot.y}%) scale(3.2)`,
+                            }}
+                          />
+                        </div>
                         <div className="lookbook-row-info">
-                          <span className="lookbook-row-name">{spot.zoneTitle}</span>
+                          <span className="lookbook-row-name">
+                            {spot.materialName}{" "}
+                            <span className="lookbook-row-flag">{spot.countryFlag}</span>
+                          </span>
                           <span className="lookbook-row-note">
-                            {spot.partLabel} · {spot.materialNote}
+                            {spot.partLabel} · {spot.countryOrigin}
                           </span>
                         </div>
                         <div className="lookbook-row-right">
@@ -5056,9 +5227,10 @@ export default function Home() {
                             className="lookbook-row-open-modal"
                             onClick={(e) => {
                               e.stopPropagation()
-                              openProductModal(itemProd)
+                              setActiveHotspotIdx(idx)
+                              setSelectedMaterialHotspot(spot)
                             }}
-                            aria-label={`Ouvrir la fiche associée à ${spot.zoneTitle}`}
+                            aria-label={`Ouvrir le dossier matière pour ${spot.materialName}`}
                           >
                             <ArrowUpRight size={15} />
                           </button>
@@ -6094,6 +6266,254 @@ export default function Home() {
                     fill={likedWhyCards.includes(selectedWhyModal.card.id) ? "currentColor" : "none"}
                   />
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Haute Couture Material & Provenance Dossier Popup Modal */}
+      {selectedMaterialHotspot && (
+        <div
+          className="material-modal-backdrop"
+          onClick={() => setSelectedMaterialHotspot(null)}
+          role="presentation"
+        >
+          <div
+            className="material-modal-container"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="material-modal-title-id"
+          >
+            {/* Header */}
+            <div className="material-modal-header">
+              <div className="material-modal-header-left">
+                <div className="material-modal-badge-row">
+                  <span className="material-modal-badge">
+                    DOSSIER MATIÈRE &amp; SAVOIR-FAIRE HAUTE COUTURE
+                  </span>
+                  <span className="material-modal-origin-pill">
+                    {selectedMaterialHotspot.countryFlag} {selectedMaterialHotspot.countryOrigin}
+                  </span>
+                </div>
+                <h2 id="material-modal-title-id" className="material-modal-title">
+                  {selectedMaterialHotspot.materialName}
+                </h2>
+                <div className="material-modal-meta-line">
+                  <span className="material-modal-meta-zone">
+                    Zone {selectedMaterialHotspot.indexLabel} : {selectedMaterialHotspot.partLabel}
+                  </span>
+                  <span className="material-modal-meta-sep">•</span>
+                  <span className="material-modal-meta-silhouette">
+                    {currentLook.title} <em>({currentLook.serifSubtitle})</em>
+                  </span>
+                  <span className="material-modal-meta-sep">•</span>
+                  <span className="material-modal-meta-ref">{selectedMaterialHotspot.archiveRef}</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="material-modal-close-btn"
+                onClick={() => setSelectedMaterialHotspot(null)}
+                aria-label="Fermer le dossier matière"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* 3-Zone Interactive Switcher Tabs inside Modal */}
+            <div className="material-modal-tabs-bar" role="tablist" aria-label="Zones de la robe">
+              {currentLook.hotspots.map((spot, sIdx) => {
+                const isTabActive = spot.id === selectedMaterialHotspot.id
+                return (
+                  <button
+                    key={spot.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isTabActive}
+                    className={`material-modal-tab-btn ${isTabActive ? "active" : ""}`}
+                    onClick={() => {
+                      setActiveHotspotIdx(sIdx)
+                      setSelectedMaterialHotspot(spot)
+                    }}
+                  >
+                    <span className="tab-zone-num">ZONE {spot.indexLabel}</span>
+                    <span className="tab-zone-title">{spot.partLabel}</span>
+                    <span className="tab-zone-flag">{spot.countryFlag}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* 2-Column Haute Couture Body */}
+            <div className="material-modal-body-grid">
+              {/* Left Column: Macro Optical Loupe Viewport + Technical Passport */}
+              <div className="material-modal-left-col">
+                <div className="material-modal-macro-viewport">
+                  <div className="material-modal-macro-top">
+                    <span className="material-modal-macro-badge">
+                      MACRO TEXTURE 3.8X · RÉSOLUTION ATELIER
+                    </span>
+                    <span className="material-modal-macro-flag">
+                      {selectedMaterialHotspot.countryFlag}
+                    </span>
+                  </div>
+
+                  <div className="material-modal-macro-loupe">
+                    <img
+                      src={currentLook.image}
+                      alt={selectedMaterialHotspot.materialName}
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transformOrigin: `${selectedMaterialHotspot.x}% ${selectedMaterialHotspot.y}%`,
+                        transform: `translate(-${selectedMaterialHotspot.x}%, -${selectedMaterialHotspot.y}%) scale(3.8)`,
+                      }}
+                    />
+                    <div className="lookbook-loupe-crosshair">
+                      <span className="loupe-ring" />
+                      <span className="loupe-dot" />
+                    </div>
+                  </div>
+
+                  <div className="material-modal-macro-foot">
+                    <span className="macro-foot-coord">
+                      COORD : X{selectedMaterialHotspot.x}% · Y{selectedMaterialHotspot.y}%
+                    </span>
+                    <span className="macro-foot-provenance">100% FIBRES CERTIFIÉES</span>
+                  </div>
+                </div>
+
+                {/* Passport Card */}
+                <div className="material-passport-card">
+                  <h4 className="material-passport-title">
+                    <span>PASSEPORT MATIÈRE &amp; TRAÇABILITÉ</span>
+                    <span className="passport-cert-tag">CERTIFIÉ COUTURE</span>
+                  </h4>
+
+                  <div className="material-passport-rows">
+                    <div className="material-passport-row">
+                      <span className="passport-key">ATELIER &amp; MANUFACTURE</span>
+                      <strong className="passport-val">{selectedMaterialHotspot.atelierName}</strong>
+                    </div>
+                    <div className="material-passport-row">
+                      <span className="passport-key">ORIGINE GÉOGRAPHIQUE</span>
+                      <strong className="passport-val">
+                        {selectedMaterialHotspot.countryFlag} {selectedMaterialHotspot.countryOrigin}
+                      </strong>
+                    </div>
+                    <div className="material-passport-row">
+                      <span className="passport-key">COMPOSITION CERTIFIÉE</span>
+                      <strong className="passport-val">{selectedMaterialHotspot.composition}</strong>
+                    </div>
+                    <div className="material-passport-row">
+                      <span className="passport-key">SAVOIR-FAIRE DE CONFECTION</span>
+                      <strong className="passport-val">{selectedMaterialHotspot.craftOrigin}</strong>
+                    </div>
+                    <div className="material-passport-row">
+                      <span className="passport-key">TEMPS DE FAÇONNAGE</span>
+                      <strong className="passport-val">{selectedMaterialHotspot.weightSpec}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Narrative Signature Box, Characteristics, Secret & Care */}
+              <div className="material-modal-right-col">
+                {/* Grand Encart Signature: Pourquoi ce matériau est si particulier */}
+                <div className="material-special-highlight-box">
+                  <div className="special-highlight-header">
+                    <Sparkles size={18} className="special-sparkle-icon" />
+                    <span className="special-highlight-eyebrow">DISTINCTION &amp; RARETÉ ATELIER</span>
+                  </div>
+                  <h3 className="special-highlight-heading">
+                    Pourquoi ce matériau est si particulier ?
+                  </h3>
+                  <p className="special-highlight-text">
+                    {selectedMaterialHotspot.whySpecial}
+                  </p>
+                </div>
+
+                {/* 3 Physical & Sensory Cards */}
+                <div className="material-sensory-grid">
+                  <div className="material-sensory-card">
+                    <div className="sensory-head">
+                      <span className="sensory-icon">✨</span>
+                      <strong className="sensory-label">Toucher &amp; Texture</strong>
+                    </div>
+                    <p className="sensory-desc">{selectedMaterialHotspot.textureTouch}</p>
+                  </div>
+
+                  <div className="material-sensory-card">
+                    <div className="sensory-head">
+                      <span className="sensory-icon">💎</span>
+                      <strong className="sensory-label">Photogénie &amp; Rendu Lumière</strong>
+                    </div>
+                    <p className="sensory-desc">{selectedMaterialHotspot.lightReflect}</p>
+                  </div>
+
+                  <div className="material-sensory-card">
+                    <div className="sensory-head">
+                      <span className="sensory-icon">🍃</span>
+                      <strong className="sensory-label">Respirabilité &amp; Confort</strong>
+                    </div>
+                    <p className="sensory-desc">{selectedMaterialHotspot.durabilityBreathability}</p>
+                  </div>
+                </div>
+
+                {/* Secret d'Atelier */}
+                <div className="material-secret-card">
+                  <div className="secret-card-head">
+                    <span className="secret-tag">SECRET D'ATELIER</span>
+                    <span className="secret-tech">{selectedMaterialHotspot.techSpec}</span>
+                  </div>
+                  <p className="secret-card-desc">
+                    {selectedMaterialHotspot.artisanSecret}
+                  </p>
+                </div>
+
+                {/* Conservation & Care */}
+                <div className="material-care-card">
+                  <span className="care-tag">CONSEILS DE CONSERVATION &amp; ENTRETIEN DE L'ÉTOFFE</span>
+                  <p className="care-desc">
+                    {selectedMaterialHotspot.careGuidance}
+                  </p>
+                </div>
+
+                {/* Bottom Action Footer */}
+                <div className="material-modal-actions">
+                  <button
+                    type="button"
+                    className="material-action-btn primary"
+                    onClick={() => {
+                      setQuickAddedLookbookItems((prev) =>
+                        prev.includes(selectedMaterialHotspot.id)
+                          ? prev
+                          : [...prev, selectedMaterialHotspot.id]
+                      )
+                      setSelectedMaterialHotspot(null)
+                    }}
+                  >
+                    <span>
+                      {quickAddedLookbookItems.includes(selectedMaterialHotspot.id)
+                        ? "Échantillon & Essayage Sélectionnés ✓"
+                        : "Demander un Échantillon d'Étoffe • Sur-Mesure"}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="material-action-btn secondary"
+                    onClick={() => setSelectedMaterialHotspot(null)}
+                  >
+                    <span>Fermer le dossier</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -3712,9 +3712,11 @@
   color: #5c5851;
 }
 
-/* Interactive Numbered Hotspots on the Silhouette */
+/* Interactive Numbered Hotspots on the Silhouette (100% Mathematically Centered) */
 .lookbook-hotspot-pin {
   position: absolute;
+  width: 38px;
+  height: 38px;
   transform: translate(-50%, -50%);
   z-index: 4;
   appearance: none;
@@ -3722,20 +3724,20 @@
   background: transparent;
   padding: 0;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.65rem;
+  justify-content: center;
 }
 
 .lookbook-hotspot-pulse {
   position: absolute;
-  left: 19px;
+  left: 50%;
   top: 50%;
   width: 38px;
   height: 38px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 1px solid rgba(251, 250, 247, 0.75);
+  border: 1.5px solid rgba(251, 250, 247, 0.85);
   animation: lookbookPinPulse 2.6s infinite cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
@@ -3760,7 +3762,7 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background-color: rgba(251, 250, 247, 0.95);
+  background-color: rgba(251, 250, 247, 0.96);
   color: #141413;
   border: 1.5px solid #141413;
   font-family: 'Poppins', sans-serif;
@@ -3770,7 +3772,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
               background-color 0.3s ease,
               color 0.3s ease;
@@ -3778,34 +3780,45 @@
 
 .lookbook-hotspot-pin:hover .lookbook-hotspot-core,
 .lookbook-hotspot-pin.active .lookbook-hotspot-core {
-  background-color: #141413;
-  color: #fbfaf7;
-  border-color: #fbfaf7;
-  transform: scale(1.12);
+  background-color: #29251c;
+  color: #d8c8b8;
+  border-color: #d8c8b8;
+  transform: scale(1.15);
 }
 
 .lookbook-hotspot-tag {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-8px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0.45rem 0.85rem;
-  border-radius: 10px;
-  background-color: rgba(20, 20, 19, 0.88);
-  backdrop-filter: blur(10px);
+  padding: 0.5rem 0.9rem;
+  border-radius: 0; /* Straight borders per user design rules */
+  background-color: rgba(20, 20, 19, 0.94);
+  backdrop-filter: blur(12px);
   color: #fbfaf7;
-  border: 1px solid rgba(251, 250, 247, 0.18);
+  border: 1px solid rgba(216, 200, 184, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
   white-space: nowrap;
   opacity: 0;
-  transform: translateX(-8px);
   pointer-events: none;
   transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 5;
+}
+
+.lookbook-hotspot-pin.pin-flip-left .lookbook-hotspot-tag {
+  left: auto;
+  right: calc(100% + 12px);
+  transform: translateY(-50%) translateX(8px);
 }
 
 .lookbook-hotspot-pin:hover .lookbook-hotspot-tag,
 .lookbook-hotspot-pin.active .lookbook-hotspot-tag {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(-50%) translateX(0);
 }
 
 .lookbook-hotspot-tag-part {
@@ -3814,7 +3827,7 @@
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(251, 250, 247, 0.65);
+  color: #d8c8b8;
 }
 
 .lookbook-hotspot-tag-name {
@@ -5838,13 +5851,14 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background-repeat: no-repeat;
-  transition: background-position 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  background-color: #1a1816;
 }
 
-.lookbook-spotlight-card:hover .lookbook-optical-loupe {
-  transform: scale(1.06);
+.lookbook-loupe-zoomed-img {
+  pointer-events: none;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              transform-origin 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .lookbook-loupe-crosshair {
@@ -5874,9 +5888,658 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.lookbook-spotlight-inspect-hint {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #74634f;
+  background: rgba(216, 200, 184, 0.25);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.lookbook-spotlight-origin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #29251c;
+  background-color: #f4eee7;
+  border: 1px solid rgba(116, 99, 79, 0.25);
+  padding: 0.22rem 0.65rem;
+  border-radius: 4px;
+}
+
+.lookbook-material-dossier-btn {
+  background-color: #29251c !important;
+  color: #d8c8b8 !important;
+  border: 1px solid #74634f !important;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.3s ease;
+}
+
+.lookbook-material-dossier-btn:hover {
+  background-color: #111312 !important;
+  color: #ffffff !important;
+  border-color: #d8c8b8 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(41, 37, 28, 0.28);
+}
+
 .lookbook-row-loupe-thumb {
-  background-repeat: no-repeat;
   border: 1px solid rgba(20, 20, 19, 0.14);
+}
+
+.lookbook-row-flag {
+  font-size: 0.95rem;
+}
+
+/* ========================================================
+   HAUTE COUTURE MATERIAL & PROVENANCE DOSSIER MODAL POPUP
+   ======================================================== */
+.material-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: rgba(17, 19, 18, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+  animation: materialModalFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes materialModalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.material-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 1060px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: #faf8f5;
+  border: 1.5px solid rgba(116, 99, 79, 0.35);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.45);
+  padding: 2.25rem;
+  color: #111312;
+  border-radius: 4px;
+  animation: materialModalSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes materialModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal Header */
+.material-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(116, 99, 79, 0.2);
+}
+
+.material-modal-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.material-modal-badge-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+/* User design rule: straight borders for badges, no rounded corners! */
+.material-modal-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background-color: #29251c;
+  color: #d8c8b8;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 0 !important; /* Strict straight borders */
+  border: 1px solid #74634f;
+}
+
+.material-modal-origin-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  background-color: #f0e9e1;
+  color: #3f2028;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(116, 99, 79, 0.3);
+}
+
+.material-modal-title {
+  font-family: 'Cormorant Garamond', 'Cinzel', serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #111312;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.material-modal-meta-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  color: #74634f;
+}
+
+.material-modal-meta-zone {
+  font-weight: 600;
+  color: #29251c;
+}
+
+.material-modal-meta-silhouette em {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.92rem;
+}
+
+.material-modal-meta-ref {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  background: rgba(116, 99, 79, 0.12);
+  padding: 0.15rem 0.5rem;
+}
+
+.material-modal-close-btn {
+  background: transparent;
+  border: 1px solid rgba(116, 99, 79, 0.3);
+  color: #29251c;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.material-modal-close-btn:hover {
+  background-color: #29251c;
+  color: #d8c8b8;
+  border-color: #29251c;
+}
+
+/* 3-Zone Navigation Tabs */
+.material-modal-tabs-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.material-modal-tab-btn {
+  background: #f4eee7;
+  border: 1.5px solid rgba(116, 99, 79, 0.22);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  text-align: left;
+}
+
+.material-modal-tab-btn .tab-zone-num {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #74634f;
+}
+
+.material-modal-tab-btn .tab-zone-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #29251c;
+}
+
+.material-modal-tab-btn .tab-zone-flag {
+  font-size: 1.05rem;
+}
+
+.material-modal-tab-btn:hover {
+  background-color: #ede3d7;
+  border-color: #74634f;
+}
+
+.material-modal-tab-btn.active {
+  background-color: #29251c;
+  border-color: #74634f;
+  color: #d8c8b8;
+  box-shadow: 0 4px 14px rgba(41, 37, 28, 0.18);
+}
+
+.material-modal-tab-btn.active .tab-zone-num {
+  color: #d8c8b8;
+}
+
+.material-modal-tab-btn.active .tab-zone-title {
+  color: #ffffff;
+}
+
+/* 2-Column Grid Layout */
+.material-modal-body-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Left Column: Macro Viewport + Passport */
+.material-modal-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.material-modal-macro-viewport {
+  position: relative;
+  background-color: #1a1816;
+  border: 1px solid rgba(116, 99, 79, 0.35);
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+}
+
+.material-modal-macro-top {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.material-modal-macro-badge {
+  background-color: rgba(20, 20, 19, 0.9);
+  color: #d8c8b8;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 0.28rem 0.65rem;
+  border: 1px solid rgba(216, 200, 184, 0.3);
+}
+
+.material-modal-macro-flag {
+  font-size: 1.15rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.material-modal-macro-loupe {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  overflow: hidden;
+  background-color: #1c1a18;
+}
+
+.material-modal-macro-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  background-color: #29251c;
+  color: #d8c8b8;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border-top: 1px solid rgba(116, 99, 79, 0.3);
+}
+
+/* Passport Card */
+.material-passport-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(116, 99, 79, 0.22);
+  padding: 1.35rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.material-passport-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 1rem 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #29251c;
+  border-bottom: 1px solid rgba(116, 99, 79, 0.15);
+  padding-bottom: 0.5rem;
+}
+
+.passport-cert-tag {
+  font-size: 0.58rem;
+  background-color: #f4eee7;
+  color: #3f2028;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(116, 99, 79, 0.25);
+}
+
+.material-passport-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.material-passport-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.passport-key {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #74634f;
+  text-transform: uppercase;
+}
+
+.passport-val {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #111312;
+  line-height: 1.4;
+}
+
+/* Right Column: Special Highlight Box & Specs */
+.material-modal-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+/* Grand Encart Signature: Pourquoi ce matériau est si particulier */
+.material-special-highlight-box {
+  background: linear-gradient(135deg, rgba(216, 200, 184, 0.28) 0%, rgba(247, 244, 238, 0.85) 100%);
+  border: 1.5px solid #74634f;
+  padding: 1.6rem 1.75rem;
+  position: relative;
+  border-left: 4px solid #29251c;
+}
+
+.special-highlight-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  color: #74634f;
+}
+
+.special-sparkle-icon {
+  color: #3f2028;
+}
+
+.special-highlight-eyebrow {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #29251c;
+}
+
+.special-highlight-heading {
+  font-family: 'Cormorant Garamond', 'Cinzel', serif;
+  font-style: italic;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #111312;
+  margin: 0 0 0.85rem 0;
+}
+
+.special-highlight-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.68;
+  color: #29251c;
+  margin: 0;
+}
+
+/* 3 Sensory Cards */
+.material-sensory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.material-sensory-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(116, 99, 79, 0.2);
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sensory-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sensory-icon {
+  font-size: 1rem;
+}
+
+.sensory-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #29251c;
+}
+
+.sensory-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: #52473b;
+  margin: 0;
+}
+
+/* Secret d'Atelier */
+.material-secret-card {
+  background-color: #f7f4ee;
+  border: 1px solid rgba(116, 99, 79, 0.25);
+  padding: 1.15rem 1.35rem;
+}
+
+.secret-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.secret-tag {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #3f2028;
+}
+
+.secret-tech {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #74634f;
+}
+
+.secret-card-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #29251c;
+  margin: 0;
+}
+
+/* Care Card */
+.material-care-card {
+  background-color: #faf8f5;
+  border: 1px dashed rgba(116, 99, 79, 0.35);
+  padding: 1rem 1.25rem;
+}
+
+.care-tag {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #74634f;
+  margin-bottom: 0.35rem;
+}
+
+.care-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #43392f;
+  margin: 0;
+}
+
+/* Modal Actions */
+.material-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.material-action-btn {
+  padding: 0.85rem 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  border-radius: 0; /* straight borders */
+}
+
+.material-action-btn.primary {
+  background-color: #29251c;
+  color: #d8c8b8;
+  border: 1px solid #74634f;
+  flex: 1;
+}
+
+.material-action-btn.primary:hover {
+  background-color: #111312;
+  color: #ffffff;
+  border-color: #d8c8b8;
+  box-shadow: 0 6px 20px rgba(41, 37, 28, 0.25);
+}
+
+.material-action-btn.secondary {
+  background-color: transparent;
+  color: #29251c;
+  border: 1px solid rgba(116, 99, 79, 0.4);
+}
+
+.material-action-btn.secondary:hover {
+  background-color: #f4eee7;
+  border-color: #29251c;
+}
+
+/* Mobile Responsiveness for Material Modal */
+@media (max-width: 900px) {
+  .material-modal-backdrop {
+    padding: 0.85rem;
+  }
+
+  .material-modal-container {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    padding: 1.25rem 1rem !important;
+  }
+
+  .material-modal-title {
+    font-size: 1.45rem !important;
+  }
+
+  .material-modal-tabs-bar {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .material-modal-body-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .material-modal-macro-loupe {
+    height: 200px;
+  }
+
+  .material-sensory-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .material-modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 /* Section 2: Animated Sliding-Background Buttons for Stage Pills & Visit CTA */
