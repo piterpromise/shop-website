@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - SIGHOM DEBOUA PIERRE PROMESSE | Design Engineer & Creative Front-End Developer</title>
+
+    <!-- Intégration de la police Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #121316;
+            --secondary-color: #383c44;
+            --tertiary-color: #646b79;
+            --bg-color: #ffffff;
+            --border-color: #e2e5eb;
+            --accent-color: #1a56db;
+            --accent-dark: #0f3ba1;
+            --tag-bg: #f3f5f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #eef1f6;
+            color: var(--primary-color);
+            line-height: 1.5;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Barre de contrôle --- */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 18px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            min-width: 200px;
+            border: 1px solid var(--border-color);
+        }
+
+        .controls label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            align-self: flex-start;
+        }
+
+        .controls select {
+            padding: 9px 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            outline: none;
+            background: #fff;
+        }
+
+        .controls button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .controls button:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        /* --- Conteneur du CV --- */
+        .cv-container {
+            width: 100%;
+            max-width: 1120px;
+            margin: 30px auto;
+            background-color: var(--bg-color);
+            padding: 55px 65px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+        }
+
+        /* --- En-tête --- */
+        header {
+            margin-bottom: 35px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 22px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--primary-color);
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+
+        header h2 {
+            font-size: 17px;
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 14px;
+        }
+
+        .badge-remote {
+            display: inline-block;
+            background: #e1effe;
+            color: #1e429f;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-info {
+            font-size: 13.5px;
+            color: var(--tertiary-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .contact-info a {
+            color: var(--tertiary-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-info a:hover {
+            color: var(--accent-color);
+        }
+
+        .contact-info span {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .contact-info span:not(:last-child)::after {
+            content: "•";
+            margin-left: 12px;
+            color: #c4c9d4;
+        }
+
+        /* --- Layout Principal --- */
+        .cv-content {
+            display: grid;
+            grid-template-columns: 32% 68%;
+            gap: 45px;
+        }
+
+        /* --- Titres de Sections --- */
+        h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 18px;
+            color: var(--primary-color);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        h3::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background-color: var(--border-color);
+            margin-left: 14px;
+        }
+
+        /* --- Colonnes --- */
+        .sidebar {
+            padding-right: 25px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .main-content {
+            padding-left: 5px;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        /* --- Listes & Tags --- */
+        ul {
+            list-style: none;
+        }
+
+        ul li {
+            font-size: 13.5px;
+            margin-bottom: 6px;
+            color: var(--secondary-color);
+            padding-left: 14px;
+            position: relative;
+            line-height: 1.45;
+        }
+
+        ul li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-size: 11px;
+            top: 1px;
+        }
+
+        /* --- Expériences, Éducation, Compétences --- */
+        .experience-item,
+        .education-item {
+            margin-bottom: 22px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--primary-color);
+        }
+
+        .item-date {
+            font-size: 12.5px;
+            color: var(--tertiary-color);
+            font-weight: 500;
+            white-space: nowrap;
+            padding-left: 10px;
+        }
+
+        .item-subtitle {
+            font-weight: 500;
+            font-size: 13.5px;
+            color: var(--accent-color);
+            margin-bottom: 6px;
+        }
+
+        .item-description {
+            font-size: 13.5px;
+            color: var(--secondary-color);
+            text-align: justify;
+            line-height: 1.5;
+        }
+
+        .skill-group {
+            margin-bottom: 14px;
+        }
+
+        .skill-group-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .skill-tag {
+            font-size: 12px;
+            background: var(--tag-bg);
+            color: var(--secondary-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #e5e8ef;
+            font-weight: 500;
+        }
+
+        .skill-tag.highlight {
+            background: #eaf1fb;
+            color: var(--accent-color);
+            border-color: #c8daf8;
+            font-weight: 600;
+        }
+
+        /* --- Profil --- */
+        .profile-text {
+            font-size: 13.5px;
+            color: var(--secondary-color);
+            text-align: justify;
+            line-height: 1.6;
+        }
+
+        /* --- Jauges de Langues --- */
+        .language-item {
+            margin-bottom: 14px;
+        }
+
+        .lang-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+
+        .gauge-bg {
+            width: 100%;
+            height: 7px;
+            background-color: #e5e8ef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        /* --- Atouts / Valeur Ajoutée --- */
+        .asset-item {
+            font-size: 13px;
+            margin-bottom: 14px;
+            color: var(--secondary-color);
+            line-height: 1.45;
+        }
+
+        .asset-item strong {
+            color: var(--primary-color);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 13.5px;
+        }
+
+        /* --- Réseaux et Liens --- */
+        .links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            word-break: break-all;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .links a:hover {
+            color: var(--accent-dark);
+            text-decoration: underline;
+        }
+
+        /* --- Paramètres d'impression de base --- */
+        @media print {
+            .controls {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barre de contrôle pour le téléchargement -->
+    <div class="controls">
+        <label for="format-select">Format d'export PDF</label>
+        <select id="format-select">
+            <option value="A4 portrait" selected>A4 Portrait (Standard International)</option>
+            <option value="A3 portrait">A3 Portrait</option>
+            <option value="A3 landscape">A3 Paysage</option>
+            <option value="A2 portrait">A2 Portrait</option>
+        </select>
+        <button onclick="generatePDF()">Télécharger en PDF</button>
+    </div>
+
+    <!-- Conteneur du CV -->
+    <div class="cv-container" id="cv">
+        <header>
+            <div class="header-top">
+                <div>
+                    <h1>SIGHOM DEBOUA PIERRE PROMESSE</h1>
+                    <h2>Design Engineer | Creative Front-End Developer (React • TypeScript • GSAP)</h2>
+                </div>
+                <span class="badge-remote">Disponible en Remote Worldwide</span>
+            </div>
+            <div class="contact-info">
+                <span><a href="mailto:sighompierre1@gmail.com">sighompierre1@gmail.com</a></span>
+                <span>+237 6 78 11 00 14</span>
+                <span>Yaoundé, Cameroun (UTC+1)</span>
+                <span><a href="https://github.com/piterpromise" target="_blank">github.com/piterpromise</a></span>
+                <span><a href="https://www.linkedin.com/in/sighom-deboua-pierre-promesse-018027424" target="_blank">linkedin.com/in/sighom-deboua-pierre-promesse</a></span>
+            </div>
+        </header>
+
+        <div class="cv-content">
+            <!-- Colonne Gauche (Sidebar) -->
+            <aside class="sidebar">
+
+                <section>
+                    <h3>Spécialités Clés</h3>
+                    <div class="asset-item">
+                        <strong>Figma to Pixel-Perfect Code</strong>
+                        Passerelle directe entre direction artistique exigeante et code React/TS propre, robuste et fidèle au millimètre.
+                    </div>
+                    <div class="asset-item">
+                        <strong>Micro-interactions & 60 FPS</strong>
+                        Maîtrise poussée des interpolations GSAP, ScrollTrigger, et animations GPU-accelerated fluides sur mobile réel.
+                    </div>
+                    <div class="asset-item">
+                        <strong>Composants Sur-Mesure</strong>
+                        Conception de composants interactifs complexes (loupes haute précision, calendriers/horloges custom) sans dépendances lourdes.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Compétences Techniques</h3>
+
+                    <div class="skill-group">
+                        <div class="skill-group-title">Creative Frontend & UI</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag highlight">React 19</span>
+                            <span class="skill-tag highlight">TypeScript</span>
+                            <span class="skill-tag highlight">GSAP 3</span>
+                            <span class="skill-tag">ScrollTrigger</span>
+                            <span class="skill-tag highlight">Tailwind CSS</span>
+                            <span class="skill-tag">Vue.js</span>
+                            <span class="skill-tag">CSS GPU Animations</span>
+                            <span class="skill-tag">SVG / Canvas</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-group">
+                        <div class="skill-group-title">Architecture & Code</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Design Systems</span>
+                            <span class="skill-tag">Vite</span>
+                            <span class="skill-tag">Next.js</span>
+                            <span class="skill-tag">Node / Express</span>
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">REST APIs</span>
+                            <span class="skill-tag">Git / GitHub</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-group">
+                        <div class="skill-group-title">Design & Performance</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Figma</span>
+                            <span class="skill-tag">UI/UX Prototyping</span>
+                            <span class="skill-tag">Responsive 60 FPS</span>
+                            <span class="skill-tag">Core Web Vitals</span>
+                            <span class="skill-tag">Web Accessibility (a11y)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Langues</h3>
+                    <div class="language-item">
+                        <div class="lang-header">
+                            <span>Français</span>
+                            <span>Bilingue (Langue maternelle)</span>
+                        </div>
+                        <div class="gauge-bg">
+                            <div class="gauge-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="language-item">
+                        <div class="lang-header">
+                            <span>Anglais</span>
+                            <span>Professionnel / Technique (C1)</span>
+                        </div>
+                        <div class="gauge-bg">
+                            <div class="gauge-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="links">
+                    <h3>Liens Professionnels</h3>
+                    <a href="https://github.com/piterpromise" target="_blank">
+                        <span>🐙 GitHub : github.com/piterpromise</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/sighom-deboua-pierre-promesse-018027424" target="_blank">
+                        <span>💼 LinkedIn Profil</span>
+                    </a>
+                    <a href="https://my-portfolio-85vq.onrender.com/" target="_blank">
+                        <span>🌐 Portfolio en ligne</span>
+                    </a>
+                </section>
+
+                <section>
+                    <h3>Références</h3>
+                    <div class="asset-item">
+                        <strong>Mr. EVAGA NGA Wenceslas</strong>
+                        Informaticien en chef & Mentor<br>
+                        BEAC (Banque des États de l'Afrique Centrale)<br>
+                        <em>Contact disponible sur demande</em>
+                    </div>
+                </section>
+
+            </aside>
+
+            <!-- Colonne Droite (Main Content) -->
+            <main class="main-content">
+
+                <section>
+                    <h3>Profil Professionnel</h3>
+                    <p class="profile-text">
+                        <strong>Design Engineer & Creative Front-End Developer</strong> avec plus de 8 ans de pratique passionnée dans l'ingénierie d'interfaces web d'exception. À la croisée de l'esthétique haute couture et de la rigueur algorithmique, je me spécialise dans la traduction de maquettes complexes en applications web ultra-réactives (React, TypeScript, GSAP). Expert des micro-interactions soignées, du scroll interactif et de l'optimisation des performances mobiles à 60 FPS, j'aide les startups, agences créatives et marques à bâtir des expériences mémorables qui transforment et fidélisent.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Expériences Professionnelles & Réalisations</h3>
+
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <span class="item-title">Design Engineer & Creative Frontend Developer — Freelance</span>
+                            <span class="item-date">Depuis 2023</span>
+                        </div>
+                        <div class="item-subtitle">Missions Remote & Projets Clients Indépendants</div>
+                        <div class="item-description">
+                            <ul>
+                                <li><strong>Plateforme E-Commerce Haute Couture & Expérience Immersive :</strong> Conception et développement complet d'une vitrine interactive de luxe avec React 19, TypeScript et Tailwind CSS v4.</li>
+                                <li><strong>Ingénierie de composants sur-mesure :</strong> Développement d'une loupe d'inspection textile haute précision (analyse de matière 100% vectorielle), d'un sélecteur de rendez-vous sur-mesure (calendrier & horaires sans dépendances tierces) et d'effets de bordures animées séquentielles (`effect-21`).</li>
+                                <li><strong>Optimisation mobile & scroll 60 FPS :</strong> Réglage chirurgical des triggers GSAP ScrollTrigger et isolation GPU pour garantir une fluidité absolue sur smartphones et connexions contraintes.</li>
+                                <li><strong>Collaboration Design-to-Code :</strong> Prototypage rapide sur Figma et restitution rigoureuse des hiérarchies typographiques, contrastes et micro-animations.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <span class="item-title">Développeur d'Applications Web — Stage Technique</span>
+                            <span class="item-date">Août 2019 – Sept. 2019</span>
+                        </div>
+                        <div class="item-subtitle">BEAC (Banque des États de l'Afrique Centrale) — Bafoussam, Cameroun</div>
+                        <div class="item-description">
+                            <ul>
+                                <li>Conception et déploiement collaboratif d'une application web interne de gestion et de monitoring des infrastructures techniques (plomberie industrielle, forages, installations sanitaires).</li>
+                                <li>Modélisation de la base de données relationnelle et conception d'une interface utilisateur claire facilitant le suivi quotidien des équipes de maintenance.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <span class="item-title">Stage Opérations & Logistique Système</span>
+                            <span class="item-date">Juil. 2025 – Août 2025</span>
+                        </div>
+                        <div class="item-subtitle">BEAC (Banque des États de l'Afrique Centrale) — Bafoussam, Cameroun</div>
+                        <div class="item-description">
+                            <ul>
+                                <li>Optimisation des procédures de réception, traçabilité et gestion des flux logistiques de l'agence centrale avec un protocole de rigueur bancaire.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Diplômes & Formations Académiques</h3>
+
+                    <div class="education-item">
+                        <div class="item-header">
+                            <span class="item-title">Master 1 SIGL (Système d'Information et Génie Logiciel)</span>
+                            <span class="item-date">En cours (2025 – 2026)</span>
+                        </div>
+                        <div class="item-subtitle">Université de Yaoundé I — Yaoundé, Cameroun</div>
+                        <div class="item-description">
+                            Approfondissement en ingénierie logicielle avancée, architectures distribuées, design patterns et gestion de projets logiciels complexes.
+                        </div>
+                    </div>
+
+                    <div class="education-item">
+                        <div class="item-header">
+                            <span class="item-title">Licence en Informatique Fondamentale</span>
+                            <span class="item-date">Promotion 2025</span>
+                        </div>
+                        <div class="item-subtitle">Université de Yaoundé I — Yaoundé, Cameroun</div>
+                        <div class="item-description">
+                            Formation d'excellence : algorithmique avancée, structures de données, programmation système, bases de données relationnelles et réseaux.
+                        </div>
+                    </div>
+
+                    <div class="education-item">
+                        <div class="item-header">
+                            <span class="item-title">Baccalauréat TI (Technologies de l'Information)</span>
+                            <span class="item-date">2020 – 2021</span>
+                        </div>
+                        <div class="item-subtitle">Lycée Bilingue de Bafoussam — Bafoussam, Cameroun</div>
+                        <div class="item-description">
+                            Spécialisation précoce en sciences informatiques, logique de programmation et environnement bilingue.
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function generatePDF() {
+            const formatSelect = document.getElementById('format-select');
+            const selectedFormat = formatSelect.value;
+
+            // Dimensions physiques en mm (largeur, hauteur)
+            const formats = {
+                "A4 portrait": { w: 210, h: 297 },
+                "A3 portrait": { w: 297, h: 420 },
+                "A3 landscape": { w: 420, h: 297 },
+                "A2 portrait": { w: 420, h: 594 }
+            };
+
+            const dims = formats[selectedFormat] || formats["A4 portrait"];
+            const mmToPx = 3.7795; // Conversion mm vers pixels (96 DPI)
+            const marginMM = 8;   // Marge d'impression
+
+            const targetWidthPx = (dims.w - marginMM * 2) * mmToPx;
+            const targetHeightPx = (dims.h - marginMM * 2) * mmToPx;
+
+            const cv = document.getElementById('cv');
+            const cvWidth = cv.offsetWidth;
+            const cvHeight = cv.offsetHeight;
+
+            // Facteur d'échelle
+            const scaleWidth = targetWidthPx / cvWidth;
+            const scaleHeight = targetHeightPx / cvHeight;
+            let scale = Math.min(scaleWidth, scaleHeight);
+            scale = Math.floor(scale * 1000) / 1000;
+
+            const style = document.createElement('style');
+            style.id = 'print-dynamic-style';
+            style.innerHTML = `
+                @media print {
+                    @page {
+                        size: ${selectedFormat};
+                        margin: 0 !important;
+                    }
+                    html, body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        height: 100%;
+                        background: white !important;
+                    }
+                    .cv-container {
+                        zoom: ${scale} !important;
+                        width: ${cvWidth}px !important;
+                        max-width: none !important;
+                        margin: ${marginMM}mm auto 0 !important;
+                        padding: 35px 45px !important;
+                        box-shadow: none !important;
+                    }
+                    .controls {
+                        display: none !important;
+                    }
+                }
+            `;
+
+            document.head.appendChild(style);
+            window.print();
+
+            setTimeout(() => {
+                const addedStyle = document.getElementById('print-dynamic-style');
+                if (addedStyle) {
+                    document.head.removeChild(addedStyle);
+                }
+            }, 600);
+        }
+    </script>
+</body>
+
+</html>

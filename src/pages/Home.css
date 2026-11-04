@@ -2315,7 +2315,7 @@
 }
 
 .event-modal-content {
-  padding: 2.25rem 2.5rem 5.5rem;
+  padding: 2.25rem 2.5rem 1.85rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -2460,8 +2460,8 @@
 }
 
 .event-modal-actions {
-  margin-top: 1.5rem;
-  margin-bottom: 4rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.35rem;
 }
 
 .event-modal-cta-btn {
@@ -8538,6 +8538,389 @@
     max-width: 95vw;
   }
 }
+
+/* ========================================================
+   HERO SECTION — LIQUID GLASS (iOS 26/27 STYLE) BACKDROP
+   ======================================================== */
+.hero-liquid-glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  min-height: 490px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  border-radius: 2.25rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.17) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(30px) saturate(190%) brightness(106%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%) brightness(106%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 30px 60px rgba(17, 19, 18, 0.22),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.liquid-glass-specular-highlight {
+  position: absolute;
+  top: -25%;
+  left: -20%;
+  width: 140%;
+  height: 65%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.35) 0%, transparent 68%);
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.liquid-glass-rim-reflection {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 40%, rgba(255, 255, 255, 0.1) 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Quick Jump Button inside Event Modal Hero */
+.event-quick-scroll-btn {
+  margin-top: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(216, 200, 184, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #f6f2ed;
+  border: 1px solid rgba(216, 200, 184, 0.45);
+  padding: 0.65rem 1.25rem;
+  border-radius: 9999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  align-self: flex-start;
+}
+
+.event-quick-scroll-btn:hover {
+  background: #d8c8b8;
+  color: #111312;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Animated Scroll Indicator Cue in Event Modal */
+.event-modal-scroll-indicator {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  cursor: pointer;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.event-modal-scroll-indicator.hidden-scrolled {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+}
+
+.scroll-indicator-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(17, 19, 18, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(216, 200, 184, 0.35);
+  color: #d8c8b8;
+  padding: 0.45rem 1.05rem;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  animation: pulseIndicator 2.2s infinite ease-in-out;
+}
+
+.scroll-mouse-icon {
+  width: 14px;
+  height: 20px;
+  border: 1.5px solid #d8c8b8;
+  border-radius: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-wheel-dot {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5px;
+  height: 4.5px;
+  background-color: #d8c8b8;
+  border-radius: 2px;
+  animation: wheelScroll 1.6s infinite ease-in-out;
+}
+
+.scroll-chevron-bounce {
+  animation: bounceDown 1.6s infinite ease-in-out;
+}
+
+@keyframes wheelScroll {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  60% { transform: translate(-50%, 5px); opacity: 0.2; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3.5px); }
+}
+
+@keyframes pulseIndicator {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* Indicatif pour cliquer sur l'image dans L'Excellence du Sur-Mesure */
+.why-choose-card-media {
+  position: relative;
+  cursor: pointer;
+}
+
+.why-card-click-cue {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(17, 19, 18, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #f6f2ed;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.why-choose-card-item:hover .why-card-click-cue {
+  background: #d8c8b8;
+  color: #111312;
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* ========================================================
+   DEDICATED BOOKING POPUP — L'EXCELLENCE DU SUR-MESURE
+   ======================================================== */
+.why-booking-modal-backdrop {
+  z-index: 2000;
+}
+
+.why-booking-modal-card {
+  width: 92%;
+  max-width: 820px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 2.75rem 2.5rem 2.25rem;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(20, 20, 19, 0.08);
+}
+
+.why-booking-modal-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1.5rem;
+}
+
+.why-booking-modal-badge {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #74634f;
+  background: #f4eee7;
+  padding: 0.3rem 0.85rem;
+  border-radius: 4px;
+  margin-bottom: 0.85rem;
+}
+
+.why-booking-modal-title {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 2.35rem;
+  font-weight: 600;
+  color: #111312;
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+}
+
+.why-booking-modal-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  color: #646b79;
+  line-height: 1.6;
+  max-width: 680px;
+}
+
+.why-booking-perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
+
+.why-booking-perk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: #fbf9f6;
+  border: 1px solid #ebd9c8;
+  padding: 1rem 1.15rem;
+  border-radius: 12px;
+}
+
+.why-booking-perk-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #74634f;
+  color: #f6f2ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.why-booking-perk-item strong {
+  display: block;
+  font-size: 0.86rem;
+  color: #111312;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.why-booking-perk-item span {
+  display: block;
+  font-size: 0.75rem;
+  color: #777;
+  line-height: 1.35;
+}
+
+.why-booking-form-box {
+  background: #ffffff;
+}
+
+.why-booking-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.85rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.why-booking-fullwidth {
+  grid-column: 1 / -1;
+}
+
+.why-booking-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.why-booking-submit-btn {
+  background: #111312;
+  color: #f6f2ed;
+  border: none;
+  padding: 1.15rem 2.5rem;
+  border-radius: 9999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 10px 25px rgba(17, 19, 18, 0.2);
+}
+
+.why-booking-submit-btn:hover {
+  background: #29251c;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(17, 19, 18, 0.3);
+}
+
+.why-booking-submit-btn.booked {
+  background: #2e7d32;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .hero-liquid-glass-card {
+    max-width: 100%;
+    min-height: 420px;
+    border-radius: 1.75rem;
+    padding: 1.25rem 0.5rem;
+  }
+
+  .why-booking-modal-card {
+    width: 95%;
+    padding: 2rem 1.25rem 1.75rem;
+    border-radius: 18px;
+  }
+
+  .why-booking-modal-title {
+    font-size: 1.75rem;
+  }
+
+  .why-booking-perks-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .why-booking-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .why-booking-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 
 
 

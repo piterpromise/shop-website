@@ -26,6 +26,7 @@ import {
   Minus,
   Heart,
   Tag,
+  Eye,
 } from "lucide-react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -46,6 +47,8 @@ import {
   faChevronLeft,
   faChevronRight,
   faCalendarCheck,
+  faChevronDown,
+  faPenNib,
 } from "@fortawesome/free-solid-svg-icons"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -2662,6 +2665,28 @@ export default function Home() {
   const [eventClientEmail, setEventClientEmail] = useState<string>("")
   const [eventClientPhone, setEventClientPhone] = useState<string>("")
   const [eventGuestsCount, setEventGuestsCount] = useState<number>(1)
+  const [hasScrolledEventModal, setHasScrolledEventModal] = useState<boolean>(false)
+
+  // Dedicated Booking Modal for "L'Excellence du Sur-Mesure"
+  const [bookingWhyCard, setBookingWhyCard] = useState<WhyChooseCard | null>(null)
+  const [whyNotes, setWhyNotes] = useState<string>("")
+  const [isWhyBookingSuccess, setIsWhyBookingSuccess] = useState<boolean>(false)
+
+  const openWhyBookingModal = (card: WhyChooseCard) => {
+    setBookingWhyCard(card)
+    setIsWhyBookingSuccess(false)
+    if (card.slots && card.slots.length > 0) {
+      const timePart = card.slots[0].split(" ")[0]
+      if (timePart) setWhySelectedTime(timePart)
+    }
+  }
+
+  const closeWhyBookingModal = () => {
+    setBookingWhyCard(null)
+    setIsWhyDatePickerOpen(false)
+    setIsWhyTimePickerOpen(false)
+    setIsWhyBookingSuccess(false)
+  }
 
   // Fermer les sélecteurs date / heure personnalisés lors d'un clic extérieur
   useEffect(() => {
@@ -3624,6 +3649,35 @@ export default function Home() {
         delay: 0.2,
       })
 
+      // Dynamic Interactive Scroll-Down & Scroll-Up Parallax for Hero Section
+      const heroContainer = document.querySelector(".home-hero")
+      if (heroContainer) {
+        gsap.to(".home-hero-left", {
+          y: -45,
+          opacity: 0.35,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroContainer,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        })
+
+        gsap.to(".hero-liquid-glass-card", {
+          y: 40,
+          scale: 0.94,
+          opacity: 0.65,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroContainer,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        })
+      }
+
       // Scroll-Down & Scroll-Up Animation for Trending Now Header
       const trendingHeader = document.querySelector(".home-section-header")
       if (trendingHeader) {
@@ -4286,45 +4340,49 @@ export default function Home() {
             </div>
           </div>
           <div className="home-hero-right hero-element">
-            <section
-              className="carousel-section"
-              style={{ '--n': n, '--k': k } as React.CSSProperties}
-            >
-              {CAROUSEL_SHOES.map((shoe: CarouselShoe, i: number) => (
-                <article
-                  key={i}
-                  style={{ '--i': i, '--a': `${shoe.a}deg` } as React.CSSProperties}
-                >
-                  <h2>{shoe.name}</h2>
-                  <em>{shoe.desc}</em>
-                  <img src={shoe.image} alt={shoe.desc} />
-                </article>
-              ))}
-              <div className="carousel-dots-container">
-                <button
-                  className="carousel-arrow-btn"
-                  aria-label="Previous slide"
-                  onClick={() => setK((prev) => (prev - 1 + n) % n)}
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                {CAROUSEL_SHOES.map((_: CarouselShoe, i: number) => (
-                  <button
+            <div className="hero-liquid-glass-card">
+              <div className="liquid-glass-specular-highlight" />
+              <div className="liquid-glass-rim-reflection" />
+              <section
+                className="carousel-section"
+                style={{ '--n': n, '--k': k } as React.CSSProperties}
+              >
+                {CAROUSEL_SHOES.map((shoe: CarouselShoe, i: number) => (
+                  <article
                     key={i}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className={`carousel-dot-btn ${i === k ? 'active' : ''}`}
-                    onClick={() => setK(i)}
-                  />
+                    style={{ '--i': i, '--a': `${shoe.a}deg` } as React.CSSProperties}
+                  >
+                    <h2>{shoe.name}</h2>
+                    <em>{shoe.desc}</em>
+                    <img src={shoe.image} alt={shoe.desc} />
+                  </article>
                 ))}
-                <button
-                  className="carousel-arrow-btn"
-                  aria-label="Next slide"
-                  onClick={() => setK((prev) => (prev + 1) % n)}
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </section>
+                <div className="carousel-dots-container">
+                  <button
+                    className="carousel-arrow-btn"
+                    aria-label="Previous slide"
+                    onClick={() => setK((prev) => (prev - 1 + n) % n)}
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  {CAROUSEL_SHOES.map((_: CarouselShoe, i: number) => (
+                    <button
+                      key={i}
+                      aria-label={`Go to slide ${i + 1}`}
+                      className={`carousel-dot-btn ${i === k ? 'active' : ''}`}
+                      onClick={() => setK(i)}
+                    />
+                  ))}
+                  <button
+                    className="carousel-arrow-btn"
+                    aria-label="Next slide"
+                    onClick={() => setK((prev) => (prev + 1) % n)}
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </section>
+            </div>
           </div>
         </section>
 
@@ -4914,7 +4972,10 @@ export default function Home() {
               </ul>
 
               <div className="why-choose-actions-row">
-                <button className="why-choose-cta-btn">
+                <button
+                  className="why-choose-cta-btn"
+                  onClick={() => openWhyBookingModal(whyChooseCards[0])}
+                >
                   Prendre Rendez-Vous
                 </button>
                 <div className="why-choose-scroll-hint">
@@ -4956,6 +5017,10 @@ export default function Home() {
                           decoding="async"
                         />
                         <div className="why-choose-card-shade" />
+                        <div className="why-card-click-cue">
+                          <Eye size={13} />
+                          <span>Cliquer pour détails</span>
+                        </div>
                       </div>
 
                       {/* Top-Right Frosted Glass Heart Button (Appears on Hover like Card 1) */}
@@ -4990,7 +5055,10 @@ export default function Home() {
                           <button
                             type="button"
                             className="why-choose-card-cta"
-                            onClick={(e) => openWhyCardModal(card, e)}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              openWhyBookingModal(card)
+                            }}
                           >
                             {bookedWhySessions.includes(card.id) ? "Session Réservée ✓" : card.ctaText}
                           </button>
@@ -6083,15 +6151,19 @@ export default function Home() {
               onClick={(e) => e.stopPropagation()}
               onScroll={(e) => {
                 const target = e.currentTarget
+                if (target.scrollTop > 50 && !hasScrolledEventModal) {
+                  setHasScrolledEventModal(true)
+                }
                 const elements = target.querySelectorAll('.gsap-scroll-reveal')
                 const modalHeight = target.clientHeight
+                const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50
                 elements.forEach((el) => {
                   const rect = el.getBoundingClientRect()
                   const containerRect = target.getBoundingClientRect()
                   const topOffset = rect.top - containerRect.top
                   
-                  if (topOffset < modalHeight * 0.95 && topOffset > -rect.height * 0.5) {
-                    gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" })
+                  if (isNearBottom || (topOffset < modalHeight * 0.95 && topOffset > -rect.height * 0.5)) {
+                    gsap.to(el, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", overwrite: "auto" })
                   } else if (topOffset >= modalHeight * 0.95) {
                     gsap.to(el, { opacity: 0.15, y: 25, duration: 0.4, ease: "power2.out", overwrite: "auto" })
                   } else if (topOffset <= -rect.height * 0.5) {
@@ -6147,6 +6219,40 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Quick Jump to Registration Form CTA Button */}
+                  <button
+                    type="button"
+                    className="event-quick-scroll-btn"
+                    onClick={() => {
+                      const formEl = document.getElementById("event-registration-form-anchor")
+                      if (formEl) {
+                        formEl.scrollIntoView({ behavior: "smooth", block: "start" })
+                      }
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faCalendarCheck} />
+                    <span>Accéder directement au formulaire d'inscription en bas ↓</span>
+                  </button>
+                </div>
+
+                {/* Animated Scroll Indicator Cue */}
+                <div 
+                  className={`event-modal-scroll-indicator ${hasScrolledEventModal ? "hidden-scrolled" : ""}`}
+                  onClick={() => {
+                    const formEl = document.getElementById("event-registration-form-anchor")
+                    if (formEl) {
+                      formEl.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }
+                  }}
+                >
+                  <div className="scroll-indicator-pill">
+                    <span className="scroll-mouse-icon">
+                      <span className="scroll-wheel-dot" />
+                    </span>
+                    <span>Défiler pour s'inscrire</span>
+                    <FontAwesomeIcon icon={faChevronDown} className="scroll-chevron-bounce" />
+                  </div>
                 </div>
               </div>
 
@@ -6197,7 +6303,7 @@ export default function Home() {
                 </div>
 
                 {/* Formulaire Nominatif Personnalisé (Effect-21 + Date Fixe) */}
-                <div className="event-modal-form-section gsap-scroll-reveal">
+                <div className="event-modal-form-section gsap-scroll-reveal" id="event-registration-form-anchor">
                   <div className="event-fixed-date-banner">
                     <div className="fixed-date-icon">
                       <FontAwesomeIcon icon={faCalendarCheck} />
@@ -6478,16 +6584,135 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 6b. Formulaire Personnalisé avec Composants TypeScript Date/Heure & Effect-21 */}
-              <div className="why-modal-booking-form why-modal-stagger-item">
-                <div className="why-form-header">
-                  <span className="why-form-kicker">COORDONNÉES &amp; PLANIFICATION PRIVÉE</span>
-                  <p className="why-form-subtitle">
-                    Précisez vos disponibilités personnalisées pour cet accompagnement à l'atelier ({selectedWhyModal.card.locationFull}).
-                  </p>
+              {/* 7. Signature Action Footer (Ouvre le popup dédié au formulaire de réservation) */}
+              <div className="why-modal-actions-row why-modal-stagger-item">
+                <button
+                  type="button"
+                  className={`why-modal-book-btn ${
+                    bookedWhySessions.includes(selectedWhyModal.card.id) ? "booked" : ""
+                  }`}
+                  onClick={() => {
+                    openWhyBookingModal(selectedWhyModal.card)
+                  }}
+                >
+                  {bookedWhySessions.includes(selectedWhyModal.card.id) ? (
+                    <>
+                      <span>Session confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}</span>
+                      <span className="why-modal-btn-Check">✓</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Réserver la session</span>
+                      <span className="why-modal-btn-right">
+                        {whySelectedTime || selectedWhySlot} — {selectedWhyModal.card.price}
+                        <ArrowRight size={17} />
+                      </span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className={`why-modal-fav-btn ${
+                    likedWhyCards.includes(selectedWhyModal.card.id) ? "liked" : ""
+                  }`}
+                  onClick={() =>
+                    setLikedWhyCards((prev) =>
+                      prev.includes(selectedWhyModal.card.id)
+                        ? prev.filter((id) => id !== selectedWhyModal.card.id)
+                        : [...prev, selectedWhyModal.card.id]
+                    )
+                  }
+                  aria-label="Ajouter aux favoris"
+                >
+                  <Heart
+                    size={20}
+                    fill={likedWhyCards.includes(selectedWhyModal.card.id) ? "currentColor" : "none"}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DEDICATED POPUP EXCLUSIVEMENT POUR LE FORMULAIRE DE RÉSERVATION SUR-MESURE */}
+      <AnimatePresence>
+        {bookingWhyCard && (
+          <motion.div
+            className="product-modal-backdrop why-booking-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={closeWhyBookingModal}
+          >
+            <motion.div
+              className="why-booking-modal-card"
+              initial={{ opacity: 0, scale: 0.92, y: 25 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="product-modal-close"
+                onClick={closeWhyBookingModal}
+                aria-label="Fermer"
+              >
+                <X size={20} />
+              </button>
+
+              {/* En-tête enrichi du formulaire */}
+              <div className="why-booking-modal-header">
+                <span className="why-booking-modal-badge">
+                  ATELIER PRIVÉ &amp; CONFECTION SUR-MESURE
+                </span>
+                <h2 className="why-booking-modal-title">
+                  Planifier Votre Séance — {bookingWhyCard.title}
+                </h2>
+                <p className="why-booking-modal-desc">
+                  Une consultation individuelle de 1h30 au sein de notre atelier d'exception ({bookingWhyCard.locationFull}). Vous serez guidée en tête-à-tête par {bookingWhyCard.instructor.name} ({bookingWhyCard.instructor.role}).
+                </p>
+              </div>
+
+              {/* 3 piliers enrichis de l'accompagnement */}
+              <div className="why-booking-perks-grid">
+                <div className="why-booking-perk-item">
+                  <div className="why-booking-perk-icon">
+                    <FontAwesomeIcon icon={faHandSparkles} />
+                  </div>
+                  <div>
+                    <strong>Prise de Mesures 3D</strong>
+                    <span>Relevé précis de 28 points anatomiques pour un patronage individuel parfait.</span>
+                  </div>
                 </div>
 
-                <div className="why-form-fields-grid">
+                <div className="why-booking-perk-item">
+                  <div className="why-booking-perk-icon">
+                    <FontAwesomeIcon icon={faGem} />
+                  </div>
+                  <div>
+                    <strong>Échantillonnage Tactile</strong>
+                    <span>Sélection exclusive de soies de Lyon, crêpes de Chine et dentelles de Calais.</span>
+                  </div>
+                </div>
+
+                <div className="why-booking-perk-item">
+                  <div className="why-booking-perk-icon">
+                    <FontAwesomeIcon icon={faPenNib} />
+                  </div>
+                  <div>
+                    <strong>Croquis Aquarellé Offert</strong>
+                    <span>Dessin original de votre robe personnalisé et remis à l'issue de la séance.</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Formulaire Personnalisé avec inputs Effect-21 et Sélecteurs TypeScript */}
+              <div className="why-booking-form-box">
+                <div className="why-booking-form-grid">
                   {/* Nom & Prénom with effect-21 */}
                   <div className="input-effect-wrap">
                     <div className="effect-21-icon">
@@ -6501,7 +6726,7 @@ export default function Home() {
                         value={whyClientName}
                         onChange={(e) => setWhyClientName(e.target.value)}
                       />
-                      <label>Nom &amp; Prénom</label>
+                      <label>Nom &amp; Prénom du client</label>
                       <span className="focus-border"><i></i></span>
                     </div>
                   </div>
@@ -6519,12 +6744,12 @@ export default function Home() {
                         value={whyClientEmail}
                         onChange={(e) => setWhyClientEmail(e.target.value)}
                       />
-                      <label>Adresse Email de contact</label>
+                      <label>Adresse Email pour le carton d'accès</label>
                       <span className="focus-border"><i></i></span>
                     </div>
                   </div>
 
-                  {/* Custom TypeScript Date Picker (No browser default!) */}
+                  {/* Date Picker Custom TypeScript */}
                   <div className="custom-picker-container" ref={whyDateDropdownRef}>
                     <div
                       className="input-effect-wrap clickable-picker"
@@ -6541,7 +6766,7 @@ export default function Home() {
                           placeholder=""
                           value={formatBespokeDate(whySelectedDate)}
                         />
-                        <label>Date du rendez-vous</label>
+                        <label>Date souhaitée pour l'essayage</label>
                         <span className="focus-border"><i></i></span>
                       </div>
                     </div>
@@ -6609,7 +6834,7 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Custom TypeScript Time Picker (No browser default!) */}
+                  {/* Time Picker Custom TypeScript */}
                   <div className="custom-picker-container" ref={whyTimeDropdownRef}>
                     <div
                       className="input-effect-wrap clickable-picker"
@@ -6626,14 +6851,14 @@ export default function Home() {
                           placeholder=""
                           value={whySelectedTime ? `${whySelectedTime} (Atelier Privé)` : ""}
                         />
-                        <label>Horaire de l'essayage</label>
+                        <label>Créneau horaire disponible</label>
                         <span className="focus-border"><i></i></span>
                       </div>
                     </div>
 
                     {isWhyTimePickerOpen && (
                       <div className="custom-time-dropdown">
-                        <span className="time-dropdown-title">Horaires d'Atelier Disponibles</span>
+                        <span className="time-dropdown-title">Créneaux d'Atelier Disponibles</span>
                         <div className="time-slots-grid">
                           {BESPOKE_TIME_SLOTS.map((t) => (
                             <button
@@ -6653,70 +6878,64 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                </div>
-              </div>
 
-              {/* 7. Signature Action Footer (Echoing the Reference Card's Matte Black Pill + Circular Heart) */}
-              <div className="why-modal-actions-row why-modal-stagger-item">
-                <button
-                  type="button"
-                  className={`why-modal-book-btn ${
-                    bookedWhySessions.includes(selectedWhyModal.card.id) ? "booked" : ""
-                  }`}
-                  onClick={() => {
-                    if (!bookedWhySessions.includes(selectedWhyModal.card.id)) {
+                  {/* Notes & Précisions with effect-21 */}
+                  <div className="input-effect-wrap why-booking-fullwidth">
+                    <div className="effect-21-icon">
+                      <FontAwesomeIcon icon={faPenNib} />
+                    </div>
+                    <div className="input-effect">
+                      <input
+                        className={`effect-21 ${whyNotes ? "has-content" : ""}`}
+                        type="text"
+                        placeholder=""
+                        value={whyNotes}
+                        onChange={(e) => setWhyNotes(e.target.value)}
+                      />
+                      <label>Précisions particulières (type d'événement, date de cérémonie, souhaits de coupe)</label>
+                      <span className="focus-border"><i></i></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Validation CTA Button */}
+                <div className="why-booking-modal-actions">
+                  <button
+                    type="button"
+                    className={`why-booking-submit-btn ${
+                      bookedWhySessions.includes(bookingWhyCard.id) ? "booked" : ""
+                    }`}
+                    onClick={() => {
                       if (!whyClientName.trim()) {
-                        alert("Veuillez renseigner votre nom et prénom pour valider la réservation.")
+                        alert("Veuillez renseigner votre nom et prénom.")
                         return
                       }
                       if (!whyClientEmail.trim()) {
-                        alert("Veuillez renseigner votre adresse email pour recevoir la confirmation d'atelier.")
+                        alert("Veuillez renseigner votre adresse email.")
                         return
                       }
-                    }
-                    toggleWhySessionBooking(selectedWhyModal.card.id)
-                  }}
-                >
-                  {bookedWhySessions.includes(selectedWhyModal.card.id) ? (
-                    <>
-                      <span>Session confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}</span>
-                      <span className="why-modal-btn-Check">✓</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Réserver la session</span>
-                      <span className="why-modal-btn-right">
-                        {whySelectedTime || selectedWhySlot} — {selectedWhyModal.card.price}
-                        <ArrowRight size={17} />
-                      </span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  className={`why-modal-fav-btn ${
-                    likedWhyCards.includes(selectedWhyModal.card.id) ? "liked" : ""
-                  }`}
-                  onClick={() =>
-                    setLikedWhyCards((prev) =>
-                      prev.includes(selectedWhyModal.card.id)
-                        ? prev.filter((id) => id !== selectedWhyModal.card.id)
-                        : [...prev, selectedWhyModal.card.id]
-                    )
-                  }
-                  aria-label="Ajouter aux favoris"
-                >
-                  <Heart
-                    size={20}
-                    fill={likedWhyCards.includes(selectedWhyModal.card.id) ? "currentColor" : "none"}
-                  />
-                </button>
+                      if (!bookedWhySessions.includes(bookingWhyCard.id)) {
+                        setBookedWhySessions((prev) => [...prev, bookingWhyCard.id])
+                      }
+                      setIsWhyBookingSuccess(true)
+                    }}
+                  >
+                    {isWhyBookingSuccess || bookedWhySessions.includes(bookingWhyCard.id) ? (
+                      <>
+                        <FontAwesomeIcon icon={faCheckCircle} /> Réservation Confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles size={18} /> Confirmer mon Rendez-Vous d'Atelier ({bookingWhyCard.price}) →
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Haute Couture Material & Provenance Dossier Popup Modal */}
       {selectedMaterialHotspot && (
