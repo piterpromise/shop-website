@@ -3652,9 +3652,10 @@ export default function Home() {
       // Dynamic Interactive Scroll-Down & Scroll-Up Parallax for Hero Section
       const heroContainer = document.querySelector(".home-hero")
       if (heroContainer) {
-        gsap.to(".home-hero-left", {
-          y: -45,
-          opacity: 0.35,
+        gsap.to(".home-hero-left .hero-liquid-glass-card", {
+          y: -40,
+          scale: 0.96,
+          opacity: 0.5,
           ease: "none",
           scrollTrigger: {
             trigger: heroContainer,
@@ -3664,10 +3665,10 @@ export default function Home() {
           },
         })
 
-        gsap.to(".hero-liquid-glass-card", {
+        gsap.to(".home-hero-right", {
           y: 40,
           scale: 0.94,
-          opacity: 0.65,
+          opacity: 0.6,
           ease: "none",
           scrollTrigger: {
             trigger: heroContainer,
@@ -4300,89 +4301,89 @@ export default function Home() {
       <main className="home-main">
         {/* Hero Section */}
         <section className="home-hero" style={{ backgroundColor: CAROUSEL_SHOES[k].bg }}>
-          <div className="home-hero-left">
-            <span className="hero-element home-tag">
-              Haute Couture &amp; Sur-Mesure
-            </span>
-            <h1 className="hero-element home-hero-title">
-              Sublimez Votre <br />{" "}
-              <span className="home-hero-title-light">Allure Unique.</span>
-            </h1>
-            <p className="hero-element home-hero-desc">
-              Des robes de mariée, de gala et de cérémonie dessinées et cousues
-              main pour célébrer chaque instant d'exception avec grâce.
-            </p>
-            <button className="hero-element home-hero-btn">
-              Découvrir l'Atelier <TrendingUp size={20} className="animate-draw-arrow" />
-            </button>
-            <div className="hero-element home-hero-brands">
-              <span className="brand-logo" title="Soie de Lyon">
-                <ion-icon name="Sparkles-outline"></ion-icon>
+          <div className="home-hero-left hero-element">
+            <div className="hero-liquid-glass-card">
+              <div className="liquid-glass-specular-highlight" />
+              <div className="liquid-glass-rim-reflection" />
+              <span className="home-tag">
+                Haute Couture &amp; Sur-Mesure
               </span>
-              <span className="brand-logo" title="Dentelle de Calais">
-                <ion-icon name="diamond-outline"></ion-icon>
-              </span>
-              <span className="brand-logo" title="Sur-Mesure">
-                <ion-icon name="cut-outline"></ion-icon>
-              </span>
-              <span className="brand-logo" title="Broderie Main">
-                <ion-icon name="rose-outline"></ion-icon>
-              </span>
-              <span className="brand-logo" title="Haute Couture">
-                <ion-icon name="ribbon-outline"></ion-icon>
-              </span>
-            </div>
-            <div className="hero-element home-scroll-indicator">
-              <span>Défiler</span>
-              <div className="home-scroll-line">
-                <div className="home-scroll-fill"></div>
+              <h1 className="home-hero-title">
+                Sublimez Votre <br />{" "}
+                <span className="home-hero-title-light">Allure Unique.</span>
+              </h1>
+              <p className="home-hero-desc">
+                Des robes de mariée, de gala et de cérémonie dessinées et cousues
+                main pour célébrer chaque instant d'exception avec grâce.
+              </p>
+              <button className="home-hero-btn">
+                Découvrir l'Atelier <TrendingUp size={20} className="animate-draw-arrow" />
+              </button>
+              <div className="home-hero-brands">
+                <span className="brand-logo" title="Soie de Lyon">
+                  <ion-icon name="Sparkles-outline"></ion-icon>
+                </span>
+                <span className="brand-logo" title="Dentelle de Calais">
+                  <ion-icon name="diamond-outline"></ion-icon>
+                </span>
+                <span className="brand-logo" title="Sur-Mesure">
+                  <ion-icon name="cut-outline"></ion-icon>
+                </span>
+                <span className="brand-logo" title="Broderie Main">
+                  <ion-icon name="rose-outline"></ion-icon>
+                </span>
+                <span className="brand-logo" title="Haute Couture">
+                  <ion-icon name="ribbon-outline"></ion-icon>
+                </span>
+              </div>
+              <div className="home-scroll-indicator">
+                <span>Défiler</span>
+                <div className="home-scroll-line">
+                  <div className="home-scroll-fill"></div>
+                </div>
               </div>
             </div>
           </div>
           <div className="home-hero-right hero-element">
-            <div className="hero-liquid-glass-card">
-              <div className="liquid-glass-specular-highlight" />
-              <div className="liquid-glass-rim-reflection" />
-              <section
-                className="carousel-section"
-                style={{ '--n': n, '--k': k } as React.CSSProperties}
-              >
-                {CAROUSEL_SHOES.map((shoe: CarouselShoe, i: number) => (
-                  <article
+            <section
+              className="carousel-section"
+              style={{ '--n': n, '--k': k } as React.CSSProperties}
+            >
+              {CAROUSEL_SHOES.map((shoe: CarouselShoe, i: number) => (
+                <article
+                  key={i}
+                  style={{ '--i': i, '--a': `${shoe.a}deg` } as React.CSSProperties}
+                >
+                  <h2>{shoe.name}</h2>
+                  <em>{shoe.desc}</em>
+                  <img src={shoe.image} alt={shoe.desc} />
+                </article>
+              ))}
+              <div className="carousel-dots-container">
+                <button
+                  className="carousel-arrow-btn"
+                  aria-label="Previous slide"
+                  onClick={() => setK((prev) => (prev - 1 + n) % n)}
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                {CAROUSEL_SHOES.map((_: CarouselShoe, i: number) => (
+                  <button
                     key={i}
-                    style={{ '--i': i, '--a': `${shoe.a}deg` } as React.CSSProperties}
-                  >
-                    <h2>{shoe.name}</h2>
-                    <em>{shoe.desc}</em>
-                    <img src={shoe.image} alt={shoe.desc} />
-                  </article>
+                    aria-label={`Go to slide ${i + 1}`}
+                    className={`carousel-dot-btn ${i === k ? 'active' : ''}`}
+                    onClick={() => setK(i)}
+                  />
                 ))}
-                <div className="carousel-dots-container">
-                  <button
-                    className="carousel-arrow-btn"
-                    aria-label="Previous slide"
-                    onClick={() => setK((prev) => (prev - 1 + n) % n)}
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  {CAROUSEL_SHOES.map((_: CarouselShoe, i: number) => (
-                    <button
-                      key={i}
-                      aria-label={`Go to slide ${i + 1}`}
-                      className={`carousel-dot-btn ${i === k ? 'active' : ''}`}
-                      onClick={() => setK(i)}
-                    />
-                  ))}
-                  <button
-                    className="carousel-arrow-btn"
-                    aria-label="Next slide"
-                    onClick={() => setK((prev) => (prev + 1) % n)}
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              </section>
-            </div>
+                <button
+                  className="carousel-arrow-btn"
+                  aria-label="Next slide"
+                  onClick={() => setK((prev) => (prev + 1) % n)}
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </section>
           </div>
         </section>
 
