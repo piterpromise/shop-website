@@ -19,9 +19,9 @@
 	--v: var(--k);
 	--abs-v: abs(var(--v) - var(--p));
 	--prg: calc(var(--abs-v)/(1 - var(--end) + var(--end)*(var(--n) - 1)));
-	grid-gap: 0.5em;
+	grid-gap: 0.65rem;
 	grid-template:
-		340px
+		clamp(320px, 46vh, 460px)
 		/* Row 1: Image stack */
 		max-content
 		/* Row 2: Title */
@@ -36,7 +36,7 @@
 	transition: --p 0s 0.8s, --v 0.8s;
 	display: grid;
 	width: 100%;
-	max-width: 440px;
+	max-width: 500px;
 }
 
 @supports not (scale: Abs(-2)) {
@@ -86,12 +86,13 @@
 .carousel-section h2 {
 	grid-area: 2/ 1;
 	font-family: var(--font-calligraphy, 'Pinyon Script', 'Great Vibes', cursive);
-	font-size: 3.15rem;
+	font-size: clamp(2.4rem, 3.6vw, 3.2rem);
 	font-weight: 400;
 	letter-spacing: 0.02em;
 	color: #d8c8b8;
-	margin-top: 12rem;
+	margin-top: 1.15rem;
 	line-height: 1.1;
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .carousel-section em {
@@ -102,19 +103,24 @@
 	font-weight: 600;
 	letter-spacing: 0.22em;
 	text-transform: uppercase;
-	color: rgba(216, 200, 184, 0.85);
+	color: rgba(216, 200, 184, 0.9);
+	margin-top: 0.25rem;
 }
 
 .carousel-section img {
 	--sin: sin(var(--prg)*.5turn);
 	grid-area: 1/ 1;
 	border: none;
-	height: 480px;
-	width: 500px;
+	height: 100%;
+	width: 100%;
+	max-width: 480px;
+	max-height: clamp(320px, 46vh, 460px);
+	justify-self: center;
 	object-fit: cover;
 	border-radius: 1.5em;
 	translate: calc(-150%*var(--mov)*sqrt(var(--sin)));
 	rotate: calc((1 - var(--sin))*var(--a));
+	box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
 }
 
 .carousel-dots-container {

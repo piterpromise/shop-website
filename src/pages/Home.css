@@ -147,7 +147,8 @@
 
 .home-hero {
   width: 100%;
-  min-height: calc(100vh - 10rem);
+  min-height: calc(100vh - 8rem);
+  min-height: calc(100dvh - 8rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,7 +166,11 @@
 @media (min-width: 768px) {
   .home-hero {
     flex-direction: row;
-    padding: 3rem;
+    padding: 2.25rem 2.75rem;
+    align-items: stretch;
+    height: calc(100vh - 4.5rem);
+    height: calc(100dvh - 4.5rem);
+    min-height: 640px;
   }
 }
 
@@ -176,39 +181,41 @@
 
 .home-tag {
   display: inline-block;
-  padding: 0.32rem 0.95rem;
+  padding: 0.42rem 1.15rem;
   border-radius: 50px;
-  background-color: rgba(216, 200, 184, 0.14);
-  border: 1px solid rgba(216, 200, 184, 0.32);
-  color: #d8c8b8;
-  font-size: 0.75rem;
+  background-color: rgba(216, 200, 184, 0.18);
+  border: 1px solid rgba(216, 200, 184, 0.42);
+  color: #f6f2ed;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(4px);
+  letter-spacing: 0.14em;
+  margin-bottom: 1.25rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 .home-hero-title {
   font-family: var(--font-wedding-serif, 'Cormorant Garamond', 'Cinzel', Georgia, serif);
-  font-size: 3.4rem;
+  font-size: clamp(3.2rem, 5vw, 5.4rem);
   font-weight: 500;
-  line-height: 1.06;
-  letter-spacing: 0.02em;
+  line-height: 1.04;
+  letter-spacing: 0.015em;
   margin-bottom: 1.5rem;
   color: #f6f2ed;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.22);
 }
 
 @media (min-width: 768px) {
   .home-hero-title {
-    font-size: 5.1rem;
+    font-size: clamp(3.6rem, 5.2vw, 5.5rem);
   }
 }
 
 .home-hero-title-light {
   font-family: var(--font-calligraphy, 'Pinyon Script', 'Great Vibes', 'Alex Brush', cursive);
   font-weight: 400;
-  font-size: 1.16em;
+  font-size: 1.18em;
   letter-spacing: 0.01em;
   color: #d8c8b8;
   display: inline-block;
@@ -226,43 +233,45 @@
 }
 
 .home-hero-desc {
-  color: rgba(246, 242, 237, 0.84);
-  font-size: 1.08rem;
-  margin-bottom: 2rem;
-  max-width: 28rem;
-  line-height: 1.65;
+  color: rgba(246, 242, 237, 0.92);
+  font-size: 1.14rem;
+  margin-bottom: 2.25rem;
+  max-width: 36rem;
+  line-height: 1.68;
 }
 
 .home-hero-btn {
   background-color: #d8c8b8;
   color: #111312;
-  padding: 1.55rem 3.6rem;
+  padding: 1.35rem 3.4rem;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 1.35rem;
-  box-shadow: 0 12px 24px -4px rgba(17, 19, 18, 0.28);
-  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease;
-  display: flex;
+  font-size: 1.22rem;
+  box-shadow: 0 16px 36px rgba(17, 19, 18, 0.32), 0 0 20px rgba(216, 200, 184, 0.2);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+  display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  gap: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
 }
 
 .home-hero-btn:hover {
-  transform: scale(1.04);
-  background-color: #e6d9cc;
+  transform: translateY(-2px) scale(1.03);
+  background-color: #f4eee7;
+  box-shadow: 0 20px 42px rgba(17, 19, 18, 0.4), 0 0 25px rgba(216, 200, 184, 0.35);
 }
 
 .home-hero-btn:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
 }
 
 .home-hero-right {
   flex: 1;
   position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8543,39 +8552,56 @@
    HERO SECTION — LIQUID GLASS (iOS 26/27 STYLE) BACKDROP (CÔTÉ GAUCHE)
    ======================================================== */
 .home-hero-left {
-  flex: 1.15;
+  flex: 1.35;
   z-index: 10;
   display: flex;
   align-items: stretch;
   width: 100%;
+  height: 100%;
 }
 
 .home-hero-left .hero-liquid-glass-card {
   position: relative;
   width: 100%;
-  max-width: 640px;
-  min-height: 540px;
+  max-width: 760px;
+  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
-  padding: 3.25rem 3.5rem;
+  padding: 3.5rem 3.75rem;
   border-radius: 2.25rem;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
     rgba(255, 255, 255, 0.02) 100%
   );
-  backdrop-filter: blur(32px) saturate(190%) brightness(106%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(106%);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(40px) saturate(210%) brightness(108%);
+  -webkit-backdrop-filter: blur(40px) saturate(210%) brightness(108%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow:
-    0 30px 60px rgba(17, 19, 18, 0.24),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
-    inset 0 -1.5px 2px rgba(0, 0, 0, 0.12);
+    0 35px 80px rgba(17, 19, 18, 0.32),
+    inset 0 2px 3px rgba(255, 255, 255, 0.55),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.16);
   overflow: hidden;
   transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.hero-glass-top-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.hero-glass-bottom-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 1.5rem;
 }
 
 .liquid-glass-specular-highlight {
@@ -8708,32 +8734,27 @@
 }
 
 /* Indicatif pour cliquer sur l'image dans L'Excellence du Sur-Mesure */
-.why-choose-card-media {
-  position: relative;
-  cursor: pointer;
-}
-
 .why-card-click-cue {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
+  top: 24px;
+  left: 24px;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  background: rgba(17, 19, 18, 0.72);
+  background: rgba(17, 19, 18, 0.78);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #f6f2ed;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 0.38rem 0.82rem;
   border-radius: 9999px;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  opacity: 0.9;
+  opacity: 0.94;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
-  z-index: 3;
+  z-index: 5;
 }
 
 .why-choose-card-item:hover .why-card-click-cue {
@@ -8926,6 +8947,784 @@
   .why-booking-submit-btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* ========================================================
+   SECTION: CONTACT US & CONCIERGERIE PRIVÉE (HAUTE COUTURE)
+   ======================================================== */
+.atelier-contact-section {
+  width: 100%;
+  margin: 6.5rem auto 4.5rem;
+  position: relative;
+}
+
+.atelier-contact-container {
+  background: linear-gradient(180deg, rgba(216, 200, 184, 0.08) 0%, rgba(17, 19, 18, 0.02) 100%);
+  border: 1px solid rgba(116, 99, 79, 0.22);
+  border-radius: 2.25rem;
+  padding: 4.25rem 3.75rem;
+  box-shadow: 0 24px 60px rgba(17, 19, 18, 0.06);
+}
+
+.atelier-contact-header {
+  margin-bottom: 3.5rem;
+}
+
+.atelier-contact-title {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', 'Cinzel', Georgia, serif);
+  font-size: clamp(2.5rem, 4.2vw, 3.8rem);
+  font-weight: 600;
+  color: #111312;
+  line-height: 1.1;
+  margin: 0.85rem 0 0.85rem;
+}
+
+.atelier-contact-desc {
+  font-size: 1.05rem;
+  color: #74634f;
+  max-width: 780px;
+  line-height: 1.7;
+}
+
+.atelier-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 3rem;
+  align-items: stretch;
+}
+
+/* Left Column: Coordonnées & Conciergerie */
+.atelier-contact-info-card {
+  background: #1c1a17;
+  border-radius: 1.75rem;
+  padding: 3.25rem 2.75rem;
+  color: #f6f2ed;
+  border: 1px solid rgba(216, 200, 184, 0.25);
+  box-shadow: 0 25px 50px rgba(17, 19, 18, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.contact-info-top {
+  margin-bottom: 2rem;
+}
+
+.contact-info-tag {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #d8c8b8;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.contact-info-heading {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #f6f2ed;
+  margin-bottom: 0.75rem;
+}
+
+.contact-info-sub {
+  font-size: 0.95rem;
+  color: rgba(246, 242, 237, 0.82);
+  line-height: 1.65;
+}
+
+.contact-coordinates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 2.5rem;
+}
+
+.contact-coordinate-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.coordinate-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(216, 200, 184, 0.14);
+  border: 1px solid rgba(216, 200, 184, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d8c8b8;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.contact-coordinate-item:hover .coordinate-icon-box {
+  transform: translateY(-2px);
+  background: rgba(216, 200, 184, 0.22);
+}
+
+.coordinate-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.coordinate-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #a39585;
+  font-weight: 600;
+}
+
+.coordinate-value {
+  font-size: 1.05rem;
+  color: #f6f2ed;
+  font-weight: 600;
+}
+
+.coordinate-hint {
+  font-size: 0.82rem;
+  color: rgba(216, 200, 184, 0.75);
+}
+
+.contact-guarantee-pill-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(216, 200, 184, 0.16);
+}
+
+.contact-pill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.95rem;
+  background: rgba(216, 200, 184, 0.1);
+  border: 1px solid rgba(216, 200, 184, 0.28);
+  border-radius: 0 !important; /* Strict straight edges */
+  font-size: 0.78rem;
+  color: #d8c8b8;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.contact-pill-item .pill-ico {
+  color: #d8c8b8;
+  font-size: 0.85rem;
+}
+
+/* Right Column: Formulaire Effect-21 */
+.atelier-contact-form-card {
+  background: #ffffff;
+  border-radius: 1.75rem;
+  padding: 3.25rem 3rem;
+  border: 1px solid rgba(116, 99, 79, 0.16);
+  box-shadow: 0 20px 45px rgba(17, 19, 18, 0.08);
+}
+
+.contact-form-header {
+  margin-bottom: 2rem;
+}
+
+.contact-form-title {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
+  font-size: 2.15rem;
+  color: #111312;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.contact-form-sub {
+  font-size: 0.92rem;
+  color: #74634f;
+  line-height: 1.6;
+  margin-top: 0.45rem;
+}
+
+.effect21-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.75rem 1.25rem;
+}
+
+.atelier-contact-form-card .input-effect {
+  position: relative;
+  width: 100%;
+}
+
+.atelier-contact-form-card .effect-21 {
+  border: 1px solid rgba(116, 99, 79, 0.35);
+  padding: 13px 14px 13px 44px;
+  transition: border-color 0.4s ease;
+  background: transparent;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  color: #111312;
+  border-radius: 0 !important; /* Strict straight border */
+  outline: none;
+}
+
+.atelier-contact-form-card .effect-21-textarea {
+  resize: vertical;
+  min-height: 110px;
+  padding-top: 14px;
+}
+
+.atelier-contact-form-card .effect-21-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #74634f;
+  font-size: 0.95rem;
+  pointer-events: none;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.atelier-contact-form-card .effect-21-icon-textarea {
+  top: 22px;
+  transform: none;
+}
+
+.atelier-contact-form-card .effect-21 ~ label {
+  position: absolute;
+  left: 44px;
+  top: 13px;
+  color: #8c7e6f;
+  font-size: 0.88rem;
+  transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 2;
+  letter-spacing: 0.02em;
+}
+
+.atelier-contact-form-card .effect-21:focus ~ label,
+.atelier-contact-form-card .effect-21.has-content ~ label {
+  top: -19px;
+  left: 0;
+  font-size: 11px;
+  color: #74634f;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.contact-form-actions {
+  margin-top: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.contact-submit-btn {
+  background: #29251c;
+  color: #f4eee7;
+  padding: 1.25rem 2.85rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(41, 37, 28, 0.22);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-submit-btn:hover {
+  background: #74634f;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(41, 37, 28, 0.32);
+}
+
+.contact-submit-btn .submit-icon {
+  font-size: 0.95rem;
+  transition: transform 0.3s ease;
+}
+
+.contact-submit-btn:hover .submit-icon {
+  transform: translateX(4px);
+}
+
+.contact-reassurance-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: #8c7e6f;
+}
+
+.contact-success-notification {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(216, 200, 184, 0.12);
+  border: 1px solid rgba(116, 99, 79, 0.25);
+  border-radius: 1.25rem;
+}
+
+.contact-success-notification .success-icon-wrap {
+  font-size: 3rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+
+.contact-success-notification h4 {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
+  font-size: 1.85rem;
+  color: #111312;
+  margin-bottom: 0.5rem;
+}
+
+.contact-success-notification p {
+  color: #74634f;
+  font-size: 0.95rem;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ========================================================
+   MAGNIFIQUE FOOTER HAUTE COUTURE (AVEC COULEUR DYNAMIQUE)
+   ======================================================== */
+.couture-footer-wrapper {
+  position: relative;
+  margin-top: 8rem;
+  padding-bottom: 2.5rem;
+  width: 100%;
+}
+
+/* 1. Floating VIP Newsletter / Gazette Privée Banner */
+.footer-floating-newsletter-card {
+  width: min(1200px, 92%);
+  margin: 0 auto -75px;
+  position: relative;
+  z-index: 10;
+  border-radius: 2.25rem;
+  padding: 3.5rem 4rem;
+  box-shadow: 0 30px 70px rgba(17, 19, 18, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+  align-items: center;
+  overflow: hidden;
+}
+
+.newsletter-visual-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.newsletter-3d-emblem {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  padding: 2.25rem 1.5rem;
+  border-radius: 1.75rem;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 2px 3px rgba(255, 255, 255, 0.45);
+}
+
+.emblem-inner-glow {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.emblem-crown-icon {
+  font-size: 3.4rem;
+  color: #d8c8b8;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.35));
+  margin-bottom: 1.15rem;
+  position: relative;
+  z-index: 2;
+}
+
+.emblem-brand {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+.emblem-sub {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+.newsletter-content-col {
+  color: #ffffff;
+}
+
+.newsletter-title {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', 'Cinzel', Georgia, serif);
+  font-size: clamp(1.9rem, 2.7vw, 2.7rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 0.65rem;
+}
+
+.newsletter-desc {
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  max-width: 640px;
+  margin-bottom: 1.6rem;
+}
+
+.newsletter-form-pill {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 50px;
+  padding: 6px 6px 6px 22px;
+  max-width: 540px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.newsletter-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.newsletter-field-icon {
+  color: #74634f;
+  font-size: 1rem;
+}
+
+.newsletter-field {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  color: #111312;
+  width: 100%;
+}
+
+.newsletter-field::placeholder {
+  color: #a39585;
+}
+
+.newsletter-submit-btn {
+  background: #111312;
+  color: #f4eee7;
+  border: none;
+  border-radius: 50px;
+  padding: 13px 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.newsletter-submit-btn:hover {
+  background: #74634f;
+  transform: scale(1.02);
+}
+
+.newsletter-disclaimer {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 0.85rem;
+}
+
+.newsletter-success-box {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+/* 2. Main Footer Body Card */
+.footer-main-card {
+  width: min(1260px, 94%);
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 2.25rem;
+  padding: 8rem 4.5rem 3.25rem;
+  border: 1px solid rgba(116, 99, 79, 0.16);
+  box-shadow: 0 30px 70px rgba(17, 19, 18, 0.08);
+}
+
+.footer-columns-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1.25fr;
+  gap: 3rem 2.5rem;
+}
+
+.footer-brand-title {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #111312;
+  letter-spacing: 0.06em;
+  display: block;
+}
+
+.footer-brand-subtitle {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #74634f;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.footer-brand-desc {
+  font-size: 0.88rem;
+  color: #61564c;
+  line-height: 1.65;
+  margin: 1.25rem 0 1.75rem;
+}
+
+.footer-social-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.footer-social-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fbf8f5;
+  border: 1px solid rgba(116, 99, 79, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #29251c;
+  transition: all 0.25s ease;
+}
+
+.footer-social-btn:hover {
+  background: #29251c;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(41, 37, 28, 0.2);
+}
+
+.footer-col-title {
+  font-family: var(--font-wedding-serif, 'Cormorant Garamond', serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111312;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links-list a {
+  color: #61564c;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer-links-list a:hover {
+  color: #111312;
+  transform: translateX(3px);
+}
+
+.footer-direct-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.footer-contact-link,
+.footer-salon-address {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #29251c;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-contact-link:hover {
+  color: #74634f;
+}
+
+.footer-ico {
+  color: #74634f;
+  font-size: 0.95rem;
+  width: 18px;
+  flex-shrink: 0;
+}
+
+.footer-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(116, 99, 79, 0.1);
+  border: 1px solid rgba(116, 99, 79, 0.25);
+  border-radius: 50px;
+  font-size: 0.78rem;
+  color: #29251c;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  width: fit-content;
+}
+
+.status-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2e7d32;
+  box-shadow: 0 0 8px rgba(46, 125, 50, 0.6);
+}
+
+.footer-bottom-strip {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(116, 99, 79, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #8c7e6f;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.footer-legal-links a {
+  color: #8c7e6f;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-legal-links a:hover {
+  color: #111312;
+}
+
+.footer-separator {
+  color: #c7beaf;
+}
+
+/* Responsive adjustments for Contact and Footer */
+@media (max-width: 1024px) {
+  .atelier-contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .footer-floating-newsletter-card {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2.75rem 2.25rem;
+  }
+
+  .newsletter-visual-col {
+    display: none;
+  }
+
+  .footer-columns-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .footer-col-brand {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .atelier-contact-container {
+    padding: 2.5rem 1.5rem;
+    border-radius: 1.75rem;
+  }
+
+  .atelier-contact-info-card,
+  .atelier-contact-form-card {
+    padding: 2.25rem 1.5rem;
+    border-radius: 1.35rem;
+  }
+
+  .effect21-fields-grid .col-6 {
+    grid-column: span 12;
+  }
+
+  .footer-main-card {
+    padding: 7rem 1.75rem 2.5rem;
+    border-radius: 1.75rem;
+  }
+
+  .footer-columns-grid {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+  }
+
+  .footer-col-brand {
+    grid-column: span 1;
+  }
+
+  .footer-bottom-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }
 

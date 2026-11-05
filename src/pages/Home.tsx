@@ -49,6 +49,14 @@ import {
   faCalendarCheck,
   faChevronDown,
   faPenNib,
+  faLocationDot,
+  faPhoneVolume,
+  faEnvelopeOpenText,
+  faShieldHalved,
+  faScissors,
+  faPaperPlane,
+  faCommentDots,
+  faCrown,
 } from "@fortawesome/free-solid-svg-icons"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -2672,6 +2680,47 @@ export default function Home() {
   const [whyNotes, setWhyNotes] = useState<string>("")
   const [isWhyBookingSuccess, setIsWhyBookingSuccess] = useState<boolean>(false)
 
+  // Section Contact Us (Conciergerie Privée) State
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    creationType: "",
+    eventDate: "",
+    message: "",
+  })
+  const [contactSubmitted, setContactSubmitted] = useState<boolean>(false)
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setContactSubmitted(true)
+    setTimeout(() => {
+      setContactSubmitted(false)
+      setContactForm({
+        name: "",
+        email: "",
+        phone: "",
+        creationType: "",
+        eventDate: "",
+        message: "",
+      })
+    }, 6000)
+  }
+
+  // Footer Newsletter / Gazette Privée State
+  const [newsletterEmail, setNewsletterEmail] = useState<string>("")
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState<boolean>(false)
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newsletterEmail) return
+    setNewsletterSubmitted(true)
+    setTimeout(() => {
+      setNewsletterSubmitted(false)
+      setNewsletterEmail("")
+    }, 5000)
+  }
+
   const openWhyBookingModal = (card: WhyChooseCard) => {
     setBookingWhyCard(card)
     setIsWhyBookingSuccess(false)
@@ -3639,44 +3688,56 @@ export default function Home() {
   useGSAP(
     () => {
       ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true })
-      // Hero Animation
-      gsap.from(".hero-element", {
-        y: 30,
+      // Dedicated Hero Entrance Animation
+      gsap.from(".hero-liquid-glass-card", {
+        y: 40,
         opacity: 0,
-        duration: 1,
-        stagger: 0.15,
+        duration: 1.1,
         ease: "power3.out",
-        delay: 0.2,
+        delay: 0.15,
+      })
+      gsap.from(".carousel-section", {
+        y: 40,
+        opacity: 0,
+        duration: 1.1,
+        ease: "power3.out",
+        delay: 0.3,
       })
 
-      // Dynamic Interactive Scroll-Down & Scroll-Up Parallax for Hero Section
+      // Calibrated Dynamic Interactive Scroll-Down & Scroll-Up Parallax for Hero Section
       const heroContainer = document.querySelector(".home-hero")
       if (heroContainer) {
-        gsap.to(".home-hero-left .hero-liquid-glass-card", {
-          y: -40,
-          scale: 0.96,
-          opacity: 0.5,
-          ease: "none",
+        const heroTl = gsap.timeline({
           scrollTrigger: {
             trigger: heroContainer,
             start: "top top",
             end: "bottom top",
-            scrub: 0.6,
+            scrub: 0.7,
+            invalidateOnRefresh: true,
           },
         })
 
-        gsap.to(".home-hero-right", {
-          y: 40,
-          scale: 0.94,
-          opacity: 0.6,
-          ease: "none",
-          scrollTrigger: {
-            trigger: heroContainer,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.6,
+        heroTl.to(
+          ".home-hero-left .hero-liquid-glass-card",
+          {
+            y: -50,
+            opacity: 0.45,
+            scale: 0.98,
+            ease: "none",
           },
-        })
+          0
+        )
+
+        heroTl.to(
+          ".home-hero-right .carousel-section",
+          {
+            y: -35,
+            opacity: 0.55,
+            scale: 0.98,
+            ease: "none",
+          },
+          0
+        )
       }
 
       // Scroll-Down & Scroll-Up Animation for Trending Now Header
@@ -4008,25 +4069,36 @@ export default function Home() {
           },
         })
 
-        // 1. Move horizontal cards track from LEFT to RIGHT
+        // 1. Horizontal scroll: Starts at Card 1 (x: 0) and glides smoothly across to Card 7
         whyTimeline.fromTo(
           whyCardsTrack,
           {
-            x: () => -getWhyScrollAmount(),
+            x: 0,
           },
           {
-            x: 0,
+            x: () => -getWhyScrollAmount(),
             ease: "none",
             onUpdate: updateWhyCardsVisibility,
           },
           0
         )
 
-        // Initial positioning & visibility state
-        gsap.set(whyCardsTrack, { x: -getWhyScrollAmount() })
+        // 2. Gently fade right panel as cards glide across
+        whyTimeline.to(
+          whyRightPanel,
+          {
+            opacity: 0.05,
+            ease: "power1.inOut",
+          },
+          0.12
+        )
+
+        // Initial positioning & visibility state (Première vue: Card 1 & Card 2 prominently in view)
+        gsap.set(whyCardsTrack, { x: 0 })
+        gsap.set(whyRightPanel, { opacity: 1, y: 0 })
         updateWhyCardsVisibility()
 
-        // 2. Real-time scroll progress bar fill
+        // 3. Real-time scroll progress bar fill
         if (whyProgressBarFill) {
           whyTimeline.to(
             whyProgressBarFill,
@@ -4301,50 +4373,56 @@ export default function Home() {
       <main className="home-main">
         {/* Hero Section */}
         <section className="home-hero" style={{ backgroundColor: CAROUSEL_SHOES[k].bg }}>
-          <div className="home-hero-left hero-element">
+          <div className="home-hero-left">
             <div className="hero-liquid-glass-card">
               <div className="liquid-glass-specular-highlight" />
               <div className="liquid-glass-rim-reflection" />
-              <span className="home-tag">
-                Haute Couture &amp; Sur-Mesure
-              </span>
-              <h1 className="home-hero-title">
-                Sublimez Votre <br />{" "}
-                <span className="home-hero-title-light">Allure Unique.</span>
-              </h1>
-              <p className="home-hero-desc">
-                Des robes de mariée, de gala et de cérémonie dessinées et cousues
-                main pour célébrer chaque instant d'exception avec grâce.
-              </p>
-              <button className="home-hero-btn">
-                Découvrir l'Atelier <TrendingUp size={20} className="animate-draw-arrow" />
-              </button>
-              <div className="home-hero-brands">
-                <span className="brand-logo" title="Soie de Lyon">
-                  <ion-icon name="Sparkles-outline"></ion-icon>
+              
+              <div className="hero-glass-top-content">
+                <span className="home-tag">
+                  Haute Couture &amp; Sur-Mesure
                 </span>
-                <span className="brand-logo" title="Dentelle de Calais">
-                  <ion-icon name="diamond-outline"></ion-icon>
-                </span>
-                <span className="brand-logo" title="Sur-Mesure">
-                  <ion-icon name="cut-outline"></ion-icon>
-                </span>
-                <span className="brand-logo" title="Broderie Main">
-                  <ion-icon name="rose-outline"></ion-icon>
-                </span>
-                <span className="brand-logo" title="Haute Couture">
-                  <ion-icon name="ribbon-outline"></ion-icon>
-                </span>
+                <h1 className="home-hero-title">
+                  Sublimez Votre <br />{" "}
+                  <span className="home-hero-title-light">Allure Unique.</span>
+                </h1>
+                <p className="home-hero-desc">
+                  Des robes de mariée, de gala et de cérémonie dessinées et cousues
+                  main pour célébrer chaque instant d'exception avec grâce.
+                </p>
+                <button className="home-hero-btn">
+                  Découvrir l'Atelier <TrendingUp size={20} className="animate-draw-arrow" />
+                </button>
               </div>
-              <div className="home-scroll-indicator">
-                <span>Défiler</span>
-                <div className="home-scroll-line">
-                  <div className="home-scroll-fill"></div>
+
+              <div className="hero-glass-bottom-content">
+                <div className="home-hero-brands">
+                  <span className="brand-logo" title="Soie de Lyon">
+                    <ion-icon name="Sparkles-outline"></ion-icon>
+                  </span>
+                  <span className="brand-logo" title="Dentelle de Calais">
+                    <ion-icon name="diamond-outline"></ion-icon>
+                  </span>
+                  <span className="brand-logo" title="Sur-Mesure">
+                    <ion-icon name="cut-outline"></ion-icon>
+                  </span>
+                  <span className="brand-logo" title="Broderie Main">
+                    <ion-icon name="rose-outline"></ion-icon>
+                  </span>
+                  <span className="brand-logo" title="Haute Couture">
+                    <ion-icon name="ribbon-outline"></ion-icon>
+                  </span>
+                </div>
+                <div className="home-scroll-indicator">
+                  <span>Défiler</span>
+                  <div className="home-scroll-line">
+                    <div className="home-scroll-fill"></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="home-hero-right hero-element">
+          <div className="home-hero-right">
             <section
               className="carousel-section"
               style={{ '--n': n, '--k': k } as React.CSSProperties}
@@ -5014,14 +5092,16 @@ export default function Home() {
                           src={card.image}
                           alt={card.title}
                           className="why-choose-card-img"
-                          loading="lazy"
+                          loading="eager"
                           decoding="async"
                         />
                         <div className="why-choose-card-shade" />
-                        <div className="why-card-click-cue">
-                          <Eye size={13} />
-                          <span>Cliquer pour détails</span>
-                        </div>
+                      </div>
+
+                      {/* Click hint pill at top-left */}
+                      <div className="why-card-click-cue">
+                        <Eye size={13} />
+                        <span>Cliquer pour détails</span>
                       </div>
 
                       {/* Top-Right Frosted Glass Heart Button (Appears on Hover like Card 1) */}
@@ -5933,7 +6013,397 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* SECTION: CONTACT US & CONCIERGERIE PRIVÉE — HAUTE COUTURE SUR-MESURE */}
+        <section id="contact" className="atelier-contact-section">
+          <div className="atelier-contact-container">
+            {/* Architectural Kicker Header */}
+            <div className="atelier-contact-header">
+              <div className="lookbook-kicker-row">
+                <span className="lookbook-kicker-num">INDEX 08</span>
+                <span className="lookbook-kicker-line" />
+                <span className="lookbook-kicker-label">CONCIERGERIE PRIVÉE &amp; RENDEZ-VOUS D'ATELIER</span>
+              </div>
+              <h2 className="atelier-contact-title">
+                Prenez Attache avec <span className="calligraphy-title-accent">l'Atelier.</span>
+              </h2>
+              <p className="atelier-contact-desc">
+                Chaque création d'exception débute par une écoute attentive. Que vous rêviez d'une robe de mariée sur-mesure, d'un fourreau de gala ou d'une parure de cérémonie, nos maîtres artisans vous reçoivent dans l'intimité de nos salons privés.
+              </p>
+            </div>
+
+            {/* 2-Column Luxury Layout */}
+            <div className="atelier-contact-grid">
+              {/* Left Column: Coordonnées de Prestige & Conciergerie */}
+              <div className="atelier-contact-info-card">
+                <div className="contact-info-top">
+                  <span className="contact-info-tag">Maison Fondée en 2018 · Paris &amp; International</span>
+                  <h3 className="contact-info-heading">L'Écrin Privé de Haute Couture</h3>
+                  <p className="contact-info-sub">
+                    Notre atelier parisien vous ouvre ses portes sur rendez-vous exclusif pour une séance de découverte, croquis sur le vif et sélection des étoffes les plus nobles.
+                  </p>
+                </div>
+
+                <div className="contact-coordinates-list">
+                  <div className="contact-coordinate-item">
+                    <div className="coordinate-icon-box">
+                      <FontAwesomeIcon icon={faLocationDot} />
+                    </div>
+                    <div className="coordinate-text">
+                      <span className="coordinate-label">ADRESSE DU SALON D'HONNEUR</span>
+                      <strong className="coordinate-value">38 Rue du Faubourg Saint-Honoré, 75008 Paris</strong>
+                      <span className="coordinate-hint">Service voiturier privatif sur demande</span>
+                    </div>
+                  </div>
+
+                  <div className="contact-coordinate-item">
+                    <div className="coordinate-icon-box">
+                      <FontAwesomeIcon icon={faPhoneVolume} />
+                    </div>
+                    <div className="coordinate-text">
+                      <span className="coordinate-label">LIGNE DIRECTE DE LA CRÉATRICE</span>
+                      <strong className="coordinate-value">+33 (0)1 42 68 55 00</strong>
+                      <span className="coordinate-hint">Lundi au Samedi · 09h00 à 20h00</span>
+                    </div>
+                  </div>
+
+                  <div className="contact-coordinate-item">
+                    <div className="coordinate-icon-box">
+                      <FontAwesomeIcon icon={faEnvelopeOpenText} />
+                    </div>
+                    <div className="coordinate-text">
+                      <span className="coordinate-label">CORRESPONDANCE PRIVÉE</span>
+                      <strong className="coordinate-value">concierge@maison-kicks.com</strong>
+                      <span className="coordinate-hint">Réponse personnalisée garantie sous 24 heures</span>
+                    </div>
+                  </div>
+
+                  <div className="contact-coordinate-item">
+                    <div className="coordinate-icon-box">
+                      <FontAwesomeIcon icon={faClock} />
+                    </div>
+                    <div className="coordinate-text">
+                      <span className="coordinate-label">HORAIRES DES CONSULTATIONS</span>
+                      <strong className="coordinate-value">Mardi - Samedi : 10h00 - 19h30</strong>
+                      <span className="coordinate-hint">Nocturnes privatisées le jeudi jusqu'à 22h00</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="contact-guarantee-pill-strip">
+                  <div className="contact-pill-item">
+                    <FontAwesomeIcon icon={faShieldHalved} className="pill-ico" />
+                    <span>Confidentialité Absolue</span>
+                  </div>
+                  <div className="contact-pill-item">
+                    <FontAwesomeIcon icon={faGem} className="pill-ico" />
+                    <span>Toile d'Essai Offerte</span>
+                  </div>
+                  <div className="contact-pill-item">
+                    <FontAwesomeIcon icon={faScissors} className="pill-ico" />
+                    <span>Façonné 100% Main</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Formulaire Haut de Gamme avec Styles Effect-21 */}
+              <div className="atelier-contact-form-card">
+                <div className="contact-form-header">
+                  <h3 className="contact-form-title">Votre Demande de Rendez-Vous ou Devis</h3>
+                  <p className="contact-form-sub">
+                    Renseignez vos coordonnées ci-dessous. Les champs réagissent au toucher selon nos exigences d'artisanat.
+                  </p>
+                </div>
+
+                {contactSubmitted ? (
+                  <div className="contact-success-notification">
+                    <div className="success-icon-wrap">
+                      <FontAwesomeIcon icon={faCheckCircle} />
+                    </div>
+                    <h4>Votre Demande a été Transmise à l'Atelier</h4>
+                    <p>
+                      Merci pour votre confiance. Notre maître modéliste examine vos souhaits et vous répondra sous 24 heures avec une proposition d'entretien personnalisé.
+                    </p>
+                  </div>
+                ) : (
+                  <form className="contact-effect21-form" onSubmit={handleContactSubmit}>
+                    <div className="effect21-fields-grid">
+                      {/* Nom & Prénom */}
+                      <div className="input-effect col-6">
+                        <FontAwesomeIcon icon={faUser} className="effect-21-icon" />
+                        <input
+                          className={`effect-21 ${contactForm.name ? "has-content" : ""}`}
+                          type="text"
+                          placeholder=""
+                          id="contact-name"
+                          value={contactForm.name}
+                          onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                          required
+                        />
+                        <label htmlFor="contact-name">Nom &amp; Prénom du titulaire</label>
+                        <span className="focus-border"><i></i></span>
+                      </div>
+
+                      {/* Email */}
+                      <div className="input-effect col-6">
+                        <FontAwesomeIcon icon={faEnvelope} className="effect-21-icon" />
+                        <input
+                          className={`effect-21 ${contactForm.email ? "has-content" : ""}`}
+                          type="email"
+                          placeholder=""
+                          id="contact-email"
+                          value={contactForm.email}
+                          onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                          required
+                        />
+                        <label htmlFor="contact-email">Adresse Email personnelle</label>
+                        <span className="focus-border"><i></i></span>
+                      </div>
+
+                      {/* Téléphone */}
+                      <div className="input-effect col-6">
+                        <FontAwesomeIcon icon={faPhone} className="effect-21-icon" />
+                        <input
+                          className={`effect-21 ${contactForm.phone ? "has-content" : ""}`}
+                          type="tel"
+                          placeholder=""
+                          id="contact-phone"
+                          value={contactForm.phone}
+                          onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                          required
+                        />
+                        <label htmlFor="contact-phone">Numéro de Téléphone Mobile</label>
+                        <span className="focus-border"><i></i></span>
+                      </div>
+
+                      {/* Type de Création */}
+                      <div className="input-effect col-6">
+                        <FontAwesomeIcon icon={faCrown} className="effect-21-icon" />
+                        <input
+                          className={`effect-21 ${contactForm.creationType ? "has-content" : ""}`}
+                          type="text"
+                          placeholder=""
+                          id="contact-creationType"
+                          value={contactForm.creationType}
+                          onChange={(e) => setContactForm({ ...contactForm, creationType: e.target.value })}
+                        />
+                        <label htmlFor="contact-creationType">Création souhaitée (Mariée, Gala, Cérémonie...)</label>
+                        <span className="focus-border"><i></i></span>
+                      </div>
+
+                      {/* Date estimée de l'événement */}
+                      <div className="input-effect col-12">
+                        <FontAwesomeIcon icon={faCalendarDays} className="effect-21-icon" />
+                        <input
+                          className={`effect-21 ${contactForm.eventDate ? "has-content" : ""}`}
+                          type="text"
+                          placeholder=""
+                          id="contact-eventDate"
+                          value={contactForm.eventDate}
+                          onChange={(e) => setContactForm({ ...contactForm, eventDate: e.target.value })}
+                        />
+                        <label htmlFor="contact-eventDate">Date ou Période estimée de l'Événement (ex: 15 Septembre 2026)</label>
+                        <span className="focus-border"><i></i></span>
+                      </div>
+
+                      {/* Message / Souhaits particuliers */}
+                      <div className="input-effect col-12">
+                        <FontAwesomeIcon icon={faCommentDots} className="effect-21-icon effect-21-icon-textarea" />
+                        <textarea
+                          className={`effect-21 effect-21-textarea ${contactForm.message ? "has-content" : ""}`}
+                          rows={4}
+                          placeholder=""
+                          id="contact-message"
+                          value={contactForm.message}
+                          onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                        />
+                        <label htmlFor="contact-message">Parlez-nous de vos inspirations, silhouettes ou désirs d'étoffes...</label>
+                        <span className="focus-border"><i></i></span>
+                      </div>
+                    </div>
+
+                    <div className="contact-form-actions">
+                      <button type="submit" className="contact-submit-btn">
+                        <span>Envoyer ma Demande à l'Atelier</span>
+                        <FontAwesomeIcon icon={faPaperPlane} className="submit-icon" />
+                      </button>
+                      <div className="contact-reassurance-note">
+                        <FontAwesomeIcon icon={faShieldHalved} />
+                        <span>Données strictement protégées · Sans aucun engagement préalable</span>
+                      </div>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
+
+      {/* FOOTER HAUTE COUTURE — SYNCHRONISÉ EN TEMPS RÉEL AVEC LA COULEUR DE LA HERO SECTION */}
+      <footer className="couture-footer-wrapper">
+        {/* Floating VIP Newsletter / Gazette Privée Banner (Overlapping Top of Footer) */}
+        <div
+          className="footer-floating-newsletter-card"
+          style={{
+            backgroundColor: CAROUSEL_SHOES[k].bg,
+            transition: "background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+        >
+          {/* Left Side: 3D Haute Couture Emblem */}
+          <div className="newsletter-visual-col">
+            <div className="newsletter-3d-emblem">
+              <div className="emblem-inner-glow" />
+              <FontAwesomeIcon icon={faCrown} className="emblem-crown-icon" />
+              <div className="emblem-details">
+                <span className="emblem-brand">MAISON KICKS &amp; CO</span>
+                <span className="emblem-sub">GAZETTE PRIVÉE · PARIS</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Headline & Subscription Form */}
+          <div className="newsletter-content-col">
+            <h3 className="newsletter-title">
+              Abonnez-vous à la Gazette Privée pour Découvrir nos Dernières Collections
+            </h3>
+            <p className="newsletter-desc">
+              Recevez une invitation d'accueil privilégiée et un accès anticipé à nos défilés, nouvelles capsules et carnets d'étoffes rares.
+            </p>
+
+            {newsletterSubmitted ? (
+              <div className="newsletter-success-box">
+                <FontAwesomeIcon icon={faCheckCircle} />
+                <span>Votre invitation a été envoyée avec succès à votre adresse email.</span>
+              </div>
+            ) : (
+              <form className="newsletter-form-pill" onSubmit={handleNewsletterSubmit}>
+                <div className="newsletter-input-wrap">
+                  <FontAwesomeIcon icon={faEnvelope} className="newsletter-field-icon" />
+                  <input
+                    type="email"
+                    className="newsletter-field"
+                    placeholder="Votre adresse email personnelle..."
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <button type="submit" className="newsletter-submit-btn">
+                  S'abonner
+                </button>
+              </form>
+            )}
+            <p className="newsletter-disclaimer">
+              Vous pourrez vous désinscrire à tout moment d'un simple clic. Confidentialité absolue garantie.
+            </p>
+          </div>
+        </div>
+
+        {/* Main Footer Body Card */}
+        <div className="footer-main-card">
+          <div className="footer-columns-grid">
+            {/* Column 1: Brand & Socials */}
+            <div className="footer-col footer-col-brand">
+              <div className="footer-brand-header">
+                <span className="footer-brand-title">KICKS &amp; CO</span>
+                <span className="footer-brand-subtitle">HAUTE COUTURE · SUR-MESURE</span>
+              </div>
+              <p className="footer-brand-desc">
+                Maison d'artisanat d'art et de confection d'exception. Chaque silhouette est taillée selon vos mesures et façonnée à la main pour magnifier vos plus beaux instants.
+              </p>
+              <div className="footer-social-links">
+                <a href="#instagram" aria-label="Instagram" className="footer-social-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                </a>
+                <a href="#pinterest" aria-label="Pinterest" className="footer-social-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.332 1.357-.053.224-.174.271-.4.164-1.493-.695-2.427-2.876-2.427-4.632 0-3.774 2.743-7.24 7.906-7.24 4.149 0 7.371 2.957 7.371 6.908 0 4.123-2.599 7.442-6.207 7.442-1.212 0-2.352-.63-2.743-1.377l-.747 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.538.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="#facebook" aria-label="Facebook" className="footer-social-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </a>
+                <a href="#linkedin" aria-label="LinkedIn" className="footer-social-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Column 2: Collections */}
+            <div className="footer-col">
+              <h4 className="footer-col-title">Collections</h4>
+              <ul className="footer-links-list">
+                <li><a href="#catalogue">Robes de Mariée Sur-Mesure</a></li>
+                <li><a href="#catalogue">Robes de Soirée &amp; Gala</a></li>
+                <li><a href="#catalogue">Tenues Traditionnelles</a></li>
+                <li><a href="#catalogue">Cortèges &amp; Demoiselles</a></li>
+                <li><a href="#catalogue">Nuancier &amp; Étoffes Rares</a></li>
+              </ul>
+            </div>
+
+            {/* Column 3: L'Atelier & Savoir-Faire */}
+            <div className="footer-col">
+              <h4 className="footer-col-title">L'Atelier</h4>
+              <ul className="footer-links-list">
+                <li><a href="#atelier">L'Histoire de la Maison</a></li>
+                <li><a href="#atelier">Secrets de Confection</a></li>
+                <li><a href="#atelier">Patronage en 28 Points</a></li>
+                <li><a href="#atelier">Dentelle de Calais &amp; Soie</a></li>
+                <li><a href="#atelier">Presse &amp; Défilés Privés</a></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Services Privés */}
+            <div className="footer-col">
+              <h4 className="footer-col-title">Services &amp; FAQ</h4>
+              <ul className="footer-links-list">
+                <li><a href="#contact">Réservation d'un Salon Privé</a></li>
+                <li><a href="#contact">Guide des Mesures</a></li>
+                <li><a href="#contact">Accompagnement Jour J</a></li>
+                <li><a href="#contact">Retouches &amp; Finitions</a></li>
+                <li><a href="#contact">Foire Aux Questions</a></li>
+              </ul>
+            </div>
+
+            {/* Column 5: Conciergerie Directe */}
+            <div className="footer-col footer-col-contact">
+              <h4 className="footer-col-title">Conciergerie</h4>
+              <div className="footer-direct-contact">
+                <a href="tel:+33142685500" className="footer-contact-link">
+                  <FontAwesomeIcon icon={faPhoneVolume} className="footer-ico" />
+                  <span>(33) 01 42 68 55 00</span>
+                </a>
+                <a href="mailto:concierge@maison-kicks.com" className="footer-contact-link">
+                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="footer-ico" />
+                  <span>concierge@maison-kicks.com</span>
+                </a>
+                <div className="footer-salon-address">
+                  <FontAwesomeIcon icon={faLocationDot} className="footer-ico" />
+                  <span>38 Rue du Faubourg Saint-Honoré, Paris</span>
+                </div>
+                <div className="footer-status-pill">
+                  <span className="status-live-dot" />
+                  <span>Salon Ouvert · Sur Rendez-Vous</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Copyright & Legal Strip */}
+          <div className="footer-bottom-strip">
+            <div className="footer-copyright">
+              © 2026 Maison Kicks &amp; Co. Tous droits réservés. Haute Couture &amp; Création Sur-Mesure.
+            </div>
+            <div className="footer-legal-links">
+              <a href="#confidentialite">Politique de Confidentialité</a>
+              <span className="footer-separator">·</span>
+              <a href="#conditions">Conditions Générales</a>
+              <span className="footer-separator">·</span>
+              <a href="#mentions">Mentions Légales</a>
+              <span className="footer-separator">·</span>
+              <a href="#plan">Plan du Site</a>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       {/* Product Detail Modal Popup with GSAP Image Extension Animation (80% width, large image & enriched Couture specs) */}
       {selectedProduct && (() => {
