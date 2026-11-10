@@ -26,16 +26,13 @@ import {
   Minus,
   Heart,
   Tag,
-  Eye,
 } from "lucide-react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faFireFlameSimple,
   faTruck,
   faCircle,
-  faHandSparkles,
   faGem,
-  faWind,
   faUser,
   faEnvelope,
   faPhone,
@@ -47,16 +44,11 @@ import {
   faChevronLeft,
   faChevronRight,
   faCalendarCheck,
-  faChevronDown,
-  faPenNib,
-  faLocationDot,
-  faPhoneVolume,
-  faEnvelopeOpenText,
-  faShieldHalved,
-  faScissors,
   faPaperPlane,
+  faCircleNotch,
   faCommentDots,
-  faCrown,
+  faLocationDot,
+  faScissors,
 } from "@fortawesome/free-solid-svg-icons"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -1073,14 +1065,68 @@ interface CarouselShoe {
   desc: string
   a: number
   bg: string
+  accentLight: string
+  accentGlow: string
+  contrastText: string
+  paletteLabel: string
 }
 
 const CAROUSEL_SHOES: CarouselShoe[] = [
-  { name: "Mariée Royale", image: "/couture/wedding4.webp", desc: "Dentelle & Traîne Cathédrale", a: -12, bg: "#29251c" },
-  { name: "Gala Étoilé", image: "/couture/party-dress3.webp", desc: "Fourreau Perlé Main", a: -6, bg: "#74634f" },
-  { name: "Drapé Couture", image: "/couture/other-robes3.webp", desc: "Soie Sauvage Sur-Mesure", a: 0, bg: "#3f2028" },
-  { name: "Dentelle d'Or", image: "/couture/wedding6.webp", desc: "Création Mariage Impérial", a: 6, bg: "#111312" },
-  { name: "Soirée Velours", image: "/couture/party-dress4.webp", desc: "Silhouette Haute Couture", a: 12, bg: "#3f3d30" },
+  {
+    name: "Mariée Royale",
+    image: "/couture/wedding4.webp",
+    desc: "Dentelle & Traîne Cathédrale",
+    a: -12,
+    bg: "#29251c",
+    accentLight: "#f4ece1",
+    accentGlow: "#d8c8b8",
+    contrastText: "#29251c",
+    paletteLabel: "Ivoire & Olive Oscuro",
+  },
+  {
+    name: "Gala Étoilé",
+    image: "/couture/party-dress3.webp",
+    desc: "Fourreau Perlé Main",
+    a: -6,
+    bg: "#74634f",
+    accentLight: "#fbf6ef",
+    accentGlow: "#ebd9c5",
+    contrastText: "#473b2c",
+    paletteLabel: "Champagne & Moss Taupe",
+  },
+  {
+    name: "Drapé Couture",
+    image: "/couture/other-robes3.webp",
+    desc: "Soie Sauvage Sur-Mesure",
+    a: 0,
+    bg: "#3f2028",
+    accentLight: "#faeef1",
+    accentGlow: "#e7c4cd",
+    contrastText: "#3f2028",
+    paletteLabel: "Nacre Poudrée & Mulberry",
+  },
+  {
+    name: "Dentelle d'Or",
+    image: "/couture/wedding6.webp",
+    desc: "Création Mariage Impérial",
+    a: 6,
+    bg: "#111312",
+    accentLight: "#f3f0ea",
+    accentGlow: "#d5cec3",
+    contrastText: "#111312",
+    paletteLabel: "Soie Pure & Noir Earth",
+  },
+  {
+    name: "Soirée Velours",
+    image: "/couture/party-dress4.webp",
+    desc: "Silhouette Haute Couture",
+    a: 12,
+    bg: "#3f3d30",
+    accentLight: "#f5f4eb",
+    accentGlow: "#dcd8c3",
+    contrastText: "#2e2d22",
+    paletteLabel: "Lin Naturel & Olive Smoke",
+  },
 ]
 
 interface EventItem {
@@ -1473,355 +1519,6 @@ const whyChooseCards: WhyChooseCard[] = [
   }
 ]
 
-interface LookbookHotspot {
-  id: number
-  indexLabel: string
-  productId: number
-  x: number
-  y: number
-  partLabel: string
-  zoneTitle: string
-  materialNote: string
-  archiveRef: string
-  craftOrigin: string
-  techSpec: string
-  weightSpec: string
-  stylingNote: string
-  materialName: string
-  countryOrigin: string
-  countryFlag: string
-  atelierName: string
-  composition: string
-  textureTouch: string
-  lightReflect: string
-  durabilityBreathability: string
-  whySpecial: string
-  artisanSecret: string
-  careGuidance: string
-}
-
-interface LookbookSilhouette {
-  id: number
-  code: string
-  title: string
-  serifSubtitle: string
-  seasonNote: string
-  image: string
-  photographer: string
-  totalPrice: string
-  hoursOfWork: string
-  fabricMeterage: string
-  fittingsCount: string
-  editorialNote: string
-  hotspots: LookbookHotspot[]
-}
-
-const LOOKBOOK_SILHOUETTES: LookbookSilhouette[] = [
-  {
-    id: 1,
-    code: "SILHOUETTE 01",
-    title: "Souveraine d'Ivoire",
-    serifSubtitle: "Robe de Mariée — Dentelle de Calais & Pur Lin",
-    seasonNote: "Haute Couture Nuptiale",
-    image: "/couture/wedding14.webp",
-    photographer: "Confection : 100% Sur-Mesure à l'Atelier",
-    totalPrice: "980 €",
-    hoursOfWork: "85 Heures",
-    fabricMeterage: "12 Mètres d'Étoffe Noble",
-    fittingsCount: "3 Essayages Privés",
-    editorialNote:
-      "Une création nuptiale majestueuse célébrant la noblesse des fibres naturelles : dentelle de Caudry-Calais ajourée, corset en soie de Côme et traîne royale façonnée en pur lin normand peigné.",
-    hotspots: [
-      {
-        id: 101,
-        indexLabel: "01",
-        productId: 1,
-        x: 32,
-        y: 28,
-        partLabel: "Corsage & Décolleté",
-        zoneTitle: "Dentelle de Caudry-Calais & Tulle Illusion",
-        materialNote: "Dentelle Leavers de Calais (France) · Tulle soyeux invisible",
-        archiveRef: "ATELIER / COR-01",
-        craftOrigin: "Incrustation Main · Point Invisible",
-        techSpec: "14 Baleines Souples · Bonnets Intégrés",
-        weightSpec: "38 Heures de Broderie Fine",
-        stylingNote:
-          "Les motifs floraux de la dentelle sont découpés aux ciseaux fins puis réappliqués à la main sur le décolleté sans aucune couture apparente.",
-        materialName: "Dentelle de Caudry-Calais sur Tulle Illusion",
-        countryOrigin: "France (Hauts-de-France)",
-        countryFlag: "🇫🇷",
-        atelierName: "Maison Dentellière Fondée en 1887 — Calais-Caudry",
-        composition: "78% Coton d'Égypte peigné extra-long · 22% Soie naturelle de mûrier",
-        textureTouch: "D'une légèreté vaporeuse, caresse aérienne sur la peau sans aucune sensation de grattage ni raideur.",
-        lightReflect: "Fini poudré mat qui absorbe la lumière naturelle sans reflet parasite, idéal pour les photographies de mariage.",
-        durabilityBreathability: "Trame aérée respirante à 100%, maintenant une fraîcheur totale sous le bustier durant toute la journée.",
-        whySpecial:
-          "Tissée sur les légendaires métiers Leavers du XIXe siècle (qui ne sont plus construits aujourd'hui), cette dentelle nécessite plus de 5 000 fils de chaîne entrelacés selon un tracé mécanique d'une précision microscopique. Chaque arabesque florale est ensuite découpée et réappliquée au point invisible par une brodeuse d'art sur le tulle illusion, donnant l'impression magique que les fleurs de dentelle fleurissent à même la peau de la mariée.",
-        artisanSecret: "Incrustation point par point sans couture visible : 38 heures de travail manuel rien que pour ce décolleté.",
-        careGuidance: "Conservation sur cintre rembourré en soie, nettoyage exclusivement chez un maître teinturier spécialisé haute couture.",
-      },
-      {
-        id: 102,
-        indexLabel: "02",
-        productId: 2,
-        x: 31,
-        y: 48,
-        partLabel: "Cintrage & Taille",
-        zoneTitle: "Satin Duchesse & Crêpe de Soie de Côme",
-        materialNote: "100% Pure Soie de Côme (Italie) · Baleinage souple",
-        archiveRef: "ATELIER / TAI-02",
-        craftOrigin: "Moulage sur Mannequin Vivant",
-        techSpec: "Maintien Interne · Fermeture Perles Nacrées",
-        weightSpec: "Ajustement au Millimètre Près",
-        stylingNote:
-          "La ligne de taille est subtilement galbée en V pour élancer le buste et marquer la cambrure avec une aisance et une souplesse absolues.",
-        materialName: "Satin Duchesse & Crêpe de Soie de Côme",
-        countryOrigin: "Italie (Lombardie, Lac de Côme)",
-        countryFlag: "🇮🇹",
-        atelierName: "Tissages Soyeux Historiques de Côme — Fondés en 1902",
-        composition: "100% Pure Soie de Mûrier biologique (42 mommes)",
-        textureTouch: "Toucher liquide et soyeux, enveloppant le corps avec une douceur incomparable et un maintien ferme mais voluptueux.",
-        lightReflect: "Éclat subtilement nacré, captant la douce lueur des bougies et du soleil couchant.",
-        durabilityBreathability: "Thermorégulation naturelle : la soie évacue l'humidité et procure une sensation de fraîcheur continue.",
-        whySpecial:
-          "Le satin duchesse de Côme est réputé dans le monde entier comme le saint des saints des soies nuptiales. Grâce à une densité exceptionnelle de fils de soie ultra-fins battus sur des métiers Jacquard séculaires, il possède une 'mémoire de forme' unique qui galbe et sculpte la taille sans nécessiter de corset rigide étouffant. La cambrure naturelle de la mariée est magnifiée tout en lui laissant une liberté de mouvement et de respiration absolue.",
-        artisanSecret: "Entoilage interne en pongé de soie pure et 14 baleines souples à mémoire de forme épousant chaque respiration.",
-        careGuidance: "Défroissage doux à la vapeur verticale basse pression, mise sous housse respirante en coton non blanchi.",
-      },
-      {
-        id: 103,
-        indexLabel: "03",
-        productId: 3,
-        x: 40,
-        y: 76,
-        partLabel: "Jupe & Traîne",
-        zoneTitle: "Pur Lin de Normandie & Voile d'Organza",
-        materialNote: "Lin normand peigné (France) · Organza de soie pure",
-        archiveRef: "ATELIER / TRA-03",
-        craftOrigin: "Coupe en Plein Biais · Roulotté Main",
-        techSpec: "Attache-Traîne Invisible Inclus",
-        weightSpec: "8,5 Mètres de Dentelle & Lin d'Ourlet",
-        stylingNote:
-          "La traîne se déploie avec majesté lors de la cérémonie puis se relève en un geste grâce au bouton nacré dissimulé pour la soirée.",
-        materialName: "Pur Lin de Normandie & Organza de Soie Aérienne",
-        countryOrigin: "France (Normandie) & Flandres",
-        countryFlag: "🇫🇷",
-        atelierName: "Filatures Traditionnelles de Normandie — Label Masters of Linen",
-        composition: "65% Lin Normand peigné longue fibre · 35% Organza de Soie naturelle",
-        textureTouch: "Souplesse texturée au tombé sculptural, conférant à la jupe et à la traîne un mouvement noble et aérien.",
-        lightReflect: "Texture brute raffinée rehaussée de reflets ivoire changeants au gré des pas.",
-        durabilityBreathability: "Résistance extrême à la déchirure lors de la marche et tombé lourd infroissable qui ne s'écrase jamais.",
-        whySpecial:
-          "Le lin cultivé sur les terres côtières de Normandie bénéficie d'un climat océanique unique au monde qui confère à ses fibres une longueur et une souplesse incomparables. Marié en trame serrée avec l'organza de soie, il permet à la traîne royale d'avoir une ampleur sculpturale sans être alourdie par des jupons synthétiques rigides. La robe ondule avec une grâce majestueuse à chaque pas vers l'autel, tout en restant remarquablement fraîche et légère.",
-        artisanSecret: "Coupe en plein biais avec ourlet roulotté main et bouton nacré dissimulé pour relever la traîne le soir du bal.",
-        careGuidance: "Housse anti-UV fournie avec papier de soie au pH neutre pour une préservation patrimoniale sur plusieurs générations.",
-      },
-    ],
-  },
-  {
-    id: 2,
-    code: "SILHOUETTE 02",
-    title: "Impératrice de Gala",
-    serifSubtitle: "Robe du Soir — Pongé & Crêpe de Soie de Lyon",
-    seasonNote: "Collection Gala & Réception",
-    image: "/couture/party-dress27.webp",
-    photographer: "Confection : Patron Individuel Sur-Mesure",
-    totalPrice: "640 €",
-    hoursOfWork: "55 Heures",
-    fabricMeterage: "6,5 Mètres de Soie Pure",
-    fittingsCount: "2 à 3 Essayages",
-    editorialNote:
-      "L'équilibre parfait entre glamour sculptural et fluidité couture. Taillée dans une étoffe précieuse qui capte la lumière du soir, cette silhouette magnifie la démarche.",
-    hotspots: [
-      {
-        id: 201,
-        indexLabel: "01",
-        productId: 5,
-        x: 50,
-        y: 56,
-        partLabel: "Épaules & Encolure",
-        zoneTitle: "Pongé de Soie Pure & Finition Glacée",
-        materialNote: "Soie d'élevage de Lyon (France) certifiée Oeko-Tex",
-        archiveRef: "GALA / ENC-01",
-        craftOrigin: "Bâtissage sur Buste · Finition Glacée",
-        techSpec: "Tenue Sans Bretelles · Ruban Anti-Glisse",
-        weightSpec: "Doublure 100% Pongé de Soie",
-        stylingNote:
-          "L'encolure est renforcée d'un ruban de maintien invisible qui épouse le décolleté sans jamais bâiller, même en mouvement.",
-        materialName: "Pongé de Soie Pure de Lyon & Perles Fines",
-        countryOrigin: "France (Auvergne-Rhône-Alpes, Lyon)",
-        countryFlag: "🇫🇷",
-        atelierName: "Ateliers Soyeux de la Croix-Rousse — Lyon",
-        composition: "100% Soie Pongée Naturelle (55 g/m²)",
-        textureTouch: "Finesse caressante d'une absolue légèreté, régulant thermiquement le contact avec le buste.",
-        lightReflect: "Reflets profonds et soyeux sous les projecteurs de soirée.",
-        durabilityBreathability: "Confort respirant incomparable évitant tout échauffement lors des réceptions.",
-        whySpecial:
-          "Héritier du savoir-faire des Canuts lyonnais, ce pongé de soie possède une finesse de filature que seuls les tisseurs de la région Rhône-Alpes maîtrisent. Sa souplesse permet un plaquage parfait sur la peau sans faux plis.",
-        artisanSecret: "Montage sur ruban de sergé sous-jacent pour un maintien sans faille sans armature métallique gênante.",
-        careGuidance: "Nettoyage délicat à sec, pressage à fer tiède sans vapeur directe.",
-      },
-      {
-        id: 202,
-        indexLabel: "02",
-        productId: 6,
-        x: 48,
-        y: 71,
-        partLabel: "Drapé Oblique",
-        zoneTitle: "Crêpe de Soie Lourd 4 Plis & Perles de Murano",
-        materialNote: "Crêpe de soie lourd de Côme (Italie) & Perles de Murano",
-        archiveRef: "GALA / DRA-02",
-        craftOrigin: "Épinglage Vivant à l'Atelier",
-        techSpec: "Plis Fixés Point par Point",
-        weightSpec: "Tombé Liquide Infroissable",
-        stylingNote:
-          "Les plis convergent vers la hanche pour dessiner une taille de guêpe et créer un jeu d'ombres et de lumière flatteur.",
-        materialName: "Crêpe de Soie Lourd 4 Plis & Verre de Murano",
-        countryOrigin: "Italie (Lombardie & Vénétie)",
-        countryFlag: "🇮🇹",
-        atelierName: "Maison Tessile Lombarda — Côme",
-        composition: "100% Crêpe de Soie Lourd torsadé 4 brins (220 g/m²)",
-        textureTouch: "Grain crêpé inimitable, dense, avec un effet drapant lourd et voluptueux.",
-        lightReflect: "Matité profonde créant un contraste saisissant avec les perles de verre soufflé de Murano.",
-        durabilityBreathability: "Tombé infroissable même après plusieurs heures assise.",
-        whySpecial:
-          "Ce crêpe lourd 4 plis utilise des fils de soie fortement surtorsadés qui lui confèrent une élasticité naturelle sans un gramme d'élasthanne synthétique. Le vêtement bouge comme du mercure liquide.",
-        artisanSecret: "Chaque pli est fixé un par un au point de chausson sur un ruban intérieur en gros-grain.",
-        careGuidance: "Suspension sur cintre large rembourré pour préserver le volume des plis.",
-      },
-      {
-        id: 203,
-        indexLabel: "03",
-        productId: 8,
-        x: 50,
-        y: 88,
-        partLabel: "Tombé & Fente",
-        zoneTitle: "Satin Envers Crêpe Liquide & Roulotté Main",
-        materialNote: "Satin italien (Biella) · Ourlet invisible au point de chausson",
-        archiveRef: "GALA / JUP-03",
-        craftOrigin: "Coupe Haute Précision au Millimètre",
-        techSpec: "Hauteur de Fente Personnalisable",
-        weightSpec: "Fluidité Dynamique 360°",
-        stylingNote:
-          "Chaque ourlet est cousu à la main au fil de soie assorti afin qu'aucune piqûre machine ne vienne briser la souplesse du tombé.",
-        materialName: "Satin Envers Crêpe Liquide de Biella",
-        countryOrigin: "Italie (Piémont, Biella)",
-        countryFlag: "🇮🇹",
-        atelierName: "Lanificio & Setificio Storico di Biella",
-        composition: "100% Soie d'exception double face satin/crêpe",
-        textureTouch: "Face extérieure satinée brillante et glissante, envers crêpé doux contre la peau.",
-        lightReflect: "Lustre chatoyant qui capte l'éclairage feutré des salons de gala.",
-        durabilityBreathability: "Tissage serré très résistant aux accrocs lors des déplacements.",
-        whySpecial:
-          "L'eau pure des Alpes biellaises utilisée pour le rinçage des fils confère à ce satin envers crêpe une brillance naturelle sans aucun additif chimique. Le tombé est si fluide qu'il accompagne la démarche avec une prestance cinématographique.",
-        artisanSecret: "Ourlet exécuté à l'aiguille fine n°10 avec un fil de soie pure tiré de la lisière même du tissu.",
-        careGuidance: "Housse de protection en soie noire fournie pour éviter toute décoloration.",
-      },
-    ],
-  },
-  {
-    id: 3,
-    code: "SILHOUETTE 03",
-    title: "Légende d'Orient",
-    serifSubtitle: "Création d'Apparat — Broderie d'Or & Soie Mikado",
-    seasonNote: "Édition Prestige Sur-Mesure",
-    image: "/couture/other-robes22.webp",
-    photographer: "Confection : Broderie & Couture Main",
-    totalPrice: "780 €",
-    hoursOfWork: "72 Heures",
-    fabricMeterage: "9 Mètres d'Étoffe d'Apparat",
-    fittingsCount: "3 Essayages Privés",
-    editorialNote:
-      "Une robe de cérémonie d'une richesse ornementale remarquable, mariant la noblesse des broderies artisanales au fil d'or 24 carats et la tenue sculpturale de la soie Mikado impériale.",
-    hotspots: [
-      {
-        id: 301,
-        indexLabel: "01",
-        productId: 13,
-        x: 51,
-        y: 35,
-        partLabel: "Parure de Buste",
-        zoneTitle: "Canetille de Fil d'Or 24ct & Cristaux de Bohême",
-        materialNote: "Fil d'or d'artisanat français · Cristaux de Bohême posés main",
-        archiveRef: "PRESTIGE / BRO-01",
-        craftOrigin: "Broderie au Crochet de Lunéville & Aiguille",
-        techSpec: "Plus de 2 400 Perles & Cristaux Posés Main",
-        weightSpec: "Doublure Douce Anti-Frottement",
-        stylingNote:
-          "Les arabesques brodées encadrent le bustier et illuminent le port de tête tel un véritable bijou cousu à même l'étoffe.",
-        materialName: "Canetille d'Or Pur & Cristaux de Bohême",
-        countryOrigin: "France (Lyon) & République Tchèque (Bohême)",
-        countryFlag: "🇫🇷 / 🇨🇿",
-        atelierName: "Maison Broderie d'Or de Lunéville & Ateliers Lyonnais",
-        composition: "Fil de cuivre gainé d'or pur 24 carats · Cristaux facettés de Bohême",
-        textureTouch: "Relief précieux sans aspérité blessante, doublé de mousseline de soie douce.",
-        lightReflect: "Scintillement éclatant sous tous les angles de lumière.",
-        durabilityBreathability: "Fil d'or inoxydable inaltérable à l'humidité.",
-        whySpecial:
-          "Chaque centimètre carré de ce plastron est brodé selon la technique séculaire du crochet de Lunéville. La canetille d'or est un ressort hélicoïdal microscopique coupé à la pince millimétrique et enfilé un à un pour former les arabesques royales.",
-        artisanSecret: "Plus de 2 400 perles et cristaux sertis à la main avec du fil de soie ciré haute résistance.",
-        careGuidance: "Conserver à plat dans sa boîte d'atelier capitonnée de soie avant port.",
-      },
-      {
-        id: 302,
-        indexLabel: "02",
-        productId: 14,
-        x: 50,
-        y: 50,
-        partLabel: "Ceinture & Galbe",
-        zoneTitle: "Soie Mikado Impériale & Passementerie d'Or",
-        materialNote: "Mikado de soie pure (Italie) · Passementerie orfèvre",
-        archiveRef: "PRESTIGE / CEI-02",
-        craftOrigin: "Façonnage et Cintrage Sur-Mesure",
-        techSpec: "Agrafes Couture Invisibles Doublées",
-        weightSpec: "Maintien Sculptural & Souple",
-        stylingNote:
-          "La ceinture souligne la taille tout en structurant la transition entre le bustier perlé et le volume généreux de la jupe.",
-        materialName: "Soie Mikado Impériale & Galon Tressé d'Or",
-        countryOrigin: "Italie (Lombardie, Lac de Côme)",
-        countryFlag: "🇮🇹",
-        atelierName: "Setificio Reale di Como",
-        composition: "100% Soie Mikado à armure diagonale lourde (280 g/m²)",
-        textureTouch: "Grain ferme et structuré, offrant une tenue architecturale incomparable.",
-        lightReflect: "Reflet semi-mat poudré très noble et distingué.",
-        durabilityBreathability: "Rigidité noble naturelle sans renfort cartonné synthétique.",
-        whySpecial:
-          "La soie Mikado est la reine des étoffes de cour : sa structure sergée serée lui confère un maintien tridimensionnel sans équivalent dans le monde textile. Elle galbe le ventre et les hanches tout en restant légère et respirante.",
-        artisanSecret: "Entoilage au crin de cheval naturel traditionnel pour une tenue perpétuelle.",
-        careGuidance: "Repassage à sec sur l'envers uniquement avec pattemouille.",
-      },
-      {
-        id: 303,
-        indexLabel: "03",
-        productId: 16,
-        x: 52,
-        y: 76,
-        partLabel: "Jupe & Panneaux",
-        zoneTitle: "Tulle Aérien Plissé Soleil & Soie Végétale",
-        materialNote: "Voile de soie et tulle de Lyon (France) · Finition orfèvre",
-        archiveRef: "PRESTIGE / PAN-03",
-        craftOrigin: "Assemblage et Plissage Traditionnel au Carton",
-        techSpec: "Tombé Symétrique Haut Volume",
-        weightSpec: "Finitions Biais de Soie Pure",
-        stylingNote:
-          "Les panneaux s'ouvrent avec grâce à chaque pas, dévoilant la finesse des motifs jusqu'au bas de la robe.",
-        materialName: "Tulle de Soie Aérien & Crêpe Plissé Soleil",
-        countryOrigin: "France (Auvergne-Rhône-Alpes)",
-        countryFlag: "🇫🇷",
-        atelierName: "Atelier Plisseur d'Art de Paris & Lyon",
-        composition: "70% Tulle de Soie d'élevage · 30% Mousseline légère de soie",
-        textureTouch: "Volutes d'air d'une légèreté presque immatérielle.",
-        lightReflect: "Transparence délicate laissant transparaître la couleur profonde de la doublure de soie.",
-        durabilityBreathability: "Aération maximale permettant une aisance totale durant les danses.",
-        whySpecial:
-          "Le plissé soleil de cette jupe est réalisé à l'aide de moules en carton kraft fabriqués à la main et passés à l'étuve de vapeur. Les plis s'évasent en éventail de la taille jusqu'à l'ourlet, créant un volume royal sans jamais alourdir la silhouette.",
-        artisanSecret: "Montage des panneaux en biais pour que chaque pli s'ouvre comme une aile d'oiseau lors de la marche.",
-        careGuidance: "Ne jamais repasser les plis directement : utiliser un défroisseur vapeur vertical à distance.",
-      },
-    ],
-  },
-]
-
 interface FlagshipStudio {
   id: number
   index: string
@@ -1919,254 +1616,6 @@ const FLAGSHIP_STUDIOS: FlagshipStudio[] = [
     image: "/couture/other-robes26.webp",
     materials: "Pressage vapeur douce, papier de soie sans acide & housse respirante Haute Couture",
     spaces: ["Essayage avec accessoires", "Réglage de la traîne", "Housse couture offerte"],
-  },
-]
-
-interface CraftCallout {
-  code: string
-  x: number
-  y: number
-  title: string
-  spec: string
-}
-
-interface CraftBenchmark {
-  label: string
-  value: string
-  fillPercent: number
-}
-
-interface CraftAnatomyLayer {
-  id: number
-  index: string
-  tabTitle: string
-  tabSub: string
-  code: string
-  title: string
-  serifSubtitle: string
-  labLocation: string
-  surfaceLabel: string
-  blueprintLabel: string
-  surfaceImage: string
-  blueprintImage: string
-  description: string
-  protocolNote: string
-  callouts: CraftCallout[]
-  benchmarks: CraftBenchmark[]
-  specs: {
-    norm: string
-    tolerance: string
-    lifespan: string
-  }
-}
-
-const CRAFT_ANATOMY_LAYERS: CraftAnatomyLayer[] = [
-  {
-    id: 1,
-    index: "01",
-    tabTitle: "Dentelle & Perlage",
-    tabSub: "Dentelle de Calais & Broderie Main",
-    code: "SECRET 01 — ORNEMENTATION & TRANSPARENCE",
-    title: "Dentelle Incrustée & Tulle Illusion",
-    serifSubtitle: "Finesse Florale — Zéro Couture Apparente",
-    labLocation: "Table de Broderie · Travail à l'Aiguille Fine",
-    surfaceLabel: "VUE MARIÉE · DENTELLE & ÉCLAT",
-    blueprintLabel: "VUE ATELIER · PLACEMENT & INCRUSTATION",
-    surfaceImage: "/couture/wedding16.webp",
-    blueprintImage: "/couture/other-robes27.webp",
-    description:
-      "Chaque motif de dentelle est découpé à la main suivant le dessin des fleurs, épinglé directement sur mannequin puis cousu à points glissés invisibles sur un tulle illusion seconde peau.",
-    protocolNote:
-      "Nos perles et cristaux sont fixés individuellement avec un point d'arrêt noué tous les trois rangs, garantissant une tenue irréprochable tout au long de votre événement.",
-    callouts: [
-      {
-        code: "D1",
-        x: 32,
-        y: 32,
-        title: "Tulle Illusion Seconde Peau",
-        spec: "Maille hexagonale ultra-fine · Maintien invisible du décolleté",
-      },
-      {
-        code: "D2",
-        x: 54,
-        y: 52,
-        title: "Incrustation de Guipure & Calais",
-        spec: "Découpe florale aux ciseaux · Point de bourdon main",
-      },
-      {
-        code: "D3",
-        x: 68,
-        y: 74,
-        title: "Perlage & Cristaux Scellés",
-        spec: "Fil de soie ciré · Reflets doux sous lumière naturelle et soirée",
-      },
-    ],
-    benchmarks: [
-      { label: "TRAVAIL DE FINITION À LA MAIN", value: "100%", fillPercent: 100 },
-      { label: "LÉGÈRETÉ & DOUCEUR SUR LA PEAU", value: "98.5%", fillPercent: 98 },
-      { label: "TENUE DES BRODERIES & PERLES", value: "99.4%", fillPercent: 99 },
-    ],
-    specs: {
-      norm: "Dentelle & Soie Choisies",
-      tolerance: "Point Invisible < 1 mm",
-      lifespan: "Conservation Héritage",
-    },
-  },
-  {
-    id: 2,
-    index: "02",
-    tabTitle: "Corseterie & Bustier",
-    tabSub: "Baleinage Souple & Satin Duchesse",
-    code: "SECRET 02 — ARCHITECTURE DU BUSTE",
-    title: "Bustier Sculptant & Maintien Doux",
-    serifSubtitle: "Galbe Parfait — Liberté de Mouvement",
-    labLocation: "Atelier Corseterie · Moulage sur Buste",
-    surfaceLabel: "LIGNE EXTERNE · GALBE & DRAPÉ",
-    blueprintLabel: "CONSTRUCTION INTERNE · BALEINAGE & SOIE",
-    surfaceImage: "/couture/other-robes28.webp",
-    blueprintImage: "/couture/other-robes29.webp",
-    description:
-      "À l'intérieur de nos robes de mariée et de gala se cache une véritable architecture de corseterie : entoilage en coton de soie, baleines souples en spirale et ceinture interne de maintien.",
-    protocolNote:
-      "Grâce à la ceinture de taille interne (gros-grain couture), le poids de la jupe repose sur les hanches et non sur les épaules, offrant une sensation de légèreté incomparable.",
-    callouts: [
-      {
-        code: "C1",
-        x: 36,
-        y: 36,
-        title: "Bonnets & Galbe Sur-Mesure",
-        spec: "Moulés selon vos mesures · Aucun besoin de soutien-gorge",
-      },
-      {
-        code: "C2",
-        x: 52,
-        y: 56,
-        title: "Baleines Spirales Souples",
-        spec: "Maintien vertical sans rigidité · Suit chaque respiration",
-      },
-      {
-        code: "C3",
-        x: 70,
-        y: 74,
-        title: "Doublure Pongé de Soie",
-        spec: "Coutures rabattues vers l'intérieur · Zéro irritation",
-      },
-    ],
-    benchmarks: [
-      { label: "MAINTIEN SANS BRETELLES", value: "99.2%", fillPercent: 99 },
-      { label: "CONFORT ASSIS & EN DANSE", value: "97.8%", fillPercent: 98 },
-      { label: "PRÉCISION DU CINTRAGE TAILLE", value: "Sur-Mesure", fillPercent: 100 },
-    ],
-    specs: {
-      norm: "Corseterie d'Art",
-      tolerance: "Ajustement ± 1 mm",
-      lifespan: "Maintien Toute la Nuit",
-    },
-  },
-  {
-    id: 3,
-    index: "03",
-    tabTitle: "Drapé & Volumétrie",
-    tabSub: "Coupe en Biais & Ourlet Roulotté",
-    code: "SECRET 03 — FLUIDITÉ & MOUVEMENT",
-    title: "Architecture des Jupes & Traînes",
-    serifSubtitle: "Tombé Aérien — Amplitude Royale",
-    labLocation: "Table de Coupe · Travail du Plein Biais",
-    surfaceLabel: "TOMBÉ EN MOUVEMENT · FLUIDITÉ SOIE",
-    blueprintLabel: "SUPERPOSITION · JUPONS & GODETS",
-    surfaceImage: "/couture/other-robes30.webp",
-    blueprintImage: "/couture/other-robes31.webp",
-    description:
-      "Pour obtenir un tombé fluide qui ondule à chaque pas, nos jupes associent la coupe à 45° dans le plein biais du tissu et une superposition savante de mousseline, d'organza et de crin souple.",
-    protocolNote:
-      "Chaque robe à grand volume est suspendue sur mannequin pendant 48 heures avant l'ourlet final afin que le biais de la soie prenne son tombé définitif.",
-    callouts: [
-      {
-        code: "V1",
-        x: 34,
-        y: 34,
-        title: "Coupe à 45° en Plein Biais",
-        spec: "Élasticité naturelle du tissage · Épouse les hanches sans pli",
-      },
-      {
-        code: "V2",
-        x: 54,
-        y: 56,
-        title: "Superposition Multi-Voiles",
-        spec: "Jeu d'opacité et de lumière entre satin et mousseline",
-      },
-      {
-        code: "V3",
-        x: 70,
-        y: 78,
-        title: "Ourlet Roulotté & Crin Souple",
-        spec: "Maintien de la corolle en bas de jupe · Finition main",
-      },
-    ],
-    benchmarks: [
-      { label: "FLUIDITÉ DU TOMBÉ EN MARCHE", value: "99.5%", fillPercent: 99 },
-      { label: "RÉSISTANCE AU FROISSEMENT", value: "94.0%", fillPercent: 94 },
-      { label: "ÉQUILIBRE DE LA TRAÎNE", value: "100%", fillPercent: 100 },
-    ],
-    specs: {
-      norm: "Coupe Plein Biais",
-      tolerance: "Ourlet Nivelé Laser",
-      lifespan: "Attache-Traîne Intégré",
-    },
-  },
-]
-
-interface CraftCounterItem {
-  id: number
-  index: string
-  target: number
-  decimals: number
-  prefix: string
-  suffix: string
-  label: string
-  detail: string
-}
-
-const CRAFT_COUNTERS: CraftCounterItem[] = [
-  {
-    id: 1,
-    index: "01",
-    target: 100,
-    decimals: 0,
-    prefix: "",
-    suffix: "%",
-    label: "Confection Sur-Mesure & Finitions Main",
-    detail: "Chaque robe est coupée et assemblée individuellement selon les mesures exactes de notre cliente.",
-  },
-  {
-    id: 2,
-    index: "02",
-    target: 3,
-    decimals: 0,
-    prefix: "",
-    suffix: " RDV",
-    label: "Séances d'Essayage Privatisées",
-    detail: "Un accompagnement attentif de la première toile jusqu'à l'ajustement final avec vos accessoires.",
-  },
-  {
-    id: 3,
-    index: "03",
-    target: 4.9,
-    decimals: 1,
-    prefix: "",
-    suffix: "/5",
-    label: "Satisfaction des Mariées & Clientes",
-    detail: "Note moyenne attribuée pour la qualité du tombé, le confort du bustier et le respect des délais.",
-  },
-  {
-    id: 4,
-    index: "04",
-    target: 180,
-    decimals: 0,
-    prefix: "+",
-    suffix: "",
-    label: "Créations Exclusives Réalisées",
-    detail: "Robes de mariée, de gala, de fiançailles et de cortège façonnées avec passion à l'atelier.",
   },
 ]
 
@@ -2604,7 +2053,6 @@ export default function Home() {
   })
   const [k, setK] = useState(0)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-  const [selectedMaterialHotspot, setSelectedMaterialHotspot] = useState<LookbookHotspot | null>(null)
   const [productModalOrigin, setProductModalOrigin] = useState<{
     left: number
     top: number
@@ -2673,69 +2121,6 @@ export default function Home() {
   const [eventClientEmail, setEventClientEmail] = useState<string>("")
   const [eventClientPhone, setEventClientPhone] = useState<string>("")
   const [eventGuestsCount, setEventGuestsCount] = useState<number>(1)
-  const [hasScrolledEventModal, setHasScrolledEventModal] = useState<boolean>(false)
-
-  // Dedicated Booking Modal for "L'Excellence du Sur-Mesure"
-  const [bookingWhyCard, setBookingWhyCard] = useState<WhyChooseCard | null>(null)
-  const [whyNotes, setWhyNotes] = useState<string>("")
-  const [isWhyBookingSuccess, setIsWhyBookingSuccess] = useState<boolean>(false)
-
-  // Section Contact Us (Conciergerie Privée) State
-  const [contactForm, setContactForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    creationType: "",
-    eventDate: "",
-    message: "",
-  })
-  const [contactSubmitted, setContactSubmitted] = useState<boolean>(false)
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setContactSubmitted(true)
-    setTimeout(() => {
-      setContactSubmitted(false)
-      setContactForm({
-        name: "",
-        email: "",
-        phone: "",
-        creationType: "",
-        eventDate: "",
-        message: "",
-      })
-    }, 6000)
-  }
-
-  // Footer Newsletter / Gazette Privée State
-  const [newsletterEmail, setNewsletterEmail] = useState<string>("")
-  const [newsletterSubmitted, setNewsletterSubmitted] = useState<boolean>(false)
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newsletterEmail) return
-    setNewsletterSubmitted(true)
-    setTimeout(() => {
-      setNewsletterSubmitted(false)
-      setNewsletterEmail("")
-    }, 5000)
-  }
-
-  const openWhyBookingModal = (card: WhyChooseCard) => {
-    setBookingWhyCard(card)
-    setIsWhyBookingSuccess(false)
-    if (card.slots && card.slots.length > 0) {
-      const timePart = card.slots[0].split(" ")[0]
-      if (timePart) setWhySelectedTime(timePart)
-    }
-  }
-
-  const closeWhyBookingModal = () => {
-    setBookingWhyCard(null)
-    setIsWhyDatePickerOpen(false)
-    setIsWhyTimePickerOpen(false)
-    setIsWhyBookingSuccess(false)
-  }
 
   // Fermer les sélecteurs date / heure personnalisés lors d'un clic extérieur
   useEffect(() => {
@@ -2775,39 +2160,56 @@ export default function Home() {
   }, [selectedWhySlot, selectedWhyModal])
   const [leftTextOpacity, setLeftTextOpacity] = useState<number>(1)
   const eventsScrollRef = useRef<HTMLDivElement>(null)
-  const [activeLookIdx, setActiveLookIdx] = useState<number>(0)
-  const [activeHotspotIdx, setActiveHotspotIdx] = useState<number>(0)
   const [activeStudioId, setActiveStudioId] = useState<number>(1)
   const [reservedStudioVisits, setReservedStudioVisits] = useState<number[]>([])
-  const [quickAddedLookbookItems, setQuickAddedLookbookItems] = useState<number[]>([])
-  const [activeCraftLayerIdx, setActiveCraftLayerIdx] = useState<number>(0)
-  const [craftSliderPos, setCraftSliderPos] = useState<number>(52)
-  const [activeCraftCalloutIdx, setActiveCraftCalloutIdx] = useState<number>(0)
-  const isDraggingCraftRef = useRef<boolean>(false)
-  const craftComparatorRef = useRef<HTMLDivElement>(null)
 
-  const currentCraftLayer = CRAFT_ANATOMY_LAYERS[activeCraftLayerIdx] || CRAFT_ANATOMY_LAYERS[0]
+  // Contact section state (adapts seamlessly to active Hero silhouette palette)
+  const [contactName, setContactName] = useState<string>("")
+  const [contactEmail, setContactEmail] = useState<string>("")
+  const [contactPhone, setContactPhone] = useState<string>("")
+  const [contactOccasion, setContactOccasion] = useState<string>("")
+  const [contactSubject, setContactSubject] = useState<string>("Robe de Mariée Sur-Mesure")
+  const [contactMessage, setContactMessage] = useState<string>("")
+  const [contactSubmitState, setContactSubmitState] = useState<"idle" | "sending" | "sent">("idle")
+  const [contactError, setContactError] = useState<string>("")
 
-  const updateCraftSliderFromClientX = (clientX: number) => {
-    const el = craftComparatorRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    if (rect.width <= 0) return
-    const rawPct = ((clientX - rect.left) / rect.width) * 100
-    const clamped = Math.max(6, Math.min(94, rawPct))
-    setCraftSliderPos(clamped)
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (contactSubmitState === "sending") return
+
+    if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) {
+      setContactError("Merci de renseigner votre nom, votre e-mail et votre message pour l'atelier.")
+      return
+    }
+    setContactError("")
+    setContactSubmitState("sending")
+    window.setTimeout(() => {
+      setContactSubmitState("sent")
+    }, 1350)
   }
 
-  const currentLook = LOOKBOOK_SILHOUETTES[activeLookIdx] || LOOKBOOK_SILHOUETTES[0]
-  const currentHotspot = currentLook.hotspots[activeHotspotIdx] || currentLook.hotspots[0]
-  const currentHotspotProduct =
-    products.find((p) => p.id === currentHotspot.productId) || products[0]
+  const resetContactForm = () => {
+    setContactName("")
+    setContactEmail("")
+    setContactPhone("")
+    setContactOccasion("")
+    setContactMessage("")
+    setContactError("")
+    setContactSubmitState("idle")
+  }
+
+  const scrollToSection = (sectionId: string) => {
+    const target = document.getElementById(sectionId)
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
 
   const activeTestimonial = testimonials.find((t) => t.id === activeTestimonialId) || testimonials[0]
   const n = CAROUSEL_SHOES.length
 
   useEffect(() => {
-    if (selectedProduct || selectedEvent || selectedMaterialHotspot) {
+    if (selectedProduct || selectedEvent) {
       document.body.style.overflow = "hidden"
     } else {
       document.body.style.overflow = ""
@@ -2815,17 +2217,7 @@ export default function Home() {
     return () => {
       document.body.style.overflow = ""
     }
-  }, [selectedProduct, selectedEvent, selectedMaterialHotspot])
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && selectedMaterialHotspot) {
-        setSelectedMaterialHotspot(null)
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [selectedMaterialHotspot])
+  }, [selectedProduct, selectedEvent])
 
   const openWhyCardModal = (card: WhyChooseCard, e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -3688,57 +3080,15 @@ export default function Home() {
   useGSAP(
     () => {
       ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true })
-      // Dedicated Hero Entrance Animation
-      gsap.from(".hero-liquid-glass-card", {
-        y: 40,
+      // Hero Animation
+      gsap.from(".hero-element", {
+        y: 30,
         opacity: 0,
-        duration: 1.1,
+        duration: 1,
+        stagger: 0.15,
         ease: "power3.out",
-        delay: 0.15,
+        delay: 0.2,
       })
-      gsap.from(".carousel-section", {
-        y: 40,
-        opacity: 0,
-        duration: 1.1,
-        ease: "power3.out",
-        delay: 0.3,
-      })
-
-      // Calibrated Dynamic Interactive Scroll-Down & Scroll-Up Parallax for Hero Section
-      const heroContainer = document.querySelector(".home-hero")
-      if (heroContainer) {
-        const heroTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: heroContainer,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.7,
-            invalidateOnRefresh: true,
-          },
-        })
-
-        heroTl.to(
-          ".home-hero-left .hero-liquid-glass-card",
-          {
-            y: -50,
-            opacity: 0.45,
-            scale: 0.98,
-            ease: "none",
-          },
-          0
-        )
-
-        heroTl.to(
-          ".home-hero-right .carousel-section",
-          {
-            y: -35,
-            opacity: 0.55,
-            scale: 0.98,
-            ease: "none",
-          },
-          0
-        )
-      }
 
       // Scroll-Down & Scroll-Up Animation for Trending Now Header
       const trendingHeader = document.querySelector(".home-section-header")
@@ -4069,36 +3419,25 @@ export default function Home() {
           },
         })
 
-        // 1. Horizontal scroll: Starts at Card 1 (x: 0) and glides smoothly across to Card 7
+        // 1. Move horizontal cards track from LEFT to RIGHT
         whyTimeline.fromTo(
           whyCardsTrack,
           {
-            x: 0,
+            x: () => -getWhyScrollAmount(),
           },
           {
-            x: () => -getWhyScrollAmount(),
+            x: 0,
             ease: "none",
             onUpdate: updateWhyCardsVisibility,
           },
           0
         )
 
-        // 2. Gently fade right panel as cards glide across
-        whyTimeline.to(
-          whyRightPanel,
-          {
-            opacity: 0.05,
-            ease: "power1.inOut",
-          },
-          0.12
-        )
-
-        // Initial positioning & visibility state (Première vue: Card 1 & Card 2 prominently in view)
-        gsap.set(whyCardsTrack, { x: 0 })
-        gsap.set(whyRightPanel, { opacity: 1, y: 0 })
+        // Initial positioning & visibility state
+        gsap.set(whyCardsTrack, { x: -getWhyScrollAmount() })
         updateWhyCardsVisibility()
 
-        // 3. Real-time scroll progress bar fill
+        // 2. Real-time scroll progress bar fill
         if (whyProgressBarFill) {
           whyTimeline.to(
             whyProgressBarFill,
@@ -4137,43 +3476,6 @@ export default function Home() {
       window.addEventListener("scroll", handleVerticalScrollReveal, { passive: true })
       window.addEventListener("resize", handleVerticalScrollReveal, { passive: true })
 
-      // Lookbook Editorial Section — Scroll-Down & Scroll-Up Reveal
-      gsap.fromTo(
-        ".lookbook-reveal-header",
-        { y: 48, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".lookbook-editorial-section",
-            start: "top 82%",
-            end: "bottom 14%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      gsap.fromTo(
-        ".lookbook-reveal-stage",
-        { y: 64, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.05,
-          stagger: 0.14,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".lookbook-stage-grid",
-            start: "top 82%",
-            end: "bottom 12%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
       // Flagship Studios Section — Scroll-Down & Scroll-Up Reveal
       gsap.fromTo(
         ".flagship-reveal-header",
@@ -4211,91 +3513,24 @@ export default function Home() {
         }
       )
 
-      // Inside The Craft Section — Scroll-Down & Scroll-Up Reveal + Animated Counters
+      // Contact Atelier Section — Smooth Reveal
       gsap.fromTo(
-        ".craft-reveal-header",
-        { y: 48, opacity: 0 },
+        ".contact-reveal",
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.9,
-          stagger: 0.1,
+          duration: 0.85,
+          stagger: 0.12,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: ".craft-anatomy-section",
-            start: "top 82%",
-            end: "bottom 14%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      gsap.fromTo(
-        ".craft-reveal-stage",
-        { y: 64, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.0,
-          stagger: 0.14,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".craft-stage-grid",
-            start: "top 82%",
+            trigger: ".contact-atelier-section",
+            start: "top 84%",
             end: "bottom 12%",
             toggleActions: "play reverse play reverse",
           },
         }
       )
-
-      gsap.fromTo(
-        ".craft-counter-card",
-        { y: 44, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.85,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".craft-counters-ledger",
-            start: "top 86%",
-            end: "bottom 10%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      const counterNodes = gsap.utils.toArray<HTMLElement>(".craft-counter-num")
-      counterNodes.forEach((node) => {
-        const targetVal = parseFloat(node.dataset.target || "0")
-        const decimals = parseInt(node.dataset.decimals || "0", 10)
-        const prefix = node.dataset.prefix || ""
-        const suffix = node.dataset.suffix || ""
-        const counterObj = { val: 0 }
-
-        gsap.to(counterObj, {
-          val: targetVal,
-          duration: 2.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".craft-counters-ledger",
-            start: "top 86%",
-            end: "bottom 10%",
-            toggleActions: "play reset play reset",
-          },
-          onUpdate: () => {
-            let formatted = ""
-            if (decimals > 0) {
-              formatted = counterObj.val.toFixed(decimals)
-            } else {
-              const rounded = Math.round(counterObj.val)
-              formatted = rounded >= 1000 ? rounded.toLocaleString("fr-FR") : String(rounded)
-            }
-            node.textContent = `${prefix}${formatted}${suffix}`
-          },
-        })
-      })
 
       // Infinite Marquee for announcements
       gsap.to(".marquee-inner", {
@@ -4317,7 +3552,12 @@ export default function Home() {
     <div
       ref={container}
       className="home-page"
-      style={{ "--hero-diamond-color": CAROUSEL_SHOES[k].bg } as React.CSSProperties}
+      style={{
+        "--hero-diamond-color": CAROUSEL_SHOES[k].bg,
+        "--hero-accent-light": CAROUSEL_SHOES[k].accentLight,
+        "--hero-accent-glow": CAROUSEL_SHOES[k].accentGlow,
+        "--hero-contrast-text": CAROUSEL_SHOES[k].contrastText,
+      } as React.CSSProperties}
     >
       {/* Navbar (Fixed) */}
       <nav className="home-navbar">
@@ -4372,57 +3612,47 @@ export default function Home() {
 
       <main className="home-main">
         {/* Hero Section */}
-        <section className="home-hero" style={{ backgroundColor: CAROUSEL_SHOES[k].bg }}>
+        <section id="hero-accueil" className="home-hero" style={{ backgroundColor: CAROUSEL_SHOES[k].bg }}>
           <div className="home-hero-left">
-            <div className="hero-liquid-glass-card">
-              <div className="liquid-glass-specular-highlight" />
-              <div className="liquid-glass-rim-reflection" />
-              
-              <div className="hero-glass-top-content">
-                <span className="home-tag">
-                  Haute Couture &amp; Sur-Mesure
-                </span>
-                <h1 className="home-hero-title">
-                  Sublimez Votre <br />{" "}
-                  <span className="home-hero-title-light">Allure Unique.</span>
-                </h1>
-                <p className="home-hero-desc">
-                  Des robes de mariée, de gala et de cérémonie dessinées et cousues
-                  main pour célébrer chaque instant d'exception avec grâce.
-                </p>
-                <button className="home-hero-btn">
-                  Découvrir l'Atelier <TrendingUp size={20} className="animate-draw-arrow" />
-                </button>
-              </div>
-
-              <div className="hero-glass-bottom-content">
-                <div className="home-hero-brands">
-                  <span className="brand-logo" title="Soie de Lyon">
-                    <ion-icon name="Sparkles-outline"></ion-icon>
-                  </span>
-                  <span className="brand-logo" title="Dentelle de Calais">
-                    <ion-icon name="diamond-outline"></ion-icon>
-                  </span>
-                  <span className="brand-logo" title="Sur-Mesure">
-                    <ion-icon name="cut-outline"></ion-icon>
-                  </span>
-                  <span className="brand-logo" title="Broderie Main">
-                    <ion-icon name="rose-outline"></ion-icon>
-                  </span>
-                  <span className="brand-logo" title="Haute Couture">
-                    <ion-icon name="ribbon-outline"></ion-icon>
-                  </span>
-                </div>
-                <div className="home-scroll-indicator">
-                  <span>Défiler</span>
-                  <div className="home-scroll-line">
-                    <div className="home-scroll-fill"></div>
-                  </div>
-                </div>
+            <span className="hero-element home-tag">
+              Haute Couture &amp; Sur-Mesure
+            </span>
+            <h1 className="hero-element home-hero-title">
+              Sublimez Votre <br />{" "}
+              <span className="home-hero-title-light">Allure Unique.</span>
+            </h1>
+            <p className="hero-element home-hero-desc">
+              Des robes de mariée, de gala et de cérémonie dessinées et cousues
+              main pour célébrer chaque instant d'exception avec grâce.
+            </p>
+            <button type="button" onClick={() => scrollToSection("catalogue-creations")} className="hero-element home-hero-btn">
+              Découvrir l'Atelier <TrendingUp size={20} className="animate-draw-arrow" />
+            </button>
+            <div className="hero-element home-hero-brands">
+              <span className="brand-logo" title="Soie de Lyon">
+                <ion-icon name="Sparkles-outline"></ion-icon>
+              </span>
+              <span className="brand-logo" title="Dentelle de Calais">
+                <ion-icon name="diamond-outline"></ion-icon>
+              </span>
+              <span className="brand-logo" title="Sur-Mesure">
+                <ion-icon name="cut-outline"></ion-icon>
+              </span>
+              <span className="brand-logo" title="Broderie Main">
+                <ion-icon name="rose-outline"></ion-icon>
+              </span>
+              <span className="brand-logo" title="Haute Couture">
+                <ion-icon name="ribbon-outline"></ion-icon>
+              </span>
+            </div>
+            <div className="hero-element home-scroll-indicator">
+              <span>Défiler</span>
+              <div className="home-scroll-line">
+                <div className="home-scroll-fill"></div>
               </div>
             </div>
           </div>
-          <div className="home-hero-right">
+          <div className="home-hero-right hero-element">
             <section
               className="carousel-section"
               style={{ '--n': n, '--k': k } as React.CSSProperties}
@@ -4430,7 +3660,8 @@ export default function Home() {
               {CAROUSEL_SHOES.map((shoe: CarouselShoe, i: number) => (
                 <article
                   key={i}
-                  style={{ '--i': i, '--a': `${shoe.a}deg` } as React.CSSProperties}
+                  onClick={() => setK(i)}
+                  style={{ '--i': i, '--a': `${shoe.a}deg`, cursor: i !== k ? 'pointer' : 'default' } as React.CSSProperties}
                 >
                   <h2>{shoe.name}</h2>
                   <em>{shoe.desc}</em>
@@ -4466,7 +3697,7 @@ export default function Home() {
         </section>
 
         {/* Product Grid — Trending Now with Unified Segmented Pill Bar & Sliding Background Glider */}
-        <section className="trending-now-section">
+        <section id="catalogue-creations" className="trending-now-section">
           <div className="home-section-header trending-header-upgraded">
             <h2 className="home-section-title">
               Catalogue <span className="calligraphy-title-accent">Couture</span>
@@ -4625,7 +3856,7 @@ export default function Home() {
         </div>
 
         {/* Customer Testimonials Section */}
-        <section className="testimonials-section">
+        <section id="temoignages-clientes" className="testimonials-section">
           <div className="testimonials-container">
             {/* Central Testimonials Title Header */}
             <div className="testimonials-header">
@@ -4812,7 +4043,7 @@ export default function Home() {
         </section>
 
         {/* Featured 3D Parallax Coverflow Carousel (Customized & Unbridled 90vw width) */}
-        <section className="featured-carousel-section">
+        <section id="collections-exclusives" className="featured-carousel-section">
           <div className="featured-carousel-header">
             <span className="testimonials-pill-badge carousel-badge">Défilé &amp; Pièces Uniques</span>
             <h2 className="featured-carousel-title">
@@ -4949,7 +4180,7 @@ export default function Home() {
         </section>
 
         {/* Events & Masterclasses Section (GSAP Pinned Horizontal Scroll) */}
-        <section className="events-pinned-section">
+        <section id="salons-prives" className="events-pinned-section">
           <div className="events-pinned-container">
             {/* Left Info Panel (Fades out when cards glide over it) */}
             <div className="events-left-panel">
@@ -5025,7 +4256,7 @@ export default function Home() {
         </section>
 
         {/* Why Choose Atelier Section (Reverse Pinned Horizontal Scroll: Left to Right, Text on Right) */}
-        <section className="why-choose-section">
+        <section id="excellence-sur-mesure" className="why-choose-section">
           <div className="why-choose-pinned-container">
             {/* Right Info Panel (Fades out when cards glide over it from left to right) */}
             <div className="why-choose-right-panel">
@@ -5052,8 +4283,9 @@ export default function Home() {
 
               <div className="why-choose-actions-row">
                 <button
+                  type="button"
                   className="why-choose-cta-btn"
-                  onClick={() => openWhyBookingModal(whyChooseCards[0])}
+                  onClick={() => scrollToSection("contact-atelier")}
                 >
                   Prendre Rendez-Vous
                 </button>
@@ -5092,16 +4324,10 @@ export default function Home() {
                           src={card.image}
                           alt={card.title}
                           className="why-choose-card-img"
-                          loading="eager"
+                          loading="lazy"
                           decoding="async"
                         />
                         <div className="why-choose-card-shade" />
-                      </div>
-
-                      {/* Click hint pill at top-left */}
-                      <div className="why-card-click-cue">
-                        <Eye size={13} />
-                        <span>Cliquer pour détails</span>
                       </div>
 
                       {/* Top-Right Frosted Glass Heart Button (Appears on Hover like Card 1) */}
@@ -5136,10 +4362,7 @@ export default function Home() {
                           <button
                             type="button"
                             className="why-choose-card-cta"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              openWhyBookingModal(card)
-                            }}
+                            onClick={(e) => openWhyCardModal(card, e)}
                           >
                             {bookedWhySessions.includes(card.id) ? "Session Réservée ✓" : card.ctaText}
                           </button>
@@ -5168,363 +4391,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 1: HAUTE COUTURE & SILHOUETTES SUR-MESURE — "L'ÉLÉGANCE FAÇONNÉE MAIN" */}
-        <section className="lookbook-editorial-section">
-          <div className="lookbook-editorial-container">
-            {/* Top Architectural Index Header */}
-            <div className="lookbook-header-bar">
-              <div className="lookbook-header-left lookbook-reveal-header">
-                <div className="lookbook-kicker-row">
-                  <span className="lookbook-kicker-num">INDEX 05</span>
-                  <span className="lookbook-kicker-line" />
-                  <span className="lookbook-kicker-label">HAUTE COUTURE &amp; SILHOUETTES SUR-MESURE</span>
-                </div>
-                <h2 className="lookbook-main-title">
-                  L'Élégance <span className="lookbook-serif-italic">Façonnée Main.</span>
-                </h2>
-              </div>
-
-              <div className="lookbook-header-right lookbook-reveal-header">
-                <p className="lookbook-header-manifesto">
-                  Trois créations maîtresses photographiées à l'atelier. Survolez ou sélectionnez un repère numéroté sur la robe pour examiner l'architecture du corsage, le drapé de taille et l'ampleur de la traîne.
-                </p>
-
-                {/* Silhouette Switcher Tabs */}
-                <div className="lookbook-silhouette-tabs" role="tablist" aria-label="Choisir une création couture">
-                  {LOOKBOOK_SILHOUETTES.map((look, idx) => {
-                    const isLookActive = idx === activeLookIdx
-                    return (
-                      <button
-                        key={look.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={isLookActive}
-                        className={`lookbook-silhouette-tab sliding-bg-btn ${isLookActive ? "active" : ""}`}
-                        onClick={() => {
-                          setActiveLookIdx(idx)
-                          setActiveHotspotIdx(0)
-                        }}
-                      >
-                        <span className="btn-sliding-bg" />
-                        <span className="btn-sliding-content">
-                          <span className="lookbook-tab-code">{look.code}</span>
-                          <span className="lookbook-tab-name">{look.title}</span>
-                        </span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Main 2-Column Editorial Stage */}
-            <div className="lookbook-stage-grid">
-              {/* Left Column: Interactive Full-Height Editorial Frame with Magnetic Hotspots */}
-              <div className="lookbook-photo-column lookbook-reveal-stage">
-                <div className="lookbook-photo-frame">
-                  <img
-                    key={currentLook.id}
-                    src={currentLook.image}
-                    alt={`${currentLook.title} — ${currentLook.serifSubtitle}`}
-                    className="lookbook-photo-img"
-                    style={{
-                      transformOrigin: `${currentHotspot.x}% ${currentHotspot.y}%`,
-                    }}
-                  />
-                  <div className="lookbook-photo-vignette" />
-
-                  {/* Top-left film frame metadata */}
-                  <div className="lookbook-frame-top-meta">
-                    <span className="lookbook-frame-code">{currentLook.code}</span>
-                    <span className="lookbook-frame-sep">/</span>
-                    <span className="lookbook-frame-season">{currentLook.seasonNote}</span>
-                  </div>
-
-                  {/* Interactive Numbered Hotspots on the Silhouette */}
-                  {currentLook.hotspots.map((spot, idx) => {
-                    const isSpotActive = idx === activeHotspotIdx
-                    const isFlipLeft = spot.x > 50
-                    return (
-                      <button
-                        key={spot.id}
-                        type="button"
-                        className={`lookbook-hotspot-pin ${isSpotActive ? "active" : ""} ${isFlipLeft ? "pin-flip-left" : ""}`}
-                        style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                        onMouseEnter={() => setActiveHotspotIdx(idx)}
-                        onClick={() => {
-                          setActiveHotspotIdx(idx)
-                          setSelectedMaterialHotspot(spot)
-                        }}
-                        aria-label={`Zone ${spot.indexLabel} : ${spot.materialName} (${spot.countryOrigin})`}
-                      >
-                        <span className="lookbook-hotspot-pulse" />
-                        <span className="lookbook-hotspot-core">{spot.indexLabel}</span>
-                        <span className="lookbook-hotspot-tag">
-                          <span className="lookbook-hotspot-tag-part">{spot.partLabel} · {spot.countryFlag}</span>
-                          <span className="lookbook-hotspot-tag-name">{spot.materialName}</span>
-                        </span>
-                      </button>
-                    )
-                  })}
-
-                  {/* Bottom Editorial Caption Bar inside Photo */}
-                  <div className="lookbook-frame-bottom-bar">
-                    <div className="lookbook-frame-location">
-                      <span className="lookbook-frame-serif">{currentLook.serifSubtitle}</span>
-                      <span className="lookbook-frame-credit">{currentLook.photographer}</span>
-                    </div>
-                    <div className="lookbook-frame-total">
-                      <span className="lookbook-frame-total-label">CRÉATION SUR-MESURE</span>
-                      <span className="lookbook-frame-total-price">{currentLook.totalPrice}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Redesigned Haute Couture Patronage & Atelier Dossier */}
-              <div className="lookbook-sheet-column lookbook-reveal-stage">
-                {/* Sheet Top Header + 3-Metric Couture Atelier Ribbon */}
-                <div className="lookbook-sheet-header">
-                  <div className="lookbook-sheet-title-row">
-                    <div>
-                      <span className="lookbook-sheet-eyebrow">DOSSIER DE CONFECTION — {currentLook.code}</span>
-                      <h3 className="lookbook-sheet-title">
-                        {currentLook.title}{" "}
-                        <span className="lookbook-sheet-subtitle-serif">({currentLook.serifSubtitle})</span>
-                      </h3>
-                    </div>
-                    <span className="lookbook-sheet-piece-counter">
-                      ZONE 0{activeHotspotIdx + 1} / 0{currentLook.hotspots.length}
-                    </span>
-                  </div>
-                  <p className="lookbook-sheet-editorial-note">{currentLook.editorialNote}</p>
-
-                  {/* New Couture Metrics Bar (Hours of Work, Fabric Meterage, Fittings) */}
-                  <div className="lookbook-atelier-metrics-ribbon">
-                    <div className="lookbook-metric-cell">
-                      <span className="lookbook-metric-key">TEMPS DE FAÇONNAGE</span>
-                      <strong className="lookbook-metric-val">{currentLook.hoursOfWork}</strong>
-                    </div>
-                    <div className="lookbook-metric-cell">
-                      <span className="lookbook-metric-key">MÉTRAGE D'ÉTOFFE</span>
-                      <strong className="lookbook-metric-val">{currentLook.fabricMeterage}</strong>
-                    </div>
-                    <div className="lookbook-metric-cell">
-                      <span className="lookbook-metric-key">ACCOMPAGNEMENT</span>
-                      <strong className="lookbook-metric-val">{currentLook.fittingsCount}</strong>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Active Couture Zone Card with Live Optical Loupe (100% Precise Geometric Centering) */}
-                <div className="lookbook-spotlight-card lookbook-couture-dossier-card" key={currentHotspot.id}>
-                  <div
-                    className="lookbook-spotlight-media lookbook-loupe-media"
-                    onClick={() => setSelectedMaterialHotspot(currentHotspot)}
-                    style={{ cursor: "pointer" }}
-                    title="Cliquer pour ouvrir le dossier matière détaillé"
-                  >
-                    <span className="lookbook-spotlight-index-badge">LOUPE {currentHotspot.indexLabel}</span>
-                    <div
-                      className="lookbook-optical-loupe"
-                      role="img"
-                      aria-label={`Détail optique : ${currentHotspot.zoneTitle} (${currentHotspot.materialName})`}
-                    >
-                      <img
-                        src={currentLook.image}
-                        alt={currentHotspot.zoneTitle}
-                        className="lookbook-loupe-zoomed-img"
-                        style={{
-                          position: "absolute",
-                          left: "50%",
-                          top: "50%",
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          transformOrigin: `${currentHotspot.x}% ${currentHotspot.y}%`,
-                          transform: `translate(-${currentHotspot.x}%, -${currentHotspot.y}%) scale(3.2)`,
-                        }}
-                      />
-                      <div className="lookbook-loupe-crosshair">
-                        <span className="loupe-ring" />
-                        <span className="loupe-dot" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="lookbook-spotlight-body">
-                    <div className="lookbook-spotlight-top-group">
-                      <div className="lookbook-spotlight-meta-top">
-                        <span className="lookbook-spotlight-part">{currentHotspot.partLabel}</span>
-                        <span className="lookbook-spotlight-origin-badge">
-                          {currentHotspot.countryFlag} {currentHotspot.countryOrigin}
-                        </span>
-                      </div>
-
-                      <h4 className="lookbook-spotlight-name">{currentHotspot.materialName}</h4>
-                      <p className="lookbook-spotlight-material">
-                        <strong className="text-[#29251c]">{currentHotspot.zoneTitle}</strong> · {currentHotspot.materialNote}
-                      </p>
-                      <p className="lookbook-spotlight-desc">{currentHotspot.stylingNote}</p>
-                    </div>
-
-                    {/* Architectural & Couture Specifications Grid */}
-                    <div className="lookbook-spotlight-specs-grid">
-                      <div className="lookbook-spotlight-spec-item">
-                        <span className="lookbook-spotlight-spec-label">ATELIER &amp; SAVOIR-FAIRE</span>
-                        <span className="lookbook-spotlight-spec-val">{currentHotspot.craftOrigin}</span>
-                      </div>
-                      <div className="lookbook-spotlight-spec-item">
-                        <span className="lookbook-spotlight-spec-label">TECHNIQUE DE COUTURE</span>
-                        <span className="lookbook-spotlight-spec-val">{currentHotspot.techSpec}</span>
-                      </div>
-                      <div className="lookbook-spotlight-spec-item">
-                        <span className="lookbook-spotlight-spec-label">MÉTRAGE &amp; DENSITÉ</span>
-                        <span className="lookbook-spotlight-spec-val">{currentHotspot.weightSpec}</span>
-                      </div>
-                    </div>
-
-                    {/* Available Finishes (Colors) & Bespoke Sizes Preview */}
-                    <div className="lookbook-spotlight-variants-row">
-                      <div className="lookbook-spotlight-swatches-group">
-                        <span className="lookbook-spotlight-variant-label">NUANCIER DE SOIE</span>
-                        <div className="lookbook-spotlight-swatches">
-                          {currentHotspotProduct.colors.map((c, cIdx) => (
-                            <span
-                              key={cIdx}
-                              className="lookbook-spotlight-swatch"
-                              style={{ backgroundColor: c.hex }}
-                              title={c.name}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="lookbook-spotlight-sizes-group">
-                        <span className="lookbook-spotlight-variant-label">PATRONAGE &amp; TAILLES</span>
-                        <div className="lookbook-spotlight-size-pills">
-                          {currentHotspotProduct.sizes.slice(0, 4).map((sz, sIdx) => (
-                            <span key={sIdx} className="lookbook-spotlight-size-pill">
-                              {sz}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="lookbook-spotlight-actions">
-                      <button
-                        type="button"
-                        className="lookbook-inspect-btn lookbook-material-dossier-btn"
-                        onClick={() => setSelectedMaterialHotspot(currentHotspot)}
-                      >
-                        <Sparkles size={16} />
-                        <span>Fiche Matière &amp; Origine</span>
-                        <ArrowUpRight size={17} />
-                      </button>
-                      <button
-                        type="button"
-                        className="lookbook-quick-bag-btn"
-                        onClick={() => {
-                          setQuickAddedLookbookItems((prev) =>
-                            prev.includes(currentHotspot.id)
-                              ? prev
-                              : [...prev, currentHotspot.id]
-                          )
-                        }}
-                      >
-                        {quickAddedLookbookItems.includes(currentHotspot.id)
-                          ? "Zone Sélectionnée ✓"
-                          : "+ Demander un essayage"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Complete 3-Zone Couture Anatomy List (with 100% Precise Mini Optical Loupes) */}
-                <div className="lookbook-nomenclature-list">
-                  <div className="lookbook-nomenclature-head">
-                    <span>ARCHITECTURE DES 3 ZONES DE LA ROBE</span>
-                    <span>FICHE MATIÈRE &amp; ORIGINE (CLIQUEZ POUR DÉTAIL)</span>
-                  </div>
-
-                  {currentLook.hotspots.map((spot, idx) => {
-                    const isRowActive = idx === activeHotspotIdx
-                    return (
-                      <div
-                        key={spot.id}
-                        role="button"
-                        tabIndex={0}
-                        className={`lookbook-nomenclature-row ${isRowActive ? "active" : ""}`}
-                        onMouseEnter={() => setActiveHotspotIdx(idx)}
-                        onClick={() => {
-                          setActiveHotspotIdx(idx)
-                          setSelectedMaterialHotspot(spot)
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault()
-                            setActiveHotspotIdx(idx)
-                            setSelectedMaterialHotspot(spot)
-                          }
-                        }}
-                      >
-                        <span className="lookbook-row-index">{spot.indexLabel}</span>
-                        <div
-                          className="lookbook-row-thumb-wrap lookbook-row-loupe-thumb"
-                          style={{ position: "relative", overflow: "hidden" }}
-                          aria-hidden="true"
-                        >
-                          <img
-                            src={currentLook.image}
-                            alt=""
-                            style={{
-                              position: "absolute",
-                              left: "50%",
-                              top: "50%",
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              transformOrigin: `${spot.x}% ${spot.y}%`,
-                              transform: `translate(-${spot.x}%, -${spot.y}%) scale(3.2)`,
-                            }}
-                          />
-                        </div>
-                        <div className="lookbook-row-info">
-                          <span className="lookbook-row-name">
-                            {spot.materialName}{" "}
-                            <span className="lookbook-row-flag">{spot.countryFlag}</span>
-                          </span>
-                          <span className="lookbook-row-note">
-                            {spot.partLabel} · {spot.countryOrigin}
-                          </span>
-                        </div>
-                        <div className="lookbook-row-right">
-                          <span className="lookbook-row-price">{spot.archiveRef}</span>
-                          <button
-                            type="button"
-                            className="lookbook-row-open-modal"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setActiveHotspotIdx(idx)
-                              setSelectedMaterialHotspot(spot)
-                            }}
-                            aria-label={`Ouvrir le dossier matière pour ${spot.materialName}`}
-                          >
-                            <ArrowUpRight size={15} />
-                          </button>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* SECTION 2: PARCOURS DE CRÉATION & EXPÉRIENCE ATELIER — "DE L'ESQUISSE À LA ROBE RÊVÉE" */}
-        <section className="flagship-studios-section">
+        <section id="parcours-atelier" className="flagship-studios-section">
           <div className="flagship-studios-container">
             {/* Editorial Section Header */}
             <div className="flagship-header-bar">
@@ -5672,566 +4540,336 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 3: NOBLESSE DES ÉTOFFES & SECRETS DE CONFECTION — "L'ART DU SAVOIR-FAIRE" */}
-        <section className="craft-anatomy-section">
-          <div className="craft-anatomy-container">
-            {/* Top Architectural Header + 3-Layer Selector */}
-            <div className="craft-header-bar">
-              <div className="craft-header-left craft-reveal-header">
+        {/* SECTION CONTACT: HAUTE COUTURE & CONCIERGERIE ADAPTATIVE HERO */}
+        <section id="contact-atelier" className="contact-atelier-section">
+          <div className="contact-atelier-container">
+            {/* Editorial Header */}
+            <div className="contact-header-bar contact-reveal">
+              <div className="contact-header-left">
                 <div className="lookbook-kicker-row">
-                  <span className="lookbook-kicker-num">INDEX 07</span>
-                  <span className="lookbook-kicker-line" />
-                  <span className="lookbook-kicker-label">NOBLESSE DES ÉTOFFES &amp; SECRETS DE CONFECTION</span>
+                  <span className="lookbook-kicker-num">CONCIERGERIE PRIVÉE</span>
+                  <span className="lookbook-kicker-line contact-dynamic-line" />
+                  <span className="lookbook-kicker-label">RENDEZ-VOUS &amp; CRÉATIONS SUR-MESURE</span>
                 </div>
-                <h2 className="craft-main-title">
-                  L'Art du <span className="lookbook-serif-italic">Savoir-Faire.</span>
+                <h2 className="contact-main-title">
+                  Écrivons Votre{" "}
+                  <span className="lookbook-serif-italic contact-dynamic-italic">
+                    Pièce d'Exception.
+                  </span>
                 </h2>
               </div>
 
-              <div className="craft-header-right craft-reveal-header">
-                <p className="craft-header-desc">
-                  Plongez au cœur de nos techniques de Haute Couture. Sélectionnez un pilier de confection puis faites glisser le curseur optique pour comparer le tombé extérieur et la structure interne du vêtement.
+              <div className="contact-header-right">
+                <p className="contact-header-manifesto">
+                  Première rencontre créative, demande de croquis personnalisé ou réservation de cabine privée : adressez vos envies à nos maîtres couturières. L'esthétique du formulaire épouse en direct la silhouette sélectionnée dans notre vitrine Hero.
                 </p>
-
-                {/* 3-Layer Interactive Selector */}
-                <div className="craft-layer-tabs" role="tablist" aria-label="Sélecteur de savoir-faire couture">
-                  {CRAFT_ANATOMY_LAYERS.map((layer, idx) => {
-                    const isLayerActive = idx === activeCraftLayerIdx
-                    return (
-                      <button
-                        key={layer.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={isLayerActive}
-                        className={`craft-layer-tab sliding-bg-btn ${isLayerActive ? "active" : ""}`}
-                        onClick={() => {
-                          setActiveCraftLayerIdx(idx)
-                          setActiveCraftCalloutIdx(0)
-                        }}
-                      >
-                        <span className="btn-sliding-bg" />
-                        <span className="btn-sliding-content">
-                          <span className="craft-tab-num">{layer.index}. {layer.tabTitle}</span>
-                          <span className="craft-tab-sub">{layer.tabSub}</span>
-                        </span>
-                      </button>
-                    )
-                  })}
-                </div>
               </div>
             </div>
 
-            {/* Central 2-Column Stage: Left Interactive Couture Split Comparator + Right Redesigned Savoir-Faire Dossier */}
-            <div className="craft-stage-grid">
-              {/* Left Column: Sliding Split-Screen Visual Comparator */}
-              <div className="craft-comparator-column craft-reveal-stage">
-                <div
-                  ref={craftComparatorRef}
-                  className="craft-comparator-viewport"
-                  onMouseDown={(e) => {
-                    isDraggingCraftRef.current = true
-                    updateCraftSliderFromClientX(e.clientX)
-                  }}
-                  onMouseMove={(e) => {
-                    if (isDraggingCraftRef.current || e.buttons === 1) {
-                      updateCraftSliderFromClientX(e.clientX)
-                    }
-                  }}
-                  onMouseUp={() => {
-                    isDraggingCraftRef.current = false
-                  }}
-                  onMouseLeave={() => {
-                    isDraggingCraftRef.current = false
-                  }}
-                  onTouchMove={(e) => {
-                    if (e.touches[0]) {
-                      updateCraftSliderFromClientX(e.touches[0].clientX)
-                    }
-                  }}
-                >
-                  {/* Base Layer (Right side exposed): Internal Couture Structure View */}
-                  <div className="craft-layer-blueprint">
+            {/* Main 2-Column Interactive Stage */}
+            <div className="contact-stage-grid">
+              {/* Left Column: Hero Theme Live Sync + Atelier Info Cards */}
+              <div className="contact-info-column contact-reveal">
+                {/* Live Hero Silhouette Harmony Card */}
+                <div className="contact-hero-sync-card">
+                  <div className="contact-sync-media">
                     <img
-                      key={`bp-${currentCraftLayer.id}`}
-                      src={currentCraftLayer.blueprintImage}
-                      alt={`${currentCraftLayer.title} — Structure Interne`}
-                      className="craft-comparator-img craft-img-xray"
-                      draggable={false}
+                      src={CAROUSEL_SHOES[k].image}
+                      alt={CAROUSEL_SHOES[k].name}
+                      className="contact-sync-thumb"
                     />
-                    <div className="craft-xray-grid-overlay" />
-
-                    {/* Technical SVG Reticle Overlay */}
-                    <svg className="craft-xray-svg" viewBox="0 0 800 700" preserveAspectRatio="none">
-                      <circle cx="400" cy="350" r="210" fill="none" stroke="rgba(251,250,247,0.18)" strokeWidth="1" strokeDasharray="4 6" />
-                      <circle cx="400" cy="350" r="310" fill="none" stroke="rgba(251,250,247,0.1)" strokeWidth="1" />
-                      <line x1="0" y1="350" x2="800" y2="350" stroke="rgba(251,250,247,0.1)" strokeWidth="1" />
-                      <line x1="400" y1="0" x2="400" y2="700" stroke="rgba(251,250,247,0.1)" strokeWidth="1" />
-                    </svg>
-
-                    {/* Interactive Couture Callout Markers */}
-                    {currentCraftLayer.callouts.map((callout, cIdx) => {
-                      const isCalloutActive = cIdx === activeCraftCalloutIdx
-                      return (
+                    <span className="contact-sync-badge">TEINTE HERO ACTIVE</span>
+                  </div>
+                  <div className="contact-sync-body">
+                    <span className="contact-sync-eyebrow">HARMONIE CHROMATIQUE SYNCHRONISÉE</span>
+                    <h3 className="contact-sync-name">{CAROUSEL_SHOES[k].name}</h3>
+                    <p className="contact-sync-desc">
+                      {CAROUSEL_SHOES[k].desc} · <strong>{CAROUSEL_SHOES[k].paletteLabel}</strong>
+                    </p>
+                    <div className="contact-swatch-switcher" role="group" aria-label="Changer la silhouette et les couleurs">
+                      {CAROUSEL_SHOES.map((item, idx) => (
                         <button
-                          key={callout.code}
+                          key={item.name}
                           type="button"
-                          className={`craft-xray-callout ${isCalloutActive ? "active" : ""}`}
-                          style={{ left: `${callout.x}%`, top: `${callout.y}%` }}
-                          onMouseEnter={() => setActiveCraftCalloutIdx(cIdx)}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setActiveCraftCalloutIdx(cIdx)
-                          }}
-                        >
-                          <span className="craft-callout-code">{callout.code}</span>
-                          <span className="craft-callout-card">
-                            <span className="craft-callout-title">{callout.title}</span>
-                            <span className="craft-callout-spec">{callout.spec}</span>
-                          </span>
-                        </button>
-                      )
-                    })}
-                  </div>
-
-                  {/* Clipped Top Layer (Left side exposed): Exterior Couture Drape View */}
-                  <div
-                    className="craft-layer-surface"
-                    style={{
-                      clipPath: `inset(0 ${100 - craftSliderPos}% 0 0)`,
-                    }}
-                  >
-                    <img
-                      key={`sf-${currentCraftLayer.id}`}
-                      src={currentCraftLayer.surfaceImage}
-                      alt={`${currentCraftLayer.title} — Tombé Externe`}
-                      className="craft-comparator-img craft-img-surface"
-                      draggable={false}
-                    />
-                    <div className="craft-surface-vignette" />
-                  </div>
-
-                  {/* Top Corner Mode Badges */}
-                  <div className="craft-viewport-top-badges">
-                    <span className="craft-mode-badge craft-mode-badge-light">
-                      {currentCraftLayer.surfaceLabel}
-                    </span>
-                    <span className="craft-mode-badge craft-mode-badge-dark">
-                      {currentCraftLayer.blueprintLabel}
-                    </span>
-                  </div>
-
-                  {/* Sliding Vertical Divider Line & Handle */}
-                  <div
-                    className="craft-slider-divider"
-                    style={{ left: `${craftSliderPos}%` }}
-                  >
-                    <div className="craft-slider-handle" aria-hidden="true">
-                      <ChevronLeft size={14} />
-                      <span className="craft-slider-handle-code">COUTURE</span>
-                      <ChevronRight size={14} />
-                    </div>
-                  </div>
-
-                  {/* Accessible Range Input + Quick Preset Bar at Bottom of Viewport */}
-                  <div
-                    className="craft-viewport-bottom-bar"
-                    onMouseDown={(e) => e.stopPropagation()}
-                  >
-                    <div className="craft-viewport-presets">
-                      <button
-                        type="button"
-                        className={`craft-preset-btn ${craftSliderPos > 80 ? "active" : ""}`}
-                        onClick={() => setCraftSliderPos(88)}
-                      >
-                        Tombé Externe
-                      </button>
-                      <button
-                        type="button"
-                        className={`craft-preset-btn ${craftSliderPos >= 35 && craftSliderPos <= 65 ? "active" : ""}`}
-                        onClick={() => setCraftSliderPos(50)}
-                      >
-                        Coupe 50 / 50
-                      </button>
-                      <button
-                        type="button"
-                        className={`craft-preset-btn ${craftSliderPos < 25 ? "active" : ""}`}
-                        onClick={() => setCraftSliderPos(12)}
-                      >
-                        Structure Interne
-                      </button>
-                    </div>
-
-                    <div className="craft-range-control">
-                      <span className="craft-range-label">CURSEUR D'INSPECTION</span>
-                      <input
-                        type="range"
-                        min={6}
-                        max={94}
-                        value={Math.round(craftSliderPos)}
-                        onChange={(e) => setCraftSliderPos(Number(e.target.value))}
-                        className="craft-range-input"
-                        aria-label="Curseur de comparaison entre tombé externe et structure interne"
-                      />
-                      <span className="craft-range-pct">{Math.round(craftSliderPos)}%</span>
+                          onClick={() => setK(idx)}
+                          className={`contact-swatch-btn ${k === idx ? "active" : ""}`}
+                          style={{ backgroundColor: item.bg }}
+                          title={`Appliquer l'ambiance ${item.name}`}
+                          aria-label={`Choisir la nuance ${item.name}`}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Right Column: Redesigned Haute Couture Savoir-Faire & Matières Dossier */}
-              <div className="craft-dossier-column craft-reveal-stage" key={currentCraftLayer.id}>
-                <div className="craft-dossier-header">
-                  <div className="craft-dossier-meta-row">
-                    <span className="craft-dossier-code">{currentCraftLayer.code}</span>
-                    <span className="craft-dossier-lab">{currentCraftLayer.labLocation}</span>
-                  </div>
-                  <h3 className="craft-dossier-title">
-                    {currentCraftLayer.title}{" "}
-                    <span className="lookbook-sheet-subtitle-serif">({currentCraftLayer.serifSubtitle})</span>
-                  </h3>
-                  <p className="craft-dossier-desc">{currentCraftLayer.description}</p>
-                </div>
-
-                {/* Redesigned Couture Architecture Cards (3-Card Interactive Matrix) */}
-                <div className="craft-callouts-ledger">
-                  <div className="craft-subhead-row">
-                    <span>POINTS DE MAÎTRISE COUTURE</span>
-                    <span>EXIGENCE D'ATELIER</span>
-                  </div>
-                  <div className="craft-couture-cards-grid">
-                    {currentCraftLayer.callouts.map((cItem, cIdx) => {
-                      const isCurrent = cIdx === activeCraftCalloutIdx
-                      return (
-                        <div
-                          key={cItem.code}
-                          role="button"
-                          tabIndex={0}
-                          className={`craft-couture-pillar-card ${isCurrent ? "active" : ""}`}
-                          onMouseEnter={() => setActiveCraftCalloutIdx(cIdx)}
-                          onClick={() => {
-                            setActiveCraftCalloutIdx(cIdx)
-                            if (craftSliderPos > 60) {
-                              setCraftSliderPos(24)
-                            }
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault()
-                              setActiveCraftCalloutIdx(cIdx)
-                            }
-                          }}
-                        >
-                          <div className="craft-pillar-card-top">
-                            <span className="craft-callout-row-code">{cItem.code}</span>
-                            <span className="craft-pillar-step-tag">POINT N°0{cIdx + 1}</span>
-                          </div>
-                          <span className="craft-callout-row-title">{cItem.title}</span>
-                          <span className="craft-callout-row-spec">{cItem.spec}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-
-                {/* Calibrated Couture Quality Benchmarks */}
-                <div className="craft-benchmarks-block">
-                  <div className="craft-subhead-row">
-                    <span>INDICES DE QUALITÉ DES ÉTOFFES</span>
-                    <span>BARÈME HAUTE COUTURE</span>
-                  </div>
-                  <div className="craft-benchmarks-list">
-                    {currentCraftLayer.benchmarks.map((bm, bIdx) => (
-                      <div key={bIdx} className="craft-benchmark-item">
-                        <div className="craft-benchmark-top">
-                          <span className="craft-benchmark-label">{bm.label}</span>
-                          <span className="craft-benchmark-val">{bm.value}</span>
-                        </div>
-                        <div className="craft-benchmark-bar-track">
-                          <div
-                            className="craft-benchmark-bar-fill"
-                            style={{ width: `${bm.fillPercent}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Couture Seal + 3-Pillar Guarantee Strip */}
-                <div className="craft-protocol-box craft-couture-seal-box">
-                  <div className="craft-seal-header">
-                    <span className="craft-protocol-label">SCEAU D'EXCELLENCE &amp; FINITION MAIN</span>
-                    <span className="craft-seal-badge">CERTIFIÉ SUR-MESURE</span>
-                  </div>
-                  <p className="craft-protocol-text">{currentCraftLayer.protocolNote}</p>
-                </div>
-
-                <div className="craft-specs-strip">
-                  <div className="craft-spec-pill-box">
-                    <span className="craft-spec-key">FINITION</span>
-                    <span className="craft-spec-value">{currentCraftLayer.specs.norm}</span>
-                  </div>
-                  <div className="craft-spec-pill-box">
-                    <span className="craft-spec-key">PRÉCISION</span>
-                    <span className="craft-spec-value">{currentCraftLayer.specs.tolerance}</span>
-                  </div>
-                  <div className="craft-spec-pill-box">
-                    <span className="craft-spec-key">TENUE</span>
-                    <span className="craft-spec-value">{currentCraftLayer.specs.lifespan}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom 4-Column Animated Numeric Counters Ledger */}
-            <div className="craft-counters-ledger">
-              {CRAFT_COUNTERS.map((counter) => (
-                <div key={counter.id} className="craft-counter-card">
-                  <div className="craft-counter-top-line">
-                    <span className="craft-counter-index">INDICATEUR {counter.index}</span>
-                    <span className="craft-counter-dot" />
-                  </div>
-                  <div
-                    className="craft-counter-num"
-                    data-target={counter.target}
-                    data-decimals={counter.decimals}
-                    data-prefix={counter.prefix}
-                    data-suffix={counter.suffix}
-                  >
-                    {counter.prefix}
-                    {counter.decimals > 0
-                      ? counter.target.toFixed(counter.decimals)
-                      : counter.target >= 1000
-                        ? counter.target.toLocaleString("fr-FR")
-                        : counter.target}
-                    {counter.suffix}
-                  </div>
-                  <h4 className="craft-counter-label">{counter.label}</h4>
-                  <p className="craft-counter-detail">{counter.detail}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* SECTION: CONTACT US & CONCIERGERIE PRIVÉE — HAUTE COUTURE SUR-MESURE */}
-        <section id="contact" className="atelier-contact-section">
-          <div className="atelier-contact-container">
-            {/* Architectural Kicker Header */}
-            <div className="atelier-contact-header">
-              <div className="lookbook-kicker-row">
-                <span className="lookbook-kicker-num">INDEX 08</span>
-                <span className="lookbook-kicker-line" />
-                <span className="lookbook-kicker-label">CONCIERGERIE PRIVÉE &amp; RENDEZ-VOUS D'ATELIER</span>
-              </div>
-              <h2 className="atelier-contact-title">
-                Prenez Attache avec <span className="calligraphy-title-accent">l'Atelier.</span>
-              </h2>
-              <p className="atelier-contact-desc">
-                Chaque création d'exception débute par une écoute attentive. Que vous rêviez d'une robe de mariée sur-mesure, d'un fourreau de gala ou d'une parure de cérémonie, nos maîtres artisans vous reçoivent dans l'intimité de nos salons privés.
-              </p>
-            </div>
-
-            {/* 2-Column Luxury Layout */}
-            <div className="atelier-contact-grid">
-              {/* Left Column: Coordonnées de Prestige & Conciergerie */}
-              <div className="atelier-contact-info-card">
-                <div className="contact-info-top">
-                  <span className="contact-info-tag">Maison Fondée en 2018 · Paris &amp; International</span>
-                  <h3 className="contact-info-heading">L'Écrin Privé de Haute Couture</h3>
-                  <p className="contact-info-sub">
-                    Notre atelier parisien vous ouvre ses portes sur rendez-vous exclusif pour une séance de découverte, croquis sur le vif et sélection des étoffes les plus nobles.
-                  </p>
-                </div>
-
-                <div className="contact-coordinates-list">
-                  <div className="contact-coordinate-item">
-                    <div className="coordinate-icon-box">
+                {/* Atelier Direct Coordinate Cards */}
+                <div className="contact-coords-stack">
+                  <div className="contact-coord-card">
+                    <div className="contact-coord-icon">
                       <FontAwesomeIcon icon={faLocationDot} />
                     </div>
-                    <div className="coordinate-text">
-                      <span className="coordinate-label">ADRESSE DU SALON D'HONNEUR</span>
-                      <strong className="coordinate-value">38 Rue du Faubourg Saint-Honoré, 75008 Paris</strong>
-                      <span className="coordinate-hint">Service voiturier privatif sur demande</span>
+                    <div className="contact-coord-text">
+                      <span className="contact-coord-label">SALON PRIVÉ &amp; CABINE D'ESSAYAGE</span>
+                      <strong className="contact-coord-val">Atelier Maison Soie &amp; Couture · Sur Rendez-Vous</strong>
+                      <span className="contact-coord-sub">Accueil privatisé pour la future mariée et ses proches</span>
                     </div>
                   </div>
 
-                  <div className="contact-coordinate-item">
-                    <div className="coordinate-icon-box">
-                      <FontAwesomeIcon icon={faPhoneVolume} />
+                  <div className="contact-coord-card">
+                    <div className="contact-coord-icon">
+                      <FontAwesomeIcon icon={faEnvelope} />
                     </div>
-                    <div className="coordinate-text">
-                      <span className="coordinate-label">LIGNE DIRECTE DE LA CRÉATRICE</span>
-                      <strong className="coordinate-value">+33 (0)1 42 68 55 00</strong>
-                      <span className="coordinate-hint">Lundi au Samedi · 09h00 à 20h00</span>
-                    </div>
-                  </div>
-
-                  <div className="contact-coordinate-item">
-                    <div className="coordinate-icon-box">
-                      <FontAwesomeIcon icon={faEnvelopeOpenText} />
-                    </div>
-                    <div className="coordinate-text">
-                      <span className="coordinate-label">CORRESPONDANCE PRIVÉE</span>
-                      <strong className="coordinate-value">concierge@maison-kicks.com</strong>
-                      <span className="coordinate-hint">Réponse personnalisée garantie sous 24 heures</span>
+                    <div className="contact-coord-text">
+                      <span className="contact-coord-label">CORRESPONDANCE DIRECTE</span>
+                      <strong className="contact-coord-val">atelier@maisonsoiecouture.com</strong>
+                      <span className="contact-coord-sub">Réponse dédiée de la Première d'Atelier sous 24h</span>
                     </div>
                   </div>
 
-                  <div className="contact-coordinate-item">
-                    <div className="coordinate-icon-box">
+                  <div className="contact-coord-card">
+                    <div className="contact-coord-icon">
                       <FontAwesomeIcon icon={faClock} />
                     </div>
-                    <div className="coordinate-text">
-                      <span className="coordinate-label">HORAIRES DES CONSULTATIONS</span>
-                      <strong className="coordinate-value">Mardi - Samedi : 10h00 - 19h30</strong>
-                      <span className="coordinate-hint">Nocturnes privatisées le jeudi jusqu'à 22h00</span>
+                    <div className="contact-coord-text">
+                      <span className="contact-coord-label">HORAIRES DES ESSAYAGES</span>
+                      <strong className="contact-coord-val">Mardi au Samedi · 10:00 — 19:30</strong>
+                      <span className="contact-coord-sub">Séances individuelles d'1h30 avec carnet d'étoffes</span>
                     </div>
-                  </div>
-                </div>
-
-                <div className="contact-guarantee-pill-strip">
-                  <div className="contact-pill-item">
-                    <FontAwesomeIcon icon={faShieldHalved} className="pill-ico" />
-                    <span>Confidentialité Absolue</span>
-                  </div>
-                  <div className="contact-pill-item">
-                    <FontAwesomeIcon icon={faGem} className="pill-ico" />
-                    <span>Toile d'Essai Offerte</span>
-                  </div>
-                  <div className="contact-pill-item">
-                    <FontAwesomeIcon icon={faScissors} className="pill-ico" />
-                    <span>Façonné 100% Main</span>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Formulaire Haut de Gamme avec Styles Effect-21 */}
-              <div className="atelier-contact-form-card">
-                <div className="contact-form-header">
-                  <h3 className="contact-form-title">Votre Demande de Rendez-Vous ou Devis</h3>
-                  <p className="contact-form-sub">
-                    Renseignez vos coordonnées ci-dessous. Les champs réagissent au toucher selon nos exigences d'artisanat.
-                  </p>
+              {/* Right Column: Hero Color-Adaptive Effect-21 Form Card */}
+              <div className="contact-form-card contact-reveal">
+                <div className="contact-form-top-strip">
+                  <span className="contact-form-kicker">
+                    <FontAwesomeIcon icon={faScissors} /> DEMANDE DE CRÉATION &amp; RENDEZ-VOUS
+                  </span>
+                  <span className="contact-form-palette-tag">
+                    NUANCE : {CAROUSEL_SHOES[k].name.toUpperCase()}
+                  </span>
                 </div>
 
-                {contactSubmitted ? (
-                  <div className="contact-success-notification">
-                    <div className="success-icon-wrap">
-                      <FontAwesomeIcon icon={faCheckCircle} />
-                    </div>
-                    <h4>Votre Demande a été Transmise à l'Atelier</h4>
-                    <p>
-                      Merci pour votre confiance. Notre maître modéliste examine vos souhaits et vous répondra sous 24 heures avec une proposition d'entretien personnalisé.
-                    </p>
-                  </div>
-                ) : (
-                  <form className="contact-effect21-form" onSubmit={handleContactSubmit}>
-                    <div className="effect21-fields-grid">
-                      {/* Nom & Prénom */}
-                      <div className="input-effect col-6">
-                        <FontAwesomeIcon icon={faUser} className="effect-21-icon" />
-                        <input
-                          className={`effect-21 ${contactForm.name ? "has-content" : ""}`}
-                          type="text"
-                          placeholder=""
-                          id="contact-name"
-                          value={contactForm.name}
-                          onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                          required
-                        />
-                        <label htmlFor="contact-name">Nom &amp; Prénom du titulaire</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
+                <h3 className="contact-form-heading">
+                  Partagez votre souhait d'atelier
+                </h3>
 
-                      {/* Email */}
-                      <div className="input-effect col-6">
-                        <FontAwesomeIcon icon={faEnvelope} className="effect-21-icon" />
+                {/* Quick Subject Selector Chips */}
+                <div className="contact-subject-pills" role="group" aria-label="Objet de votre demande">
+                  {[
+                    "Robe de Mariée Sur-Mesure",
+                    "Tenue de Gala & Soirée",
+                    "Robes de Cortège",
+                    "Retouche & Essayage Privé",
+                  ].map((subj) => (
+                    <button
+                      key={subj}
+                      type="button"
+                      className={`contact-subject-pill ${contactSubject === subj ? "active" : ""}`}
+                      onClick={() => setContactSubject(subj)}
+                    >
+                      {subj}
+                    </button>
+                  ))}
+                </div>
+
+                <form className="contact-form-fields" onSubmit={handleContactSubmit} noValidate>
+                  <div className="contact-fields-grid">
+                    {/* Nom complet - Effect 21 */}
+                    <div className="input-effect-wrap">
+                      <div className="effect-21-icon">
+                        <FontAwesomeIcon icon={faUser} />
+                      </div>
+                      <div className="input-effect">
                         <input
-                          className={`effect-21 ${contactForm.email ? "has-content" : ""}`}
+                          type="text"
+                          className={`effect-21 ${contactName ? "has-content" : ""}`}
+                          value={contactName}
+                          onChange={(e) => {
+                            setContactName(e.target.value)
+                            if (contactError) setContactError("")
+                          }}
+                          placeholder=""
+                          disabled={contactSubmitState === "sent"}
+                          aria-label="Nom & Prénom"
+                        />
+                        <label>Nom &amp; Prénom *</label>
+                        <span className="focus-border">
+                          <i />
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Email - Effect 21 */}
+                    <div className="input-effect-wrap">
+                      <div className="effect-21-icon">
+                        <FontAwesomeIcon icon={faEnvelope} />
+                      </div>
+                      <div className="input-effect">
+                        <input
                           type="email"
+                          className={`effect-21 ${contactEmail ? "has-content" : ""}`}
+                          value={contactEmail}
+                          onChange={(e) => {
+                            setContactEmail(e.target.value)
+                            if (contactError) setContactError("")
+                          }}
                           placeholder=""
-                          id="contact-email"
-                          value={contactForm.email}
-                          onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                          required
+                          disabled={contactSubmitState === "sent"}
+                          aria-label="Adresse Email"
                         />
-                        <label htmlFor="contact-email">Adresse Email personnelle</label>
-                        <span className="focus-border"><i></i></span>
+                        <label>Adresse E-mail *</label>
+                        <span className="focus-border">
+                          <i />
+                        </span>
                       </div>
+                    </div>
 
-                      {/* Téléphone */}
-                      <div className="input-effect col-6">
-                        <FontAwesomeIcon icon={faPhone} className="effect-21-icon" />
+                    {/* Téléphone - Effect 21 */}
+                    <div className="input-effect-wrap">
+                      <div className="effect-21-icon">
+                        <FontAwesomeIcon icon={faPhone} />
+                      </div>
+                      <div className="input-effect">
                         <input
-                          className={`effect-21 ${contactForm.phone ? "has-content" : ""}`}
                           type="tel"
+                          className={`effect-21 ${contactPhone ? "has-content" : ""}`}
+                          value={contactPhone}
+                          onChange={(e) => setContactPhone(e.target.value)}
                           placeholder=""
-                          id="contact-phone"
-                          value={contactForm.phone}
-                          onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                          required
+                          disabled={contactSubmitState === "sent"}
+                          aria-label="Téléphone ou WhatsApp"
                         />
-                        <label htmlFor="contact-phone">Numéro de Téléphone Mobile</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-
-                      {/* Type de Création */}
-                      <div className="input-effect col-6">
-                        <FontAwesomeIcon icon={faCrown} className="effect-21-icon" />
-                        <input
-                          className={`effect-21 ${contactForm.creationType ? "has-content" : ""}`}
-                          type="text"
-                          placeholder=""
-                          id="contact-creationType"
-                          value={contactForm.creationType}
-                          onChange={(e) => setContactForm({ ...contactForm, creationType: e.target.value })}
-                        />
-                        <label htmlFor="contact-creationType">Création souhaitée (Mariée, Gala, Cérémonie...)</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-
-                      {/* Date estimée de l'événement */}
-                      <div className="input-effect col-12">
-                        <FontAwesomeIcon icon={faCalendarDays} className="effect-21-icon" />
-                        <input
-                          className={`effect-21 ${contactForm.eventDate ? "has-content" : ""}`}
-                          type="text"
-                          placeholder=""
-                          id="contact-eventDate"
-                          value={contactForm.eventDate}
-                          onChange={(e) => setContactForm({ ...contactForm, eventDate: e.target.value })}
-                        />
-                        <label htmlFor="contact-eventDate">Date ou Période estimée de l'Événement (ex: 15 Septembre 2026)</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-
-                      {/* Message / Souhaits particuliers */}
-                      <div className="input-effect col-12">
-                        <FontAwesomeIcon icon={faCommentDots} className="effect-21-icon effect-21-icon-textarea" />
-                        <textarea
-                          className={`effect-21 effect-21-textarea ${contactForm.message ? "has-content" : ""}`}
-                          rows={4}
-                          placeholder=""
-                          id="contact-message"
-                          value={contactForm.message}
-                          onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                        />
-                        <label htmlFor="contact-message">Parlez-nous de vos inspirations, silhouettes ou désirs d'étoffes...</label>
-                        <span className="focus-border"><i></i></span>
+                        <label>Téléphone / WhatsApp</label>
+                        <span className="focus-border">
+                          <i />
+                        </span>
                       </div>
                     </div>
 
-                    <div className="contact-form-actions">
-                      <button type="submit" className="contact-submit-btn">
-                        <span>Envoyer ma Demande à l'Atelier</span>
-                        <FontAwesomeIcon icon={faPaperPlane} className="submit-icon" />
-                      </button>
-                      <div className="contact-reassurance-note">
-                        <FontAwesomeIcon icon={faShieldHalved} />
-                        <span>Données strictement protégées · Sans aucun engagement préalable</span>
+                    {/* Date ou Étoffe souhaitée - Effect 21 */}
+                    <div className="input-effect-wrap">
+                      <div className="effect-21-icon">
+                        <FontAwesomeIcon icon={faGem} />
+                      </div>
+                      <div className="input-effect">
+                        <input
+                          type="text"
+                          className={`effect-21 ${contactOccasion ? "has-content" : ""}`}
+                          value={contactOccasion}
+                          onChange={(e) => setContactOccasion(e.target.value)}
+                          placeholder=""
+                          disabled={contactSubmitState === "sent"}
+                          aria-label="Date de l'événement ou tissu souhaité"
+                        />
+                        <label>Date de cérémonie ou tissu</label>
+                        <span className="focus-border">
+                          <i />
+                        </span>
                       </div>
                     </div>
-                  </form>
+                  </div>
+
+                  {/* Message Textarea - Effect 21 */}
+                  <div className="input-effect-wrap contact-textarea-wrap">
+                    <div className="effect-21-icon effect-21-textarea-icon">
+                      <FontAwesomeIcon icon={faCommentDots} />
+                    </div>
+                    <div className="input-effect">
+                      <textarea
+                        rows={4}
+                        className={`effect-21 contact-textarea ${contactMessage ? "has-content" : ""}`}
+                        value={contactMessage}
+                        onChange={(e) => {
+                          setContactMessage(e.target.value)
+                          if (contactError) setContactError("")
+                        }}
+                        placeholder=""
+                        disabled={contactSubmitState === "sent"}
+                        aria-label="Votre message et vos inspirations"
+                      />
+                      <label>Vos envies de coupe, coupe souhaitée &amp; message *</label>
+                      <span className="focus-border">
+                        <i />
+                      </span>
+                    </div>
+                  </div>
+
+                  {contactError && (
+                    <div className="contact-error-banner" role="alert">
+                      {contactError}
+                    </div>
+                  )}
+
+                  {/* Submit Event Button with 3-Stage Liquid Collision Hover + Morphing Click State */}
+                  <div className="contact-submit-row">
+                    <button
+                      type="submit"
+                      className={`contact-liquid-submit-btn ${
+                        contactSubmitState === "sending"
+                          ? "is-sending"
+                          : contactSubmitState === "sent"
+                            ? "is-sent"
+                            : ""
+                      }`}
+                      disabled={contactSubmitState === "sending"}
+                    >
+                      <span className="contact-liquid-blobs" aria-hidden="true">
+                        <span className="contact-liquid-blob b-1" />
+                        <span className="contact-liquid-blob b-2" />
+                        <span className="contact-liquid-blob b-3" />
+                        <span className="contact-liquid-blob b-4" />
+                        <span className="contact-liquid-blob b-5" />
+                        <span className="contact-liquid-blob b-6" />
+                      </span>
+
+                      <span className="contact-btn-label-wrap">
+                        {contactSubmitState === "idle" && (
+                          <>
+                            <FontAwesomeIcon icon={faPaperPlane} className="contact-btn-icon" />
+                            <span>Envoyer le message</span>
+                          </>
+                        )}
+                        {contactSubmitState === "sending" && (
+                          <>
+                            <FontAwesomeIcon icon={faCircleNotch} spin className="contact-btn-icon" />
+                            <span>Transmission à l'Atelier...</span>
+                          </>
+                        )}
+                        {contactSubmitState === "sent" && (
+                          <>
+                            <FontAwesomeIcon icon={faCheck} className="contact-btn-icon" />
+                            <span>Message Envoyé</span>
+                          </>
+                        )}
+                      </span>
+                    </button>
+
+                    <span className="contact-privacy-note">
+                      Réponse personnalisée sous 24h ouvrées · Confidentialité absolue
+                    </span>
+                  </div>
+                </form>
+
+                {contactSubmitState === "sent" && (
+                  <div className="contact-sent-confirmation">
+                    <div className="contact-sent-head">
+                      <FontAwesomeIcon icon={faCheckCircle} className="contact-sent-check" />
+                      <div>
+                        <strong>Votre demande a été enregistrée pour « {contactSubject} »</strong>
+                        <p>
+                          Merci <strong>{contactName}</strong>. Notre Première d'Atelier a reçu votre note inspirée par la nuance <em>{CAROUSEL_SHOES[k].name}</em> et vous contactera très rapidement à <strong>{contactEmail}</strong>.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="contact-reset-btn"
+                      onClick={resetContactForm}
+                    >
+                      Rédiger un autre message
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
@@ -6239,171 +4877,143 @@ export default function Home() {
         </section>
       </main>
 
-      {/* FOOTER HAUTE COUTURE — SYNCHRONISÉ EN TEMPS RÉEL AVEC LA COULEUR DE LA HERO SECTION */}
-      <footer className="couture-footer-wrapper">
-        {/* Floating VIP Newsletter / Gazette Privée Banner (Overlapping Top of Footer) */}
-        <div
-          className="footer-floating-newsletter-card"
-          style={{
-            backgroundColor: CAROUSEL_SHOES[k].bg,
-            transition: "background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-        >
-          {/* Left Side: 3D Haute Couture Emblem */}
-          <div className="newsletter-visual-col">
-            <div className="newsletter-3d-emblem">
-              <div className="emblem-inner-glow" />
-              <FontAwesomeIcon icon={faCrown} className="emblem-crown-icon" />
-              <div className="emblem-details">
-                <span className="emblem-brand">MAISON KICKS &amp; CO</span>
-                <span className="emblem-sub">GAZETTE PRIVÉE · PARIS</span>
-              </div>
-            </div>
+      {/* SITE FOOTER — MAISON SOIE & COUTURE */}
+      <footer className="site-footer">
+        {/* Top Signature Strip */}
+        <div className="footer-cta-banner">
+          <div className="footer-cta-left">
+            <span className="footer-cta-eyebrow">MAISON DE HAUTE COUTURE &amp; PATRONAGE SUR-MESURE</span>
+            <h2 className="footer-cta-title">
+              Sublimez Chaque Instant d'Exception.
+            </h2>
           </div>
-
-          {/* Right Side: Headline & Subscription Form */}
-          <div className="newsletter-content-col">
-            <h3 className="newsletter-title">
-              Abonnez-vous à la Gazette Privée pour Découvrir nos Dernières Collections
-            </h3>
-            <p className="newsletter-desc">
-              Recevez une invitation d'accueil privilégiée et un accès anticipé à nos défilés, nouvelles capsules et carnets d'étoffes rares.
-            </p>
-
-            {newsletterSubmitted ? (
-              <div className="newsletter-success-box">
-                <FontAwesomeIcon icon={faCheckCircle} />
-                <span>Votre invitation a été envoyée avec succès à votre adresse email.</span>
-              </div>
-            ) : (
-              <form className="newsletter-form-pill" onSubmit={handleNewsletterSubmit}>
-                <div className="newsletter-input-wrap">
-                  <FontAwesomeIcon icon={faEnvelope} className="newsletter-field-icon" />
-                  <input
-                    type="email"
-                    className="newsletter-field"
-                    placeholder="Votre adresse email personnelle..."
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit" className="newsletter-submit-btn">
-                  S'abonner
-                </button>
-              </form>
-            )}
-            <p className="newsletter-disclaimer">
-              Vous pourrez vous désinscrire à tout moment d'un simple clic. Confidentialité absolue garantie.
-            </p>
+          <div className="footer-cta-right">
+            <button
+              type="button"
+              className="footer-cta-btn"
+              onClick={() => scrollToSection("contact-atelier")}
+            >
+              <span>Prendre Rendez-Vous en Salon</span>
+              <ArrowUpRight size={17} />
+            </button>
           </div>
         </div>
 
-        {/* Main Footer Body Card */}
-        <div className="footer-main-card">
-          <div className="footer-columns-grid">
-            {/* Column 1: Brand & Socials */}
-            <div className="footer-col footer-col-brand">
-              <div className="footer-brand-header">
-                <span className="footer-brand-title">KICKS &amp; CO</span>
-                <span className="footer-brand-subtitle">HAUTE COUTURE · SUR-MESURE</span>
+        {/* Main 4-Column Editorial Footer Grid */}
+        <div className="footer-main-grid">
+          {/* Column 1: Maison Identity */}
+          <div className="footer-brand-col">
+            <div className="footer-brand-logo">
+              <div className="footer-logo-square">
+                <Sparkles size={17} />
               </div>
-              <p className="footer-brand-desc">
-                Maison d'artisanat d'art et de confection d'exception. Chaque silhouette est taillée selon vos mesures et façonnée à la main pour magnifier vos plus beaux instants.
-              </p>
-              <div className="footer-social-links">
-                <a href="#instagram" aria-label="Instagram" className="footer-social-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                </a>
-                <a href="#pinterest" aria-label="Pinterest" className="footer-social-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.291 1.199-.332 1.357-.053.224-.174.271-.4.164-1.493-.695-2.427-2.876-2.427-4.632 0-3.774 2.743-7.24 7.906-7.24 4.149 0 7.371 2.957 7.371 6.908 0 4.123-2.599 7.442-6.207 7.442-1.212 0-2.352-.63-2.743-1.377l-.747 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.538.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
-                </a>
-                <a href="#facebook" aria-label="Facebook" className="footer-social-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-                </a>
-                <a href="#linkedin" aria-label="LinkedIn" className="footer-social-btn">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
-              </div>
+              <span className="footer-brand-name">Maison Soie &amp; Couture</span>
             </div>
-
-            {/* Column 2: Collections */}
-            <div className="footer-col">
-              <h4 className="footer-col-title">Collections</h4>
-              <ul className="footer-links-list">
-                <li><a href="#catalogue">Robes de Mariée Sur-Mesure</a></li>
-                <li><a href="#catalogue">Robes de Soirée &amp; Gala</a></li>
-                <li><a href="#catalogue">Tenues Traditionnelles</a></li>
-                <li><a href="#catalogue">Cortèges &amp; Demoiselles</a></li>
-                <li><a href="#catalogue">Nuancier &amp; Étoffes Rares</a></li>
-              </ul>
-            </div>
-
-            {/* Column 3: L'Atelier & Savoir-Faire */}
-            <div className="footer-col">
-              <h4 className="footer-col-title">L'Atelier</h4>
-              <ul className="footer-links-list">
-                <li><a href="#atelier">L'Histoire de la Maison</a></li>
-                <li><a href="#atelier">Secrets de Confection</a></li>
-                <li><a href="#atelier">Patronage en 28 Points</a></li>
-                <li><a href="#atelier">Dentelle de Calais &amp; Soie</a></li>
-                <li><a href="#atelier">Presse &amp; Défilés Privés</a></li>
-              </ul>
-            </div>
-
-            {/* Column 4: Services Privés */}
-            <div className="footer-col">
-              <h4 className="footer-col-title">Services &amp; FAQ</h4>
-              <ul className="footer-links-list">
-                <li><a href="#contact">Réservation d'un Salon Privé</a></li>
-                <li><a href="#contact">Guide des Mesures</a></li>
-                <li><a href="#contact">Accompagnement Jour J</a></li>
-                <li><a href="#contact">Retouches &amp; Finitions</a></li>
-                <li><a href="#contact">Foire Aux Questions</a></li>
-              </ul>
-            </div>
-
-            {/* Column 5: Conciergerie Directe */}
-            <div className="footer-col footer-col-contact">
-              <h4 className="footer-col-title">Conciergerie</h4>
-              <div className="footer-direct-contact">
-                <a href="tel:+33142685500" className="footer-contact-link">
-                  <FontAwesomeIcon icon={faPhoneVolume} className="footer-ico" />
-                  <span>(33) 01 42 68 55 00</span>
-                </a>
-                <a href="mailto:concierge@maison-kicks.com" className="footer-contact-link">
-                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="footer-ico" />
-                  <span>concierge@maison-kicks.com</span>
-                </a>
-                <div className="footer-salon-address">
-                  <FontAwesomeIcon icon={faLocationDot} className="footer-ico" />
-                  <span>38 Rue du Faubourg Saint-Honoré, Paris</span>
-                </div>
-                <div className="footer-status-pill">
-                  <span className="status-live-dot" />
-                  <span>Salon Ouvert · Sur Rendez-Vous</span>
-                </div>
-              </div>
+            <p className="footer-brand-desc">
+              Maison de confection dédiée aux robes de mariée, silhouettes de gala et pièces de cérémonie façonnées à la main avec les plus nobles soieries de Côme, dentelles de Calais et lins peignés.
+            </p>
+            <div className="footer-atelier-badge">
+              NUANCE EN VITRINE : {CAROUSEL_SHOES[k].name.toUpperCase()}
             </div>
           </div>
 
-          {/* Bottom Copyright & Legal Strip */}
-          <div className="footer-bottom-strip">
-            <div className="footer-copyright">
-              © 2026 Maison Kicks &amp; Co. Tous droits réservés. Haute Couture &amp; Création Sur-Mesure.
+          {/* Column 2: Collections */}
+          <div className="footer-nav-col">
+            <h4 className="footer-col-title">SILHOUETTES &amp; CRÉATIONS</h4>
+            <ul className="footer-links-list">
+              <li>
+                <button type="button" onClick={() => scrollToSection("hero-accueil")}>
+                  Vitrine Haute Couture
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollToSection("catalogue-creations")}>
+                  Catalogue &amp; Pièces Phares
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollToSection("collections-exclusives")}>
+                  Collections Exclusives
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollToSection("temoignages-clientes")}>
+                  Confidences de Mariées
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Experience */}
+          <div className="footer-nav-col">
+            <h4 className="footer-col-title">SAVOIR-FAIRE &amp; SALONS</h4>
+            <ul className="footer-links-list">
+              <li>
+                <button type="button" onClick={() => scrollToSection("salons-prives")}>
+                  Salons Privés &amp; Défilés
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollToSection("excellence-sur-mesure")}>
+                  L'Excellence du Sur-Mesure
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollToSection("parcours-atelier")}>
+                  De l'Esquisse à la Robe Rêvée
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => scrollToSection("contact-atelier")}>
+                  Conciergerie &amp; Contact
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Atelier Contact & Hours */}
+          <div className="footer-nav-col">
+            <h4 className="footer-col-title">L'ATELIER SUR RENDEZ-VOUS</h4>
+            <div className="footer-contact-details">
+              <div className="footer-contact-line">
+                <FontAwesomeIcon icon={faLocationDot} className="footer-contact-ic" />
+                <span>Salon Privé de Couture · Sur Rendez-Vous Uniquement</span>
+              </div>
+              <div className="footer-contact-line">
+                <FontAwesomeIcon icon={faEnvelope} className="footer-contact-ic" />
+                <span>atelier@maisonsoiecouture.com</span>
+              </div>
+              <div className="footer-contact-line">
+                <FontAwesomeIcon icon={faClock} className="footer-contact-ic" />
+                <span>Mardi — Samedi · 10h00 à 19h30</span>
+              </div>
+              <div className="footer-contact-line">
+                <FontAwesomeIcon icon={faCalendarDays} className="footer-contact-ic" />
+                <span>Essayages Individuels de 1h30 Offerts</span>
+              </div>
             </div>
-            <div className="footer-legal-links">
-              <a href="#confidentialite">Politique de Confidentialité</a>
-              <span className="footer-separator">·</span>
-              <a href="#conditions">Conditions Générales</a>
-              <span className="footer-separator">·</span>
-              <a href="#mentions">Mentions Légales</a>
-              <span className="footer-separator">·</span>
-              <a href="#plan">Plan du Site</a>
-            </div>
+          </div>
+        </div>
+
+        {/* Bottom Copyright Bar */}
+        <div className="footer-bottom-bar">
+          <div className="footer-copyright">
+            © 2026 Maison Soie &amp; Couture · Tous droits réservés · Haute Couture &amp; Sur-Mesure Artisanal.
+          </div>
+          <div className="footer-bottom-tags">
+            <span className="footer-bottom-tag">100% FAIT MAIN</span>
+            <span className="footer-bottom-tag">PATRONAGE UNIQUE</span>
+            <button
+              type="button"
+              className="footer-back-top-btn"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              Haut de page ↑
+            </button>
           </div>
         </div>
       </footer>
+
 
       {/* Product Detail Modal Popup with GSAP Image Extension Animation (80% width, large image & enriched Couture specs) */}
       {selectedProduct && (() => {
@@ -6622,19 +5232,15 @@ export default function Home() {
               onClick={(e) => e.stopPropagation()}
               onScroll={(e) => {
                 const target = e.currentTarget
-                if (target.scrollTop > 50 && !hasScrolledEventModal) {
-                  setHasScrolledEventModal(true)
-                }
                 const elements = target.querySelectorAll('.gsap-scroll-reveal')
                 const modalHeight = target.clientHeight
-                const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50
                 elements.forEach((el) => {
                   const rect = el.getBoundingClientRect()
                   const containerRect = target.getBoundingClientRect()
                   const topOffset = rect.top - containerRect.top
                   
-                  if (isNearBottom || (topOffset < modalHeight * 0.95 && topOffset > -rect.height * 0.5)) {
-                    gsap.to(el, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", overwrite: "auto" })
+                  if (topOffset < modalHeight * 0.95 && topOffset > -rect.height * 0.5) {
+                    gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" })
                   } else if (topOffset >= modalHeight * 0.95) {
                     gsap.to(el, { opacity: 0.15, y: 25, duration: 0.4, ease: "power2.out", overwrite: "auto" })
                   } else if (topOffset <= -rect.height * 0.5) {
@@ -6690,40 +5296,6 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Quick Jump to Registration Form CTA Button */}
-                  <button
-                    type="button"
-                    className="event-quick-scroll-btn"
-                    onClick={() => {
-                      const formEl = document.getElementById("event-registration-form-anchor")
-                      if (formEl) {
-                        formEl.scrollIntoView({ behavior: "smooth", block: "start" })
-                      }
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faCalendarCheck} />
-                    <span>Accéder directement au formulaire d'inscription en bas ↓</span>
-                  </button>
-                </div>
-
-                {/* Animated Scroll Indicator Cue */}
-                <div 
-                  className={`event-modal-scroll-indicator ${hasScrolledEventModal ? "hidden-scrolled" : ""}`}
-                  onClick={() => {
-                    const formEl = document.getElementById("event-registration-form-anchor")
-                    if (formEl) {
-                      formEl.scrollIntoView({ behavior: "smooth", block: "start" })
-                    }
-                  }}
-                >
-                  <div className="scroll-indicator-pill">
-                    <span className="scroll-mouse-icon">
-                      <span className="scroll-wheel-dot" />
-                    </span>
-                    <span>Défiler pour s'inscrire</span>
-                    <FontAwesomeIcon icon={faChevronDown} className="scroll-chevron-bounce" />
-                  </div>
                 </div>
               </div>
 
@@ -6774,7 +5346,7 @@ export default function Home() {
                 </div>
 
                 {/* Formulaire Nominatif Personnalisé (Effect-21 + Date Fixe) */}
-                <div className="event-modal-form-section gsap-scroll-reveal" id="event-registration-form-anchor">
+                <div className="event-modal-form-section gsap-scroll-reveal">
                   <div className="event-fixed-date-banner">
                     <div className="fixed-date-icon">
                       <FontAwesomeIcon icon={faCalendarCheck} />
@@ -7055,135 +5627,16 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 7. Signature Action Footer (Ouvre le popup dédié au formulaire de réservation) */}
-              <div className="why-modal-actions-row why-modal-stagger-item">
-                <button
-                  type="button"
-                  className={`why-modal-book-btn ${
-                    bookedWhySessions.includes(selectedWhyModal.card.id) ? "booked" : ""
-                  }`}
-                  onClick={() => {
-                    openWhyBookingModal(selectedWhyModal.card)
-                  }}
-                >
-                  {bookedWhySessions.includes(selectedWhyModal.card.id) ? (
-                    <>
-                      <span>Session confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}</span>
-                      <span className="why-modal-btn-Check">✓</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Réserver la session</span>
-                      <span className="why-modal-btn-right">
-                        {whySelectedTime || selectedWhySlot} — {selectedWhyModal.card.price}
-                        <ArrowRight size={17} />
-                      </span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  className={`why-modal-fav-btn ${
-                    likedWhyCards.includes(selectedWhyModal.card.id) ? "liked" : ""
-                  }`}
-                  onClick={() =>
-                    setLikedWhyCards((prev) =>
-                      prev.includes(selectedWhyModal.card.id)
-                        ? prev.filter((id) => id !== selectedWhyModal.card.id)
-                        : [...prev, selectedWhyModal.card.id]
-                    )
-                  }
-                  aria-label="Ajouter aux favoris"
-                >
-                  <Heart
-                    size={20}
-                    fill={likedWhyCards.includes(selectedWhyModal.card.id) ? "currentColor" : "none"}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* DEDICATED POPUP EXCLUSIVEMENT POUR LE FORMULAIRE DE RÉSERVATION SUR-MESURE */}
-      <AnimatePresence>
-        {bookingWhyCard && (
-          <motion.div
-            className="product-modal-backdrop why-booking-modal-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={closeWhyBookingModal}
-          >
-            <motion.div
-              className="why-booking-modal-card"
-              initial={{ opacity: 0, scale: 0.92, y: 25 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                className="product-modal-close"
-                onClick={closeWhyBookingModal}
-                aria-label="Fermer"
-              >
-                <X size={20} />
-              </button>
-
-              {/* En-tête enrichi du formulaire */}
-              <div className="why-booking-modal-header">
-                <span className="why-booking-modal-badge">
-                  ATELIER PRIVÉ &amp; CONFECTION SUR-MESURE
-                </span>
-                <h2 className="why-booking-modal-title">
-                  Planifier Votre Séance — {bookingWhyCard.title}
-                </h2>
-                <p className="why-booking-modal-desc">
-                  Une consultation individuelle de 1h30 au sein de notre atelier d'exception ({bookingWhyCard.locationFull}). Vous serez guidée en tête-à-tête par {bookingWhyCard.instructor.name} ({bookingWhyCard.instructor.role}).
-                </p>
-              </div>
-
-              {/* 3 piliers enrichis de l'accompagnement */}
-              <div className="why-booking-perks-grid">
-                <div className="why-booking-perk-item">
-                  <div className="why-booking-perk-icon">
-                    <FontAwesomeIcon icon={faHandSparkles} />
-                  </div>
-                  <div>
-                    <strong>Prise de Mesures 3D</strong>
-                    <span>Relevé précis de 28 points anatomiques pour un patronage individuel parfait.</span>
-                  </div>
+              {/* 6b. Formulaire Personnalisé avec Composants TypeScript Date/Heure & Effect-21 */}
+              <div className="why-modal-booking-form why-modal-stagger-item">
+                <div className="why-form-header">
+                  <span className="why-form-kicker">COORDONNÉES &amp; PLANIFICATION PRIVÉE</span>
+                  <p className="why-form-subtitle">
+                    Précisez vos disponibilités personnalisées pour cet accompagnement à l'atelier ({selectedWhyModal.card.locationFull}).
+                  </p>
                 </div>
 
-                <div className="why-booking-perk-item">
-                  <div className="why-booking-perk-icon">
-                    <FontAwesomeIcon icon={faGem} />
-                  </div>
-                  <div>
-                    <strong>Échantillonnage Tactile</strong>
-                    <span>Sélection exclusive de soies de Lyon, crêpes de Chine et dentelles de Calais.</span>
-                  </div>
-                </div>
-
-                <div className="why-booking-perk-item">
-                  <div className="why-booking-perk-icon">
-                    <FontAwesomeIcon icon={faPenNib} />
-                  </div>
-                  <div>
-                    <strong>Croquis Aquarellé Offert</strong>
-                    <span>Dessin original de votre robe personnalisé et remis à l'issue de la séance.</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Formulaire Personnalisé avec inputs Effect-21 et Sélecteurs TypeScript */}
-              <div className="why-booking-form-box">
-                <div className="why-booking-form-grid">
+                <div className="why-form-fields-grid">
                   {/* Nom & Prénom with effect-21 */}
                   <div className="input-effect-wrap">
                     <div className="effect-21-icon">
@@ -7197,7 +5650,7 @@ export default function Home() {
                         value={whyClientName}
                         onChange={(e) => setWhyClientName(e.target.value)}
                       />
-                      <label>Nom &amp; Prénom du client</label>
+                      <label>Nom &amp; Prénom</label>
                       <span className="focus-border"><i></i></span>
                     </div>
                   </div>
@@ -7215,12 +5668,12 @@ export default function Home() {
                         value={whyClientEmail}
                         onChange={(e) => setWhyClientEmail(e.target.value)}
                       />
-                      <label>Adresse Email pour le carton d'accès</label>
+                      <label>Adresse Email de contact</label>
                       <span className="focus-border"><i></i></span>
                     </div>
                   </div>
 
-                  {/* Date Picker Custom TypeScript */}
+                  {/* Custom TypeScript Date Picker (No browser default!) */}
                   <div className="custom-picker-container" ref={whyDateDropdownRef}>
                     <div
                       className="input-effect-wrap clickable-picker"
@@ -7237,7 +5690,7 @@ export default function Home() {
                           placeholder=""
                           value={formatBespokeDate(whySelectedDate)}
                         />
-                        <label>Date souhaitée pour l'essayage</label>
+                        <label>Date du rendez-vous</label>
                         <span className="focus-border"><i></i></span>
                       </div>
                     </div>
@@ -7305,7 +5758,7 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Time Picker Custom TypeScript */}
+                  {/* Custom TypeScript Time Picker (No browser default!) */}
                   <div className="custom-picker-container" ref={whyTimeDropdownRef}>
                     <div
                       className="input-effect-wrap clickable-picker"
@@ -7322,14 +5775,14 @@ export default function Home() {
                           placeholder=""
                           value={whySelectedTime ? `${whySelectedTime} (Atelier Privé)` : ""}
                         />
-                        <label>Créneau horaire disponible</label>
+                        <label>Horaire de l'essayage</label>
                         <span className="focus-border"><i></i></span>
                       </div>
                     </div>
 
                     {isWhyTimePickerOpen && (
                       <div className="custom-time-dropdown">
-                        <span className="time-dropdown-title">Créneaux d'Atelier Disponibles</span>
+                        <span className="time-dropdown-title">Horaires d'Atelier Disponibles</span>
                         <div className="time-slots-grid">
                           {BESPOKE_TIME_SLOTS.map((t) => (
                             <button
@@ -7349,313 +5802,65 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-
-                  {/* Notes & Précisions with effect-21 */}
-                  <div className="input-effect-wrap why-booking-fullwidth">
-                    <div className="effect-21-icon">
-                      <FontAwesomeIcon icon={faPenNib} />
-                    </div>
-                    <div className="input-effect">
-                      <input
-                        className={`effect-21 ${whyNotes ? "has-content" : ""}`}
-                        type="text"
-                        placeholder=""
-                        value={whyNotes}
-                        onChange={(e) => setWhyNotes(e.target.value)}
-                      />
-                      <label>Précisions particulières (type d'événement, date de cérémonie, souhaits de coupe)</label>
-                      <span className="focus-border"><i></i></span>
-                    </div>
-                  </div>
                 </div>
+              </div>
 
-                {/* Validation CTA Button */}
-                <div className="why-booking-modal-actions">
-                  <button
-                    type="button"
-                    className={`why-booking-submit-btn ${
-                      bookedWhySessions.includes(bookingWhyCard.id) ? "booked" : ""
-                    }`}
-                    onClick={() => {
+              {/* 7. Signature Action Footer (Echoing the Reference Card's Matte Black Pill + Circular Heart) */}
+              <div className="why-modal-actions-row why-modal-stagger-item">
+                <button
+                  type="button"
+                  className={`why-modal-book-btn ${
+                    bookedWhySessions.includes(selectedWhyModal.card.id) ? "booked" : ""
+                  }`}
+                  onClick={() => {
+                    if (!bookedWhySessions.includes(selectedWhyModal.card.id)) {
                       if (!whyClientName.trim()) {
-                        alert("Veuillez renseigner votre nom et prénom.")
+                        alert("Veuillez renseigner votre nom et prénom pour valider la réservation.")
                         return
                       }
                       if (!whyClientEmail.trim()) {
-                        alert("Veuillez renseigner votre adresse email.")
+                        alert("Veuillez renseigner votre adresse email pour recevoir la confirmation d'atelier.")
                         return
                       }
-                      if (!bookedWhySessions.includes(bookingWhyCard.id)) {
-                        setBookedWhySessions((prev) => [...prev, bookingWhyCard.id])
-                      }
-                      setIsWhyBookingSuccess(true)
-                    }}
-                  >
-                    {isWhyBookingSuccess || bookedWhySessions.includes(bookingWhyCard.id) ? (
-                      <>
-                        <FontAwesomeIcon icon={faCheckCircle} /> Réservation Confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles size={18} /> Confirmer mon Rendez-Vous d'Atelier ({bookingWhyCard.price}) →
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Haute Couture Material & Provenance Dossier Popup Modal */}
-      {selectedMaterialHotspot && (
-        <div
-          className="material-modal-backdrop"
-          onClick={() => setSelectedMaterialHotspot(null)}
-          role="presentation"
-        >
-          <div
-            className="material-modal-container"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="material-modal-title-id"
-          >
-            {/* Header */}
-            <div className="material-modal-header">
-              <div className="material-modal-header-left">
-                <div className="material-modal-badge-row">
-                  <span className="material-modal-badge">
-                    DOSSIER MATIÈRE &amp; SAVOIR-FAIRE HAUTE COUTURE
-                  </span>
-                  <span className="material-modal-origin-pill">
-                    {selectedMaterialHotspot.countryFlag} {selectedMaterialHotspot.countryOrigin}
-                  </span>
-                </div>
-                <h2 id="material-modal-title-id" className="material-modal-title">
-                  {selectedMaterialHotspot.materialName}
-                </h2>
-                <div className="material-modal-meta-line">
-                  <span className="material-modal-meta-zone">
-                    Zone {selectedMaterialHotspot.indexLabel} : {selectedMaterialHotspot.partLabel}
-                  </span>
-                  <span className="material-modal-meta-sep">•</span>
-                  <span className="material-modal-meta-silhouette">
-                    {currentLook.title} <em>({currentLook.serifSubtitle})</em>
-                  </span>
-                  <span className="material-modal-meta-sep">•</span>
-                  <span className="material-modal-meta-ref">{selectedMaterialHotspot.archiveRef}</span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="material-modal-close-btn"
-                onClick={() => setSelectedMaterialHotspot(null)}
-                aria-label="Fermer le dossier matière"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* 3-Zone Interactive Switcher Tabs inside Modal */}
-            <div className="material-modal-tabs-bar" role="tablist" aria-label="Zones de la robe">
-              {currentLook.hotspots.map((spot, sIdx) => {
-                const isTabActive = spot.id === selectedMaterialHotspot.id
-                return (
-                  <button
-                    key={spot.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isTabActive}
-                    className={`material-modal-tab-btn ${isTabActive ? "active" : ""}`}
-                    onClick={() => {
-                      setActiveHotspotIdx(sIdx)
-                      setSelectedMaterialHotspot(spot)
-                    }}
-                  >
-                    <span className="tab-zone-num">ZONE {spot.indexLabel}</span>
-                    <span className="tab-zone-title">{spot.partLabel}</span>
-                    <span className="tab-zone-flag">{spot.countryFlag}</span>
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* 2-Column Haute Couture Body */}
-            <div className="material-modal-body-grid">
-              {/* Left Column: Macro Optical Loupe Viewport + Technical Passport */}
-              <div className="material-modal-left-col">
-                <div className="material-modal-macro-viewport">
-                  <div className="material-modal-macro-top">
-                    <span className="material-modal-macro-badge">
-                      MACRO TEXTURE 3.8X · RÉSOLUTION ATELIER
-                    </span>
-                    <span className="material-modal-macro-flag">
-                      {selectedMaterialHotspot.countryFlag}
-                    </span>
-                  </div>
-
-                  <div className="material-modal-macro-loupe">
-                    <img
-                      src={currentLook.image}
-                      alt={selectedMaterialHotspot.materialName}
-                      style={{
-                        position: "absolute",
-                        left: "50%",
-                        top: "50%",
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        transformOrigin: `${selectedMaterialHotspot.x}% ${selectedMaterialHotspot.y}%`,
-                        transform: `translate(-${selectedMaterialHotspot.x}%, -${selectedMaterialHotspot.y}%) scale(3.8)`,
-                      }}
-                    />
-                    <div className="lookbook-loupe-crosshair">
-                      <span className="loupe-ring" />
-                      <span className="loupe-dot" />
-                    </div>
-                  </div>
-
-                  <div className="material-modal-macro-foot">
-                    <span className="macro-foot-coord">
-                      COORD : X{selectedMaterialHotspot.x}% · Y{selectedMaterialHotspot.y}%
-                    </span>
-                    <span className="macro-foot-provenance">100% FIBRES CERTIFIÉES</span>
-                  </div>
-                </div>
-
-                {/* Passport Card */}
-                <div className="material-passport-card">
-                  <h4 className="material-passport-title">
-                    <span>PASSEPORT MATIÈRE &amp; TRAÇABILITÉ</span>
-                    <span className="passport-cert-tag">CERTIFIÉ COUTURE</span>
-                  </h4>
-
-                  <div className="material-passport-rows">
-                    <div className="material-passport-row">
-                      <span className="passport-key">ATELIER &amp; MANUFACTURE</span>
-                      <strong className="passport-val">{selectedMaterialHotspot.atelierName}</strong>
-                    </div>
-                    <div className="material-passport-row">
-                      <span className="passport-key">ORIGINE GÉOGRAPHIQUE</span>
-                      <strong className="passport-val">
-                        {selectedMaterialHotspot.countryFlag} {selectedMaterialHotspot.countryOrigin}
-                      </strong>
-                    </div>
-                    <div className="material-passport-row">
-                      <span className="passport-key">COMPOSITION CERTIFIÉE</span>
-                      <strong className="passport-val">{selectedMaterialHotspot.composition}</strong>
-                    </div>
-                    <div className="material-passport-row">
-                      <span className="passport-key">SAVOIR-FAIRE DE CONFECTION</span>
-                      <strong className="passport-val">{selectedMaterialHotspot.craftOrigin}</strong>
-                    </div>
-                    <div className="material-passport-row">
-                      <span className="passport-key">TEMPS DE FAÇONNAGE</span>
-                      <strong className="passport-val">{selectedMaterialHotspot.weightSpec}</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Narrative Signature Box, Characteristics, Secret & Care */}
-              <div className="material-modal-right-col">
-                {/* Grand Encart Signature: Pourquoi ce matériau est si particulier */}
-                <div className="material-special-highlight-box">
-                  <div className="special-highlight-header">
-                    <Sparkles size={18} className="special-sparkle-icon" />
-                    <span className="special-highlight-eyebrow">DISTINCTION &amp; RARETÉ ATELIER</span>
-                  </div>
-                  <h3 className="special-highlight-heading">
-                    Pourquoi ce matériau est si particulier ?
-                  </h3>
-                  <p className="special-highlight-text">
-                    {selectedMaterialHotspot.whySpecial}
-                  </p>
-                </div>
-
-                {/* 3 Physical & Sensory Cards */}
-                <div className="material-sensory-grid">
-                  <div className="material-sensory-card">
-                    <div className="sensory-head">
-                      <span className="sensory-icon">
-                        <FontAwesomeIcon icon={faHandSparkles} className="sensory-fa-icon" />
+                    }
+                    toggleWhySessionBooking(selectedWhyModal.card.id)
+                  }}
+                >
+                  {bookedWhySessions.includes(selectedWhyModal.card.id) ? (
+                    <>
+                      <span>Session confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}</span>
+                      <span className="why-modal-btn-Check">✓</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Réserver la session</span>
+                      <span className="why-modal-btn-right">
+                        {whySelectedTime || selectedWhySlot} — {selectedWhyModal.card.price}
+                        <ArrowRight size={17} />
                       </span>
-                      <strong className="sensory-label">Toucher &amp; Texture</strong>
-                    </div>
-                    <p className="sensory-desc">{selectedMaterialHotspot.textureTouch}</p>
-                  </div>
+                    </>
+                  )}
+                </button>
 
-                  <div className="material-sensory-card">
-                    <div className="sensory-head">
-                      <span className="sensory-icon">
-                        <FontAwesomeIcon icon={faGem} className="sensory-fa-icon" />
-                      </span>
-                      <strong className="sensory-label">Photogénie &amp; Rendu Lumière</strong>
-                    </div>
-                    <p className="sensory-desc">{selectedMaterialHotspot.lightReflect}</p>
-                  </div>
-
-                  <div className="material-sensory-card">
-                    <div className="sensory-head">
-                      <span className="sensory-icon">
-                        <FontAwesomeIcon icon={faWind} className="sensory-fa-icon" />
-                      </span>
-                      <strong className="sensory-label">Respirabilité &amp; Confort</strong>
-                    </div>
-                    <p className="sensory-desc">{selectedMaterialHotspot.durabilityBreathability}</p>
-                  </div>
-                </div>
-
-                {/* Secret d'Atelier */}
-                <div className="material-secret-card">
-                  <div className="secret-card-head">
-                    <span className="secret-tag">SECRET D'ATELIER</span>
-                    <span className="secret-tech">{selectedMaterialHotspot.techSpec}</span>
-                  </div>
-                  <p className="secret-card-desc">
-                    {selectedMaterialHotspot.artisanSecret}
-                  </p>
-                </div>
-
-                {/* Conservation & Care */}
-                <div className="material-care-card">
-                  <span className="care-tag">CONSEILS DE CONSERVATION &amp; ENTRETIEN DE L'ÉTOFFE</span>
-                  <p className="care-desc">
-                    {selectedMaterialHotspot.careGuidance}
-                  </p>
-                </div>
-
-                {/* Bottom Action Footer */}
-                <div className="material-modal-actions">
-                  <button
-                    type="button"
-                    className="material-action-btn primary"
-                    onClick={() => {
-                      setQuickAddedLookbookItems((prev) =>
-                        prev.includes(selectedMaterialHotspot.id)
-                          ? prev
-                          : [...prev, selectedMaterialHotspot.id]
-                      )
-                      setSelectedMaterialHotspot(null)
-                    }}
-                  >
-                    <span>
-                      {quickAddedLookbookItems.includes(selectedMaterialHotspot.id)
-                        ? "Échantillon & Essayage Sélectionnés ✓"
-                        : "Demander un Échantillon d'Étoffe • Sur-Mesure"}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    className="material-action-btn secondary"
-                    onClick={() => setSelectedMaterialHotspot(null)}
-                  >
-                    <span>Fermer le dossier</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className={`why-modal-fav-btn ${
+                    likedWhyCards.includes(selectedWhyModal.card.id) ? "liked" : ""
+                  }`}
+                  onClick={() =>
+                    setLikedWhyCards((prev) =>
+                      prev.includes(selectedWhyModal.card.id)
+                        ? prev.filter((id) => id !== selectedWhyModal.card.id)
+                        : [...prev, selectedWhyModal.card.id]
+                    )
+                  }
+                  aria-label="Ajouter aux favoris"
+                >
+                  <Heart
+                    size={20}
+                    fill={likedWhyCards.includes(selectedWhyModal.card.id) ? "currentColor" : "none"}
+                  />
+                </button>
               </div>
             </div>
           </div>
