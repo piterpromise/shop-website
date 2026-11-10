@@ -2232,50 +2232,86 @@
   height: 0 !important;
 }
 
+.event-modal-card .product-modal-close {
+  background-color: rgba(244, 236, 225, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(216, 200, 184, 0.35);
+  color: #f6f2ed;
+}
+
+.event-modal-card .product-modal-close:hover {
+  background-color: #d8c8b8;
+  color: #111312;
+  border-color: #d8c8b8;
+}
+
 .event-modal-hero {
   position: relative;
   width: 100%;
-  height: 100%; /* Takes 100% of the initial popup view fold */
-  min-height: 100%;
+  height: auto;
+  min-height: 0;
   overflow: hidden;
   border-top-left-radius: 2.25rem;
   border-top-right-radius: 2.25rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  background-color: #161410;
   box-sizing: border-box;
 }
 
-.event-modal-hero-img {
-  position: absolute;
-  inset: 0;
+.event-modal-hero-stage {
+  position: relative;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem 0.65rem;
+  overflow: hidden;
+  background-color: #161410;
 }
 
-/* GRADIENT BACKDROP: Transparent at top (opacity 0), smoothly darkening down to solid #29251c at bottom */
-.event-modal-hero-overlay {
+.event-modal-hero-bg-blur {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(17, 19, 18, 0) 0%,
-    rgba(17, 19, 18, 0.25) 30%,
-    rgba(41, 37, 28, 0.75) 65%,
-    rgba(41, 37, 28, 0.98) 92%,
-    #29251c 100%
-  );
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  object-fit: cover;
+  filter: blur(28px) saturate(1.25) brightness(0.42);
+  transform: scale(1.08);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.event-modal-hero-img {
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  border-radius: 1rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+}
+
+/* Overlay hidden since photo has its own dedicated unobstructed showcase stage above */
+.event-modal-hero-overlay {
+  display: none;
   pointer-events: none;
 }
 
 .event-modal-hero-bottom {
   position: relative;
   z-index: 2;
-  padding: 2rem 2.25rem 2.25rem 2.25rem;
+  background: linear-gradient(180deg, rgba(22, 20, 16, 0.96) 0%, #29251c 100%);
+  padding: 1.5rem 2.25rem 1.75rem 2.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  border-bottom: 1px solid rgba(216, 200, 184, 0.14);
 }
 
 .event-modal-hero-badges {
@@ -2345,10 +2381,10 @@
 }
 
 .event-modal-content {
-  padding: 2.25rem 2.5rem 5.5rem;
+  padding: 1.75rem 2.5rem 2.25rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
   background-color: #29251c;
 }
 
@@ -2490,8 +2526,8 @@
 }
 
 .event-modal-actions {
-  margin-top: 1.5rem;
-  margin-bottom: 4rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 
 .event-modal-cta-btn {
@@ -3115,6 +3151,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   display: block;
   will-change: transform;
 }
@@ -6690,6 +6727,10 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   color: #74634f;
   font-size: 0.95rem;
   pointer-events: none;
@@ -6784,14 +6825,22 @@
 .effect-21 ~ label {
   position: absolute;
   left: 42px;
-  top: 13px;
-  height: 22px;
-  line-height: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
   color: #8c8275;
-  transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition:
+    top 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    left 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s ease;
   pointer-events: none;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   letter-spacing: 0.2px;
   white-space: nowrap;
 }
@@ -6804,12 +6853,12 @@
 .has-content.effect-21 ~ label {
   top: -20px;
   left: 0;
+  transform: translateY(0);
   height: auto;
   line-height: 1.2;
   font-size: 0.66rem;
   font-weight: 700;
   color: #74634f;
-  transition: 0.3s;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -7982,11 +8031,22 @@
   }
 
   .event-modal-hero {
-    height: 230px;
+    height: auto;
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
   }
 
-  .event-modal-hero-overlay {
-    padding: 1.2rem;
+  .event-modal-hero-stage {
+    height: 300px;
+    padding: 0.9rem 0.9rem 0.35rem;
+  }
+
+  .event-modal-hero-bottom {
+    padding: 1.15rem 1.15rem 1.35rem;
+  }
+
+  .event-modal-content {
+    padding: 1.25rem 1.25rem 1.75rem;
   }
 
   .event-modal-title {
@@ -8972,11 +9032,19 @@
 }
 
 .contact-form-card .effect-21 ~ label {
+  top: 50%;
+  left: 42px;
+  transform: translateY(-50%);
+  line-height: 1;
   color: color-mix(in srgb, var(--hero-accent-glow, #d8c8b8) 76%, transparent);
 }
 
 .contact-form-card .effect-21:focus ~ label,
 .contact-form-card .has-content.effect-21 ~ label {
+  top: -20px;
+  left: 0;
+  transform: translateY(0);
+  line-height: 1.2;
   color: var(--hero-accent-light, #f4ece1);
   font-weight: 700;
 }
@@ -9002,8 +9070,8 @@
   align-items: flex-start;
 }
 
-.effect-21-textarea-icon {
-  top: 15px !important;
+.contact-form-card .effect-21-textarea-icon {
+  top: 16px !important;
   left: 14px !important;
   height: 22px;
   display: inline-flex;
@@ -9012,29 +9080,33 @@
   transform: none !important;
 }
 
-.contact-textarea {
+.contact-form-card .contact-textarea {
   display: block;
   min-height: 122px;
-  padding: 14px 16px 14px 44px !important;
+  padding: 15px 16px 15px 44px !important;
   resize: none;
   font-size: 0.88rem;
   line-height: 22px !important;
 }
 
-.contact-textarea ~ label {
+.contact-form-card .contact-textarea ~ label {
   left: 44px !important;
-  top: 15px !important;
+  top: 16px !important;
+  transform: none !important;
   height: 22px;
   line-height: 22px !important;
+  display: flex;
+  align-items: center;
   margin: 0;
   padding: 0;
-  font-size: 0.88rem !important;
+  font-size: 0.86rem !important;
 }
 
-.contact-textarea:focus ~ label,
-.has-content.contact-textarea ~ label {
+.contact-form-card .contact-textarea:focus ~ label,
+.contact-form-card .has-content.contact-textarea ~ label {
   top: -22px !important;
   left: 0 !important;
+  transform: none !important;
   height: auto;
   line-height: 1.2 !important;
   font-size: 0.66rem !important;

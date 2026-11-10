@@ -37,12 +37,8 @@ import {
   faPhone,
   faCalendarDays,
   faClock,
-  faUsers,
   faCheck,
   faCheckCircle,
-  faChevronLeft,
-  faChevronRight,
-  faCalendarCheck,
   faPaperPlane,
   faCircleNotch,
   faCommentDots,
@@ -51,61 +47,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 
 gsap.registerPlugin(ScrollTrigger)
-
-const BESPOKE_MONTH_NAMES = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre",
-]
-
-const BESPOKE_WEEKDAYS = ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"]
-const BESPOKE_TIME_SLOTS = ["09:30", "10:30", "11:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
-
-const formatBespokeDate = (d: Date | null): string => {
-  if (!d) return ""
-  return `${d.getDate()} ${BESPOKE_MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`
-}
-
-const isSameCalendarDay = (d1: Date | null, d2: Date | null): boolean => {
-  if (!d1 || !d2) return false
-  return (
-    d1.getDate() === d2.getDate() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getFullYear() === d2.getFullYear()
-  )
-}
-
-const getMonthCalendarDays = (monthDate: Date) => {
-  const year = monthDate.getFullYear()
-  const month = monthDate.getMonth()
-  const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7 // Monday = 0
-  const totalDays = new Date(year, month + 1, 0).getDate()
-  const days: ({ date: Date; dayNum: number; isPast: boolean } | null)[] = []
-
-  for (let i = 0; i < firstDayIndex; i++) {
-    days.push(null)
-  }
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  for (let d = 1; d <= totalDays; d++) {
-    const dateObj = new Date(year, month, d)
-    days.push({
-      date: dateObj,
-      dayNum: d,
-      isPast: dateObj < today,
-    })
-  }
-  return days
-}
 
 interface PhoneFormatResult {
   formatted: string
@@ -2316,49 +2257,10 @@ export default function Home() {
   const whyModalRightColRef = useRef<HTMLDivElement>(null)
   const isWhyModalClosingRef = useRef<boolean>(false)
 
-  // Why Choose / Sur-Mesure appointment state
-  const [whyClientName, setWhyClientName] = useState<string>("")
-  const [whyClientEmail, setWhyClientEmail] = useState<string>("")
-  const [whySelectedDate, setWhySelectedDate] = useState<Date | null>(() => {
-    const d = new Date()
-    d.setDate(d.getDate() + 5)
-    return d
-  })
-  const [whySelectedTime, setWhySelectedTime] = useState<string>("11:00")
-  const [isWhyDatePickerOpen, setIsWhyDatePickerOpen] = useState<boolean>(false)
-  const [isWhyTimePickerOpen, setIsWhyTimePickerOpen] = useState<boolean>(false)
-  const [calendarMonth, setCalendarMonth] = useState<Date>(new Date())
+  // Why Choose / Sur-Mesure glider state
   const [whyGlider, setWhyGlider] = useState<{ left: number; width: number }>({ left: 0, width: 85 })
   const whyTabsNavRef = useRef<HTMLDivElement>(null)
   const whyTabRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const whyDateDropdownRef = useRef<HTMLDivElement>(null)
-  const whyTimeDropdownRef = useRef<HTMLDivElement>(null)
-
-  // Salons Privés & Défilés event registration state
-  const [eventClientName, setEventClientName] = useState<string>("")
-  const [eventClientEmail, setEventClientEmail] = useState<string>("")
-  const [eventClientPhone, setEventClientPhone] = useState<string>("")
-  const [eventGuestsCount, setEventGuestsCount] = useState<number>(1)
-
-  // Fermer les sélecteurs date / heure personnalisés lors d'un clic extérieur
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (
-        whyDateDropdownRef.current &&
-        !whyDateDropdownRef.current.contains(e.target as Node)
-      ) {
-        setIsWhyDatePickerOpen(false)
-      }
-      if (
-        whyTimeDropdownRef.current &&
-        !whyTimeDropdownRef.current.contains(e.target as Node)
-      ) {
-        setIsWhyTimePickerOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClick)
-    return () => document.removeEventListener("mousedown", handleOutsideClick)
-  }, [])
 
   // Mesure dynamique et coulissage fluide de l'onglet créneau dans le popup Sur-Mesure
   useEffect(() => {
@@ -2386,7 +2288,6 @@ export default function Home() {
   const [contactEmail, setContactEmail] = useState<string>("")
   const [contactPhone, setContactPhone] = useState<string>("")
   const [contactPhoneCountry, setContactPhoneCountry] = useState<string>("")
-  const [eventPhoneCountry, setEventPhoneCountry] = useState<string>("")
   const [contactOccasion, setContactOccasion] = useState<string>("")
   const [contactSubject, setContactSubject] = useState<string>("Robe de Mariée Sur-Mesure")
   const [contactMessage, setContactMessage] = useState<string>("")
@@ -5525,9 +5426,9 @@ export default function Home() {
                   const containerRect = target.getBoundingClientRect()
                   const topOffset = rect.top - containerRect.top
                   
-                  if (topOffset < modalHeight * 0.95 && topOffset > -rect.height * 0.5) {
+                  if (topOffset < modalHeight * 0.99 && topOffset > -rect.height * 0.5) {
                     gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" })
-                  } else if (topOffset >= modalHeight * 0.95) {
+                  } else if (topOffset >= modalHeight * 0.99) {
                     gsap.to(el, { opacity: 0.15, y: 25, duration: 0.4, ease: "power2.out", overwrite: "auto" })
                   } else if (topOffset <= -rect.height * 0.5) {
                     gsap.to(el, { opacity: 0, y: -20, duration: 0.4, ease: "power2.out", overwrite: "auto" })
@@ -5543,11 +5444,21 @@ export default function Home() {
                 <X size={20} />
               </button>
 
-              {/* Event Hero Cover Header (Occupies 100% of initial popup fold) */}
+              {/* Event Hero Cover Header — Full visible photo stage + clean metadata bottom panel */}
               <div className="event-modal-hero">
-                <img src={selectedEvent.image} alt={selectedEvent.title} className="event-modal-hero-img" />
-                
-                {/* Transparent to solid dark gradient background overlay behind text elements */}
+                <div className="event-modal-hero-stage">
+                  <img
+                    src={selectedEvent.image}
+                    alt=""
+                    className="event-modal-hero-bg-blur"
+                    aria-hidden="true"
+                  />
+                  <img
+                    src={selectedEvent.image}
+                    alt={selectedEvent.title}
+                    className="event-modal-hero-img"
+                  />
+                </div>
                 <div className="event-modal-hero-overlay" />
                 
                 <div className="event-modal-hero-bottom">
@@ -5631,144 +5542,22 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Formulaire Nominatif Personnalisé (Effect-21 + Date Fixe) */}
-                <div className="event-modal-form-section gsap-scroll-reveal">
-                  <div className="event-fixed-date-banner">
-                    <div className="fixed-date-icon">
-                      <FontAwesomeIcon icon={faCalendarCheck} />
-                    </div>
-                    <div className="fixed-date-info">
-                      <span className="fixed-date-kicker">DATE &amp; HORAIRE FIXÉS POUR CETTE ÉDITION</span>
-                      <strong className="fixed-date-val">{selectedEvent.date}</strong>
-                      <span className="fixed-date-loc">Lieu : {selectedEvent.location}</span>
-                    </div>
-                  </div>
-
-                  <h3 className="section-heading" style={{ marginTop: "1.25rem" }}>
-                    Inscription Nominative Personnalisée
-                  </h3>
-                  <p className="event-modal-description" style={{ fontSize: "0.88rem" }}>
-                    Les invitations pour cet atelier sont strictement personnelles et nominatives. Veuillez renseigner les informations du participant.
-                  </p>
-
-                  <div className="event-form-grid">
-                    {/* Nom & Prénom with effect-21 */}
-                    <div className="input-effect-wrap">
-                      <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faUser} />
-                      </div>
-                      <div className="input-effect">
-                        <input
-                          className={`effect-21 ${eventClientName ? "has-content" : ""}`}
-                          type="text"
-                          placeholder=""
-                          value={eventClientName}
-                          onChange={(e) => setEventClientName(e.target.value)}
-                        />
-                        <label>Nom &amp; Prénom du titulaire</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-                    </div>
-
-                    {/* Email with effect-21 */}
-                    <div className="input-effect-wrap">
-                      <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faEnvelope} />
-                      </div>
-                      <div className="input-effect">
-                        <input
-                          className={`effect-21 ${eventClientEmail ? "has-content" : ""}`}
-                          type="email"
-                          placeholder=""
-                          value={eventClientEmail}
-                          onChange={(e) => setEventClientEmail(e.target.value)}
-                        />
-                        <label>Adresse Email pour le carton d'invitation</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-                    </div>
-
-                    {/* Téléphone avec formatage automatique + indicatif pays - Effect 21 */}
-                    <div className="input-effect-wrap">
-                      <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faPhone} />
-                      </div>
-                      <div className="input-effect">
-                        <input
-                          className={`effect-21 ${eventClientPhone ? "has-content" : ""} ${eventPhoneCountry ? "has-country-tag" : ""}`}
-                          type="tel"
-                          inputMode="tel"
-                          placeholder=""
-                          value={eventClientPhone}
-                          onChange={(e) => {
-                            const { formatted, countryTag } = formatPhoneWithAutoCountry(
-                              e.target.value,
-                              eventClientPhone
-                            )
-                            setEventClientPhone(formatted)
-                            setEventPhoneCountry(countryTag)
-                          }}
-                        />
-                        <label>Numéro de Téléphone Mobile</label>
-                        {eventPhoneCountry && (
-                          <span className="phone-country-pill" title="Indicatif pays détecté">
-                            {eventPhoneCountry}
-                          </span>
-                        )}
-                        <span className="focus-border"><i></i></span>
-                      </div>
-                    </div>
-
-                    {/* Nombre d'invités with faUsers and effect-21 */}
-                    <div className="event-guests-selector-wrap">
-                      <div className="event-guests-label">
-                        <FontAwesomeIcon icon={faUsers} style={{ marginRight: "0.5rem", color: "#d8c8b8" }} />
-                        <span>Nombre de places souhaitées</span>
-                      </div>
-                      <div className="event-guests-options">
-                        {[1, 2, 3, 4].map((num) => (
-                          <button
-                            key={num}
-                            type="button"
-                            className={`event-guest-btn ${eventGuestsCount === num ? "active" : ""}`}
-                            onClick={() => setEventGuestsCount(num)}
-                          >
-                            {num} {num > 1 ? "personnes" : "personne"}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action CTA Register Button with generous margin-bottom so GSAP completes fully */}
+                {/* Action CTA Register Button */}
                 <div className="event-modal-actions gsap-scroll-reveal">
                   <button
                     type="button"
                     className={`event-modal-cta-btn ${
                       registeredEvents.includes(selectedEvent.id) ? "registered" : ""
                     }`}
-                    onClick={() => {
-                      if (!registeredEvents.includes(selectedEvent.id)) {
-                        if (!eventClientName.trim()) {
-                          alert("Veuillez renseigner votre nom et prénom.")
-                          return
-                        }
-                        if (!eventClientEmail.trim()) {
-                          alert("Veuillez renseigner votre adresse email.")
-                          return
-                        }
-                      }
-                      toggleEventRegistration(selectedEvent.id)
-                    }}
+                    onClick={() => toggleEventRegistration(selectedEvent.id)}
                   >
                     {registeredEvents.includes(selectedEvent.id) ? (
                       <>
-                        <FontAwesomeIcon icon={faCheckCircle} /> Place Réservée ({eventGuestsCount} invité{eventGuestsCount > 1 ? "s" : ""}) — Annuler
+                        <FontAwesomeIcon icon={faCheckCircle} /> Place Réservée ✓ — Annuler l'inscription
                       </>
                     ) : (
                       <>
-                        <Sparkles size={20} /> Confirmer mon Inscription Gratuite ({eventGuestsCount} place{eventGuestsCount > 1 ? "s" : ""})
+                        <Sparkles size={20} /> Confirmer mon Inscription Gratuite
                       </>
                     )}
                   </button>
@@ -5913,11 +5702,7 @@ export default function Home() {
                         }}
                         type="button"
                         className={`why-time-tab ${selectedWhySlot === slot ? "active" : ""}`}
-                        onClick={() => {
-                          setSelectedWhySlot(slot)
-                          const timePart = slot.split(" ")[0]
-                          if (timePart) setWhySelectedTime(timePart)
-                        }}
+                        onClick={() => setSelectedWhySlot(slot)}
                       >
                         {slot}
                       </button>
@@ -5926,215 +5711,25 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 6b. Formulaire Personnalisé avec Composants TypeScript Date/Heure & Effect-21 */}
-              <div className="why-modal-booking-form why-modal-stagger-item">
-                <div className="why-form-header">
-                  <span className="why-form-kicker">COORDONNÉES &amp; PLANIFICATION PRIVÉE</span>
-                  <p className="why-form-subtitle">
-                    Précisez vos disponibilités personnalisées pour cet accompagnement à l'atelier ({selectedWhyModal.card.locationFull}).
-                  </p>
-                </div>
-
-                <div className="why-form-fields-grid">
-                  {/* Nom & Prénom with effect-21 */}
-                  <div className="input-effect-wrap">
-                    <div className="effect-21-icon">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                    <div className="input-effect">
-                      <input
-                        className={`effect-21 ${whyClientName ? "has-content" : ""}`}
-                        type="text"
-                        placeholder=""
-                        value={whyClientName}
-                        onChange={(e) => setWhyClientName(e.target.value)}
-                      />
-                      <label>Nom &amp; Prénom</label>
-                      <span className="focus-border"><i></i></span>
-                    </div>
-                  </div>
-
-                  {/* Email with effect-21 */}
-                  <div className="input-effect-wrap">
-                    <div className="effect-21-icon">
-                      <FontAwesomeIcon icon={faEnvelope} />
-                    </div>
-                    <div className="input-effect">
-                      <input
-                        className={`effect-21 ${whyClientEmail ? "has-content" : ""}`}
-                        type="email"
-                        placeholder=""
-                        value={whyClientEmail}
-                        onChange={(e) => setWhyClientEmail(e.target.value)}
-                      />
-                      <label>Adresse Email de contact</label>
-                      <span className="focus-border"><i></i></span>
-                    </div>
-                  </div>
-
-                  {/* Custom TypeScript Date Picker (No browser default!) */}
-                  <div className="custom-picker-container" ref={whyDateDropdownRef}>
-                    <div
-                      className="input-effect-wrap clickable-picker"
-                      onClick={() => setIsWhyDatePickerOpen((prev) => !prev)}
-                    >
-                      <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faCalendarDays} />
-                      </div>
-                      <div className="input-effect">
-                        <input
-                          readOnly
-                          className={`effect-21 cursor-pointer ${whySelectedDate ? "has-content" : ""}`}
-                          type="text"
-                          placeholder=""
-                          value={formatBespokeDate(whySelectedDate)}
-                        />
-                        <label>Date du rendez-vous</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-                    </div>
-
-                    {isWhyDatePickerOpen && (
-                      <div className="custom-calendar-dropdown">
-                        <div className="calendar-dropdown-header">
-                          <button
-                            type="button"
-                            className="calendar-nav-btn"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setCalendarMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
-                            }}
-                            aria-label="Mois précédent"
-                          >
-                            <FontAwesomeIcon icon={faChevronLeft} />
-                          </button>
-                          <span className="calendar-month-label">
-                            {BESPOKE_MONTH_NAMES[calendarMonth.getMonth()]} {calendarMonth.getFullYear()}
-                          </span>
-                          <button
-                            type="button"
-                            className="calendar-nav-btn"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setCalendarMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))
-                            }}
-                            aria-label="Mois suivant"
-                          >
-                            <FontAwesomeIcon icon={faChevronRight} />
-                          </button>
-                        </div>
-
-                        <div className="calendar-weekdays-row">
-                          {BESPOKE_WEEKDAYS.map((d) => (
-                            <span key={d} className="calendar-weekday-cell">{d}</span>
-                          ))}
-                        </div>
-
-                        <div className="calendar-days-grid">
-                          {getMonthCalendarDays(calendarMonth).map((cell, idx) =>
-                            cell ? (
-                              <button
-                                key={idx}
-                                type="button"
-                                className={`calendar-day-btn ${
-                                  isSameCalendarDay(cell.date, whySelectedDate) ? "selected" : ""
-                                }`}
-                                disabled={cell.isPast}
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  setWhySelectedDate(cell.date)
-                                  setIsWhyDatePickerOpen(false)
-                                }}
-                              >
-                                {cell.dayNum}
-                              </button>
-                            ) : (
-                              <span key={idx} className="calendar-empty-cell" />
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Custom TypeScript Time Picker (No browser default!) */}
-                  <div className="custom-picker-container" ref={whyTimeDropdownRef}>
-                    <div
-                      className="input-effect-wrap clickable-picker"
-                      onClick={() => setIsWhyTimePickerOpen((prev) => !prev)}
-                    >
-                      <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faClock} />
-                      </div>
-                      <div className="input-effect">
-                        <input
-                          readOnly
-                          className={`effect-21 cursor-pointer ${whySelectedTime ? "has-content" : ""}`}
-                          type="text"
-                          placeholder=""
-                          value={whySelectedTime ? `${whySelectedTime} (Atelier Privé)` : ""}
-                        />
-                        <label>Horaire de l'essayage</label>
-                        <span className="focus-border"><i></i></span>
-                      </div>
-                    </div>
-
-                    {isWhyTimePickerOpen && (
-                      <div className="custom-time-dropdown">
-                        <span className="time-dropdown-title">Horaires d'Atelier Disponibles</span>
-                        <div className="time-slots-grid">
-                          {BESPOKE_TIME_SLOTS.map((t) => (
-                            <button
-                              key={t}
-                              type="button"
-                              className={`time-slot-btn ${whySelectedTime === t ? "selected" : ""}`}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setWhySelectedTime(t)
-                                setIsWhyTimePickerOpen(false)
-                              }}
-                            >
-                              {t}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* 7. Signature Action Footer (Echoing the Reference Card's Matte Black Pill + Circular Heart) */}
+              {/* 7. Signature Action Footer */}
               <div className="why-modal-actions-row why-modal-stagger-item">
                 <button
                   type="button"
                   className={`why-modal-book-btn ${
                     bookedWhySessions.includes(selectedWhyModal.card.id) ? "booked" : ""
                   }`}
-                  onClick={() => {
-                    if (!bookedWhySessions.includes(selectedWhyModal.card.id)) {
-                      if (!whyClientName.trim()) {
-                        alert("Veuillez renseigner votre nom et prénom pour valider la réservation.")
-                        return
-                      }
-                      if (!whyClientEmail.trim()) {
-                        alert("Veuillez renseigner votre adresse email pour recevoir la confirmation d'atelier.")
-                        return
-                      }
-                    }
-                    toggleWhySessionBooking(selectedWhyModal.card.id)
-                  }}
+                  onClick={() => toggleWhySessionBooking(selectedWhyModal.card.id)}
                 >
                   {bookedWhySessions.includes(selectedWhyModal.card.id) ? (
                     <>
-                      <span>Session confirmée • {formatBespokeDate(whySelectedDate)} à {whySelectedTime}</span>
+                      <span>Session réservée • {selectedWhySlot}</span>
                       <span className="why-modal-btn-Check">✓</span>
                     </>
                   ) : (
                     <>
                       <span>Réserver la session</span>
                       <span className="why-modal-btn-right">
-                        {whySelectedTime || selectedWhySlot} — {selectedWhyModal.card.price}
+                        {selectedWhySlot} — {selectedWhyModal.card.price}
                         <ArrowRight size={17} />
                       </span>
                     </>
