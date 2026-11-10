@@ -5444,23 +5444,17 @@ export default function Home() {
                 <X size={20} />
               </button>
 
-              {/* Event Hero Cover Header — Full visible photo stage + clean metadata bottom panel */}
+              {/* Event Hero Cover Header (Occupies 100% of initial popup fold, exact original design) */}
               <div className="event-modal-hero">
-                <div className="event-modal-hero-stage">
-                  <img
-                    src={selectedEvent.image}
-                    alt=""
-                    className="event-modal-hero-bg-blur"
-                    aria-hidden="true"
-                  />
-                  <img
-                    src={selectedEvent.image}
-                    alt={selectedEvent.title}
-                    className="event-modal-hero-img"
-                  />
-                </div>
+                <img
+                  src={selectedEvent.image}
+                  alt={selectedEvent.title}
+                  className="event-modal-hero-img"
+                />
+
+                {/* Transparent to solid dark gradient background overlay behind text elements */}
                 <div className="event-modal-hero-overlay" />
-                
+
                 <div className="event-modal-hero-bottom">
                   {/* Category & Date Badges */}
                   <div className="event-modal-hero-badges">

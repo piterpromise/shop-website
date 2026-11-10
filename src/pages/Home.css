@@ -2086,6 +2086,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -2212,9 +2213,9 @@
   background-color: #29251c;
   border-radius: 2.25rem;
   width: 100%;
-  max-width: 820px;
-  height: 85vh;
-  max-height: 85vh;
+  max-width: 680px;
+  height: 90vh;
+  max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
   border: 1px solid rgba(216, 200, 184, 0.2);
@@ -2249,69 +2250,48 @@
 .event-modal-hero {
   position: relative;
   width: 100%;
-  height: auto;
-  min-height: 0;
+  height: 100%; /* Takes 100% of the initial popup view fold */
+  min-height: 100%;
   overflow: hidden;
   border-top-left-radius: 2.25rem;
   border-top-right-radius: 2.25rem;
   display: flex;
   flex-direction: column;
-  background-color: #161410;
+  justify-content: flex-end;
   box-sizing: border-box;
 }
 
-.event-modal-hero-stage {
-  position: relative;
-  width: 100%;
-  height: 440px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem 2rem 0.65rem;
-  overflow: hidden;
-  background-color: #161410;
-}
-
-.event-modal-hero-bg-blur {
-  position: absolute;
-  inset: -12%;
-  width: 124%;
-  height: 124%;
-  object-fit: cover;
-  filter: blur(28px) saturate(1.25) brightness(0.42);
-  transform: scale(1.08);
-  pointer-events: none;
-  z-index: 0;
-}
-
 .event-modal-hero-img {
-  position: relative;
-  z-index: 2;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center center;
-  border-radius: 1rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  object-fit: cover;
+  object-position: top center;
 }
 
-/* Overlay hidden since photo has its own dedicated unobstructed showcase stage above */
+/* GRADIENT BACKDROP: Transparent at top (0%..45%), smoothly darkening down to solid #29251c at bottom */
 .event-modal-hero-overlay {
-  display: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 19, 18, 0) 0%,
+    rgba(17, 19, 18, 0.08) 42%,
+    rgba(41, 37, 28, 0.72) 70%,
+    rgba(41, 37, 28, 0.96) 92%,
+    #29251c 100%
+  );
   pointer-events: none;
 }
 
 .event-modal-hero-bottom {
   position: relative;
   z-index: 2;
-  background: linear-gradient(180deg, rgba(22, 20, 16, 0.96) 0%, #29251c 100%);
-  padding: 1.5rem 2.25rem 1.75rem 2.25rem;
+  padding: 2rem 2.25rem 2.25rem 2.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  border-bottom: 1px solid rgba(216, 200, 184, 0.14);
 }
 
 .event-modal-hero-badges {
@@ -8031,18 +8011,17 @@
   }
 
   .event-modal-hero {
-    height: auto;
-    border-top-left-radius: 26px;
-    border-top-right-radius: 26px;
+    height: 430px;
+    min-height: 430px;
   }
 
-  .event-modal-hero-stage {
-    height: 300px;
-    padding: 0.9rem 0.9rem 0.35rem;
+  .event-modal-hero-img {
+    object-fit: cover;
+    object-position: top center;
   }
 
   .event-modal-hero-bottom {
-    padding: 1.15rem 1.15rem 1.35rem;
+    padding: 1.25rem 1.25rem 1.35rem;
   }
 
   .event-modal-content {
