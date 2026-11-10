@@ -2208,12 +2208,21 @@
 }
 
 /* EVENT DETAIL MODAL POPUP */
+.event-modal-backdrop-ext {
+  display: block !important;
+  padding: 0 !important;
+  z-index: 9998;
+  background-color: rgba(15, 14, 12, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
 .event-modal-card {
   position: relative;
   background-color: #29251c;
   border-radius: 2.25rem;
   width: 100%;
-  max-width: 680px;
+  max-width: 810px;
   height: 90vh;
   max-height: 90vh;
   overflow-y: auto;
@@ -2225,6 +2234,15 @@
   /* HIDE SCROLLBAR COMPLETELY ACROSS ALL BROWSERS */
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+}
+
+.event-modal-card-ext {
+  position: fixed !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  z-index: 9999;
+  will-change: left, top, width, height, border-radius;
 }
 
 .event-modal-card::-webkit-scrollbar {
@@ -8011,8 +8029,8 @@
   }
 
   .event-modal-hero {
-    height: 430px;
-    min-height: 430px;
+    height: 100%;
+    min-height: 100%;
   }
 
   .event-modal-hero-img {

@@ -2241,6 +2241,18 @@ export default function Home() {
     : products.filter((p) => p.categoryKey === currentCategory.key)
 
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null)
+  const [eventModalOrigin, setEventModalOrigin] = useState<{
+    left: number
+    top: number
+    width: number
+    height: number
+    sourceEl: HTMLElement | null
+  } | null>(null)
+  const eventModalBackdropRef = useRef<HTMLDivElement>(null)
+  const eventModalCardRef = useRef<HTMLDivElement>(null)
+  const eventModalHeroBottomRef = useRef<HTMLDivElement>(null)
+  const eventModalHeroImgRef = useRef<HTMLImageElement>(null)
+  const isEventModalClosingRef = useRef<boolean>(false)
   const [registeredEvents, setRegisteredEvents] = useState<number[]>([])
   const [likedWhyCards, setLikedWhyCards] = useState<number[]>([])
   const [selectedWhyModal, setSelectedWhyModal] = useState<{
@@ -2380,6 +2392,249 @@ export default function Home() {
       document.body.style.overflow = ""
     }
   }, [selectedProduct, selectedEvent])
+
+  const openEventModal = (evt: EventItem, e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const cardEl = (e.currentTarget as HTMLElement).closest(".event-card") as HTMLElement | null
+    const rect = cardEl
+      ? cardEl.getBoundingClientRect()
+      : {
+          left: window.innerWidth / 2 - 200,
+          top: window.innerHeight / 2 - 250,
+          width: 400,
+          height: 500,
+        }
+    isEventModalClosingRef.current = false
+    setEventModalOrigin({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      sourceEl: cardEl,
+    })
+    setSelectedEvent(evt)
+  }
+
+  const closeEventModal = () => {
+    if (!selectedEvent || isEventModalClosingRef.current) return
+    isEventModalClosingRef.current = true
+
+    const backdropEl = eventModalBackdropRef.current
+    const popupEl = eventModalCardRef.current
+    const heroBottomEl = eventModalHeroBottomRef.current
+    const imgEl = eventModalHeroImgRef.current
+    const originRect = eventModalOrigin
+    const sourceEl = eventModalOrigin?.sourceEl
+
+    if (!popupEl || !backdropEl || !originRect) {
+      if (sourceEl) {
+        gsap.set(sourceEl, { autoAlpha: 1, pointerEvents: "auto" })
+      }
+      setSelectedEvent(null)
+      setEventModalOrigin(null)
+      isEventModalClosingRef.current = false
+      return
+    }
+
+    const liveRect = sourceEl ? sourceEl.getBoundingClientRect() : originRect
+    const closeBtn = popupEl.querySelector(".product-modal-close")
+    const isMobile = window.innerWidth <= 768
+
+    popupEl.scrollTop = 0
+    popupEl.style.overflowY = "hidden"
+
+    const closeTl = gsap.timeline({
+      onComplete: () => {
+        if (sourceEl) {
+          gsap.set(sourceEl, { autoAlpha: 1, pointerEvents: "auto" })
+        }
+        setSelectedEvent(null)
+        setEventModalOrigin(null)
+        isEventModalClosingRef.current = false
+      },
+    })
+
+    closeTl.to(
+      [heroBottomEl, closeBtn].filter(Boolean),
+      {
+        opacity: 0,
+        y: 18,
+        duration: 0.22,
+        ease: "power2.out",
+      },
+      0
+    )
+
+    closeTl.to(
+      popupEl,
+      {
+        left: liveRect.left,
+        top: liveRect.top,
+        width: liveRect.width,
+        height: liveRect.height,
+        borderRadius: isMobile ? "24px" : "2rem",
+        duration: 0.52,
+        ease: "power3.inOut",
+      },
+      0
+    )
+
+    if (imgEl) {
+      closeTl.to(
+        imgEl,
+        {
+          scale: 1.05,
+          duration: 0.52,
+          ease: "power3.inOut",
+        },
+        0
+      )
+    }
+
+    closeTl.to(
+      backdropEl,
+      {
+        opacity: 0,
+        duration: 0.44,
+        ease: "power2.inOut",
+      },
+      0
+    )
+
+    if (sourceEl) {
+      closeTl.call(
+        () => {
+          gsap.set(sourceEl, { autoAlpha: 1 })
+        },
+        [],
+        0.46
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (!selectedEvent || !eventModalOrigin) return
+
+    const backdropEl = eventModalBackdropRef.current
+    const popupEl = eventModalCardRef.current
+    const heroBottomEl = eventModalHeroBottomRef.current
+    const imgEl = eventModalHeroImgRef.current
+    const { sourceEl } = eventModalOrigin
+
+    if (!popupEl || !backdropEl) return
+
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const isMobile = vw <= 768
+
+    // +130px wider than previous 680px -> 810px on desktop
+    const targetW = isMobile ? Math.round(vw * 0.95) : Math.min(810, Math.round(vw - 48))
+    const targetH = isMobile ? Math.round(vh * 0.92) : Math.round(vh * 0.9)
+    const targetLeft = Math.round((vw - targetW) / 2)
+    const targetTop = Math.round((vh - targetH) / 2)
+    const closeBtn = popupEl.querySelector(".product-modal-close")
+
+    gsap.set(backdropEl, { opacity: 0 })
+    gsap.set(popupEl, {
+      position: "fixed",
+      margin: 0,
+      opacity: 1,
+      left: eventModalOrigin.left,
+      top: eventModalOrigin.top,
+      width: eventModalOrigin.width,
+      height: eventModalOrigin.height,
+      borderRadius: isMobile ? "24px" : "2rem",
+      overflowY: "hidden",
+    })
+
+    if (imgEl) {
+      gsap.set(imgEl, { scale: 1.07 })
+    }
+    if (heroBottomEl) {
+      gsap.set(heroBottomEl, { opacity: 0, y: 26 })
+    }
+    if (closeBtn) {
+      gsap.set(closeBtn, { opacity: 0, scale: 0.78 })
+    }
+
+    if (sourceEl) {
+      gsap.set(sourceEl, { autoAlpha: 0, pointerEvents: "none" })
+    }
+
+    const openTl = gsap.timeline({
+      onComplete: () => {
+        popupEl.style.overflowY = "auto"
+      },
+    })
+
+    openTl.to(
+      backdropEl,
+      {
+        opacity: 1,
+        duration: 0.45,
+        ease: "power2.out",
+      },
+      0
+    )
+
+    openTl.to(
+      popupEl,
+      {
+        left: targetLeft,
+        top: targetTop,
+        width: targetW,
+        height: targetH,
+        borderRadius: isMobile ? "26px" : "2.25rem",
+        duration: 0.74,
+        ease: "expo.inOut",
+      },
+      0
+    )
+
+    if (imgEl) {
+      openTl.to(
+        imgEl,
+        {
+          scale: 1,
+          duration: 0.9,
+          ease: "expo.out",
+        },
+        0
+      )
+    }
+
+    if (heroBottomEl) {
+      openTl.to(
+        heroBottomEl,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          ease: "power3.out",
+        },
+        0.34
+      )
+    }
+
+    if (closeBtn) {
+      openTl.to(
+        closeBtn,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          ease: "power3.out",
+        },
+        0.42
+      )
+    }
+
+    const handleEsc = (ev: KeyboardEvent) => {
+      if (ev.key === "Escape") closeEventModal()
+    }
+    window.addEventListener("keydown", handleEsc)
+    return () => window.removeEventListener("keydown", handleEsc)
+  }, [selectedEvent, eventModalOrigin])
 
   const openWhyCardModal = (card: WhyChooseCard, e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -4373,7 +4628,7 @@ export default function Home() {
                     <div
                       key={evt.id}
                       className="event-card"
-                      onClick={() => setSelectedEvent(evt)}
+                      onClick={(e) => openEventModal(evt, e)}
                     >
                       <img src={evt.image} alt={evt.title} className="event-card-img" />
 
@@ -4393,10 +4648,7 @@ export default function Home() {
                       <div className="event-card-footer">
                         <button
                           className={`event-card-btn ${isRegistered ? "registered" : ""}`}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setSelectedEvent(evt)
-                          }}
+                          onClick={(e) => openEventModal(evt, e)}
                         >
                           {isRegistered ? "Inscrit ✓" : "S'inscrire à l'événement"}
                           <ArrowRight size={16} />
@@ -5399,63 +5651,58 @@ export default function Home() {
         )
       })()}
 
-      {/* Event Detail Modal Popup */}
-      <AnimatePresence>
-        {selectedEvent && (
-          <motion.div
-            className="product-modal-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={() => setSelectedEvent(null)}
+      {/* Event Detail Modal Popup (GSAP FLIP displaced from exact card position) */}
+      {selectedEvent && (
+        <div
+          ref={eventModalBackdropRef}
+          className="product-modal-backdrop event-modal-backdrop-ext"
+          onClick={closeEventModal}
+          onWheel={(e) => e.stopPropagation()}
+        >
+          <div
+            ref={eventModalCardRef}
+            className="event-modal-card event-modal-card-ext"
+            onClick={(e) => e.stopPropagation()}
+            onScroll={(e) => {
+              const target = e.currentTarget
+              const elements = target.querySelectorAll('.gsap-scroll-reveal')
+              const modalHeight = target.clientHeight
+              elements.forEach((el) => {
+                const rect = el.getBoundingClientRect()
+                const containerRect = target.getBoundingClientRect()
+                const topOffset = rect.top - containerRect.top
+                
+                if (topOffset < modalHeight * 0.99 && topOffset > -rect.height * 0.5) {
+                  gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" })
+                } else if (topOffset >= modalHeight * 0.99) {
+                  gsap.to(el, { opacity: 0.15, y: 25, duration: 0.4, ease: "power2.out", overwrite: "auto" })
+                } else if (topOffset <= -rect.height * 0.5) {
+                  gsap.to(el, { opacity: 0, y: -20, duration: 0.4, ease: "power2.out", overwrite: "auto" })
+                }
+              })
+            }}
           >
-            <motion.div
-              className="event-modal-card"
-              initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 20 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              onClick={(e) => e.stopPropagation()}
-              onScroll={(e) => {
-                const target = e.currentTarget
-                const elements = target.querySelectorAll('.gsap-scroll-reveal')
-                const modalHeight = target.clientHeight
-                elements.forEach((el) => {
-                  const rect = el.getBoundingClientRect()
-                  const containerRect = target.getBoundingClientRect()
-                  const topOffset = rect.top - containerRect.top
-                  
-                  if (topOffset < modalHeight * 0.99 && topOffset > -rect.height * 0.5) {
-                    gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" })
-                  } else if (topOffset >= modalHeight * 0.99) {
-                    gsap.to(el, { opacity: 0.15, y: 25, duration: 0.4, ease: "power2.out", overwrite: "auto" })
-                  } else if (topOffset <= -rect.height * 0.5) {
-                    gsap.to(el, { opacity: 0, y: -20, duration: 0.4, ease: "power2.out", overwrite: "auto" })
-                  }
-                })
-              }}
+            <button
+              className="product-modal-close"
+              onClick={closeEventModal}
+              aria-label="Fermer"
             >
-              <button
-                className="product-modal-close"
-                onClick={() => setSelectedEvent(null)}
-                aria-label="Fermer"
-              >
-                <X size={20} />
-              </button>
+              <X size={20} />
+            </button>
 
-              {/* Event Hero Cover Header (Occupies 100% of initial popup fold, exact original design) */}
-              <div className="event-modal-hero">
-                <img
-                  src={selectedEvent.image}
-                  alt={selectedEvent.title}
-                  className="event-modal-hero-img"
-                />
+            {/* Event Hero Cover Header (Occupies 100% of initial popup fold, exact original design) */}
+            <div className="event-modal-hero">
+              <img
+                ref={eventModalHeroImgRef}
+                src={selectedEvent.image}
+                alt={selectedEvent.title}
+                className="event-modal-hero-img"
+              />
 
-                {/* Transparent to solid dark gradient background overlay behind text elements */}
-                <div className="event-modal-hero-overlay" />
+              {/* Transparent to solid dark gradient background overlay behind text elements */}
+              <div className="event-modal-hero-overlay" />
 
-                <div className="event-modal-hero-bottom">
+              <div ref={eventModalHeroBottomRef} className="event-modal-hero-bottom">
                   {/* Category & Date Badges */}
                   <div className="event-modal-hero-badges">
                     <span className="event-modal-category-badge">{selectedEvent.category}</span>
@@ -5556,11 +5803,10 @@ export default function Home() {
                     )}
                   </button>
                 </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Special Why Choose Sunset FLIP-Displaced Popup (80% width, pure editorial light theme, left rounded-only image, staggered right details) */}
       {selectedWhyModal && (
