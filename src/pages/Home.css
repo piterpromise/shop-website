@@ -1199,14 +1199,14 @@
 /* Haute Couture Crossed Silk Ribbons Separator between Catalogue & Testimonials */
 .section-separator-ribbon {
   width: 100vw;
-  min-height: clamp(200px, calc(110px + 21vw), 540px);
+  min-height: clamp(160px, calc(115px + 10.5vw), 340px);
   position: relative;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
   padding: 0;
   display: flex;
   align-items: center;
@@ -1219,8 +1219,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 118vw;
-  min-width: 118vw;
+  width: 112vw;
+  min-width: 112vw;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -1228,10 +1228,10 @@
   user-select: none;
 }
 
-/* Secondary Linen Satin Ghost Ribbon (Wide & tilted -10deg counter-cross) */
+/* Secondary Linen Satin Ghost Ribbon (Wide & tilted -5deg counter-cross) */
 .couture-ribbon-ghost {
   height: 74px;
-  transform: translate(-50%, -50%) rotate(-10deg);
+  transform: translate(-50%, -50%) rotate(-5deg);
   background: color-mix(in srgb, var(--hero-diamond-color, #29251c) 12%, #eee2d3);
   border-top: 1.5px solid color-mix(in srgb, var(--hero-diamond-color, #29251c) 24%, transparent);
   border-bottom: 1.5px solid color-mix(in srgb, var(--hero-diamond-color, #29251c) 24%, transparent);
@@ -1241,10 +1241,10 @@
   transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease;
 }
 
-/* Primary Sovereign Velvet Silk Ribbon (Wide & tilted +10deg, Hero-adaptive) */
+/* Primary Sovereign Velvet Silk Ribbon (Wide & tilted +5deg, Hero-adaptive) */
 .couture-ribbon-primary {
   height: 98px;
-  transform: translate(-50%, -50%) rotate(10deg);
+  transform: translate(-50%, -50%) rotate(5deg);
   background: linear-gradient(
     90deg,
     color-mix(in srgb, var(--hero-diamond-color, #29251c) 84%, #0f100f) 0%,
@@ -1364,19 +1364,19 @@
 
 @media (max-width: 768px) {
   .section-separator-ribbon {
-    min-height: calc(105px + 21vw);
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    min-height: calc(88px + 10.5vw);
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
   }
 
   .couture-ribbon-ghost {
     height: 52px;
-    transform: translate(-50%, -50%) rotate(-10deg);
+    transform: translate(-50%, -50%) rotate(-5deg);
   }
 
   .couture-ribbon-primary {
     height: 72px;
-    transform: translate(-50%, -50%) rotate(10deg);
+    transform: translate(-50%, -50%) rotate(5deg);
   }
 
   .couture-ribbon-stitch-top {
