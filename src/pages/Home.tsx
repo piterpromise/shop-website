@@ -4223,54 +4223,50 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Wavy Ribbon Separator: 2 thin black borders + green text */}
-        <div className="section-separator-ribbon">
-          <svg className="separator-ribbon-svg" viewBox="0 0 1600 200" preserveAspectRatio="none">
-            <defs>
-              <path
-                id="ribbonTopBorder"
-                d="M -150,55 C 450,185 1050,-45 1750,75"
-                fill="none"
-              />
-              <path
-                id="ribbonBottomBorder"
-                d="M -150,135 C 450,265 1050,35 1750,155"
-                fill="none"
-              />
-              <path
-                id="separatorRibbonTextPath"
-                d="M -150,95 C 450,225 1050,-5 1750,115"
-                fill="none"
-              />
-            </defs>
+        {/* Haute Couture Crossed Silk Ribbons Separator */}
+        <section className="section-separator-ribbon" aria-label="Signatures de la Maison">
+          {/* Secondary Whisper Linen Ribbon (Counter-tilted, slower inverse drift) */}
+          <div className="couture-ribbon-band couture-ribbon-ghost" aria-hidden="true">
+            <div className="couture-ribbon-track couture-ribbon-track-reverse">
+              {[0, 1].map((dup) => (
+                <div key={dup} className="couture-ribbon-group">
+                  <span className="ribbon-ghost-item">SOIE NATURELLE DE CÔME</span>
+                  <span className="ribbon-diamond-sep">◇</span>
+                  <span className="ribbon-ghost-item">DENTELLE DE CALAIS-CAUDRY</span>
+                  <span className="ribbon-diamond-sep">◇</span>
+                  <span className="ribbon-ghost-item">LIN NORMAND PEIGNÉ</span>
+                  <span className="ribbon-diamond-sep">◇</span>
+                  <span className="ribbon-ghost-item">BRODERIES DE LUNÉVILLE</span>
+                  <span className="ribbon-diamond-sep">◇</span>
+                  <span className="ribbon-ghost-item">PATRONAGE EXCLUSIF</span>
+                  <span className="ribbon-diamond-sep">◇</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            {/* Thin 1.2px Earthen Top & Bottom Borders */}
-            <use href="#ribbonTopBorder" stroke="#29251c" strokeWidth="1.2" fill="none" />
-            <use href="#ribbonBottomBorder" stroke="#29251c" strokeWidth="1.2" fill="none" />
-
-            {/* Scrolling Couture Ribbon Text */}
-            <text
-              fill="#29251c"
-              fontSize="20"
-              fontWeight="700"
-              letterSpacing="1px"
-              dominantBaseline="central"
-              alignmentBaseline="middle"
-              dy="1px"
-            >
-              <textPath href="#separatorRibbonTextPath" startOffset="0%">
-                • CRÉATION SUR-MESURE &amp; HAUTE COUTURE • ROBES DE MARIÉE, SOIRÉE &amp; COCKTAIL • BRODERIES MAIN &amp; DENTELLE DE CALAIS • ESSAYAGES PRIVÉS EN SALON • PATRONAGE EXCLUSIF • CRÉATION SUR-MESURE &amp; HAUTE COUTURE •
-                <animate
-                  attributeName="startOffset"
-                  from="0%"
-                  to="-50%"
-                  dur="30s"
-                  repeatCount="indefinite"
-                />
-              </textPath>
-            </text>
-          </svg>
-        </div>
+          {/* Primary Sovereign Couture Silk Ribbon (Hero-adaptive, tailored top/bottom stitch) */}
+          <div className="couture-ribbon-band couture-ribbon-primary">
+            <div className="couture-ribbon-stitch-top" aria-hidden="true" />
+            <div className="couture-ribbon-track couture-ribbon-track-forward">
+              {[0, 1].map((dup) => (
+                <div key={dup} className="couture-ribbon-group">
+                  <span className="ribbon-sans-item">HAUTE COUTURE &amp; SUR-MESURE</span>
+                  <span className="ribbon-star-sep" aria-hidden="true">✦</span>
+                  <span className="ribbon-serif-item">L'Éloge de la Grâce</span>
+                  <span className="ribbon-star-sep" aria-hidden="true">✦</span>
+                  <span className="ribbon-sans-item">ROBES DE MARIÉE &amp; GALA</span>
+                  <span className="ribbon-star-sep" aria-hidden="true">✦</span>
+                  <span className="ribbon-serif-item">Façonnées à la Main</span>
+                  <span className="ribbon-star-sep" aria-hidden="true">✦</span>
+                  <span className="ribbon-sans-item">ESSAYAGES PRIVÉS EN SALON</span>
+                  <span className="ribbon-star-sep" aria-hidden="true">✦</span>
+                </div>
+              ))}
+            </div>
+            <div className="couture-ribbon-stitch-bottom" aria-hidden="true" />
+          </div>
+        </section>
 
         {/* Customer Testimonials Section */}
         <section id="temoignages-clientes" className="testimonials-section">
