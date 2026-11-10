@@ -32,7 +32,6 @@ import {
   faFireFlameSimple,
   faTruck,
   faCircle,
-  faGem,
   faUser,
   faEnvelope,
   faPhone,
@@ -106,6 +105,225 @@ const getMonthCalendarDays = (monthDate: Date) => {
     })
   }
   return days
+}
+
+interface PhoneFormatResult {
+  formatted: string
+  countryTag: string
+}
+
+const DIAL_CODE_RULES: {
+  code: string
+  tag: string
+  group: (rest: string) => string
+}[] = [
+  {
+    code: "236",
+    tag: "🇨🇫 +236",
+    group: (r) => {
+      if (r.length === 9 || (r.length > 8 && r.startsWith("6"))) {
+        return [r.slice(0, 1), r.slice(1, 3), r.slice(3, 5), r.slice(5, 7), r.slice(7, 9)]
+          .filter(Boolean)
+          .join(" ")
+      }
+      return (r.slice(0, 8).match(/.{1,2}/g) || []).join(" ")
+    },
+  },
+  {
+    code: "237",
+    tag: "🇨🇲 +237",
+    group: (r) => {
+      const p1 = r.slice(0, 1)
+      const pairs = r.slice(1, 9).match(/.{1,2}/g) || []
+      return [p1, ...pairs].filter(Boolean).join(" ")
+    },
+  },
+  {
+    code: "225",
+    tag: "🇨🇮 +225",
+    group: (r) => (r.slice(0, 10).match(/.{1,2}/g) || []).join(" "),
+  },
+  {
+    code: "221",
+    tag: "🇸🇳 +221",
+    group: (r) =>
+      [r.slice(0, 2), r.slice(2, 5), r.slice(5, 7), r.slice(7, 9)].filter(Boolean).join(" "),
+  },
+  {
+    code: "241",
+    tag: "🇬🇦 +241",
+    group: (r) => (r.slice(0, 8).match(/.{1,2}/g) || []).join(" "),
+  },
+  {
+    code: "242",
+    tag: "🇨🇬 +242",
+    group: (r) => [r.slice(0, 2), r.slice(2, 5), r.slice(5, 9)].filter(Boolean).join(" "),
+  },
+  {
+    code: "243",
+    tag: "🇨🇩 +243",
+    group: (r) => [r.slice(0, 2), r.slice(2, 5), r.slice(5, 9)].filter(Boolean).join(" "),
+  },
+  {
+    code: "212",
+    tag: "🇲🇦 +212",
+    group: (r) => {
+      const clean = r.startsWith("0") ? r.slice(1) : r
+      const p1 = clean.slice(0, 1)
+      const pairs = clean.slice(1, 9).match(/.{1,2}/g) || []
+      return [p1, ...pairs].filter(Boolean).join(" ")
+    },
+  },
+  {
+    code: "33",
+    tag: "🇫🇷 +33",
+    group: (r) => {
+      const clean = r.startsWith("0") ? r.slice(1) : r
+      const p1 = clean.slice(0, 1)
+      const pairs = clean.slice(1, 9).match(/.{1,2}/g) || []
+      return [p1, ...pairs].filter(Boolean).join(" ")
+    },
+  },
+  {
+    code: "32",
+    tag: "🇧🇪 +32",
+    group: (r) => {
+      const clean = r.startsWith("0") ? r.slice(1) : r
+      return [clean.slice(0, 3), clean.slice(3, 5), clean.slice(5, 7), clean.slice(7, 9)]
+        .filter(Boolean)
+        .join(" ")
+    },
+  },
+  {
+    code: "41",
+    tag: "🇨🇭 +41",
+    group: (r) => {
+      const clean = r.startsWith("0") ? r.slice(1) : r
+      return [clean.slice(0, 2), clean.slice(2, 5), clean.slice(5, 7), clean.slice(7, 9)]
+        .filter(Boolean)
+        .join(" ")
+    },
+  },
+  {
+    code: "44",
+    tag: "🇬🇧 +44",
+    group: (r) => {
+      const clean = r.startsWith("0") ? r.slice(1) : r
+      return [clean.slice(0, 4), clean.slice(4, 10)].filter(Boolean).join(" ")
+    },
+  },
+  {
+    code: "1",
+    tag: "🇺🇸 +1",
+    group: (r) => {
+      const n = r.slice(0, 10)
+      if (n.length <= 3) return n
+      if (n.length <= 6) return `(${n.slice(0, 3)}) ${n.slice(3)}`
+      return `(${n.slice(0, 3)}) ${n.slice(3, 6)}-${n.slice(6)}`
+    },
+  },
+]
+
+const formatPhoneWithAutoCountry = (rawValue: string, prevFormatted: string): PhoneFormatResult => {
+  const isDeleting = rawValue.length < prevFormatted.length
+  let digits = rawValue.replace(/\D/g, "")
+  const prevDigits = prevFormatted.replace(/\D/g, "")
+
+  if (isDeleting && digits === prevDigits && prevDigits.length > 0) {
+    digits = digits.slice(0, -1)
+  }
+
+  if (!rawValue.trim() || digits.length === 0) {
+    if (rawValue.trimStart().startsWith("+") && !isDeleting) {
+      return { formatted: "+", countryTag: "" }
+    }
+    return { formatted: "", countryTag: "" }
+  }
+
+  const formatByDialCode = (allDigits: string): PhoneFormatResult => {
+    const matched = DIAL_CODE_RULES.find((rule) => allDigits.startsWith(rule.code))
+    if (matched) {
+      const rest = allDigits.slice(matched.code.length)
+      if (!rest) {
+        return { formatted: `+${matched.code}`, countryTag: matched.tag }
+      }
+      return {
+        formatted: `+${matched.code} ${matched.group(rest)}`,
+        countryTag: matched.tag,
+      }
+    }
+    const codeChunk = allDigits.slice(0, 3)
+    const restChunk = allDigits.slice(3)
+    const groupedRest = (restChunk.match(/.{1,2}/g) || []).join(" ")
+    return {
+      formatted: groupedRest ? `+${codeChunk} ${groupedRest}` : `+${codeChunk}`,
+      countryTag: codeChunk ? `+${codeChunk}` : "",
+    }
+  }
+
+  // Case 1: User already has explicit international "+" or "00"
+  if (rawValue.trimStart().startsWith("+") || digits.startsWith("00")) {
+    const normalized = digits.startsWith("00") ? digits.slice(2) : digits
+    if (!normalized) return { formatted: "+", countryTag: "" }
+    return formatByDialCode(normalized)
+  }
+
+  // Case 2: Raw digits typed without "+": auto-detect country code according to digit count & prefix
+  if (!isDeleting) {
+    if (digits.startsWith("236") && digits.length >= 11) {
+      return formatByDialCode(digits)
+    }
+    if (digits.startsWith("237") && digits.length >= 12) {
+      return formatByDialCode(digits)
+    }
+    if (digits.startsWith("33") && digits.length >= 11) {
+      return formatByDialCode(digits)
+    }
+    if (digits.startsWith("225") && digits.length >= 13) {
+      return formatByDialCode(digits)
+    }
+
+    // 8 digits local (e.g. RCA 75123456 -> +236 75 12 34 56)
+    if (digits.length === 8 && /^(7[02457]|2[12])\d{6}$/.test(digits)) {
+      return formatByDialCode(`236${digits}`)
+    }
+
+    // 9 digits local (e.g. RCA 640927576 -> +236 6 40 92 75 76, Cameroun 678110014 -> +237, Sénégal -> +221)
+    if (digits.length === 9 && !digits.startsWith("0")) {
+      if (/^6[01234]\d{7}$/.test(digits)) {
+        return formatByDialCode(`236${digits}`)
+      }
+      if (/^6[56789]\d{7}$/.test(digits)) {
+        return formatByDialCode(`237${digits}`)
+      }
+      if (/^7[05678]\d{7}$/.test(digits)) {
+        return formatByDialCode(`221${digits}`)
+      }
+      return formatByDialCode(`33${digits}`)
+    }
+
+    // 10 digits local starting with 0 (France 06/07... -> +33 6..., Côte d'Ivoire 01/05/07...)
+    if (digits.length === 10 && digits.startsWith("0")) {
+      if (/^0[679]\d{8}$/.test(digits) || /^0[1-4]\d{8}$/.test(digits)) {
+        return formatByDialCode(`33${digits.slice(1)}`)
+      }
+      if (/^05\d{8}$/.test(digits)) {
+        return formatByDialCode(`225${digits}`)
+      }
+      return formatByDialCode(`33${digits.slice(1)}`)
+    }
+
+    // 10 digits local not starting with 0 -> +1 (US / Canada)
+    if (digits.length === 10 && !digits.startsWith("0")) {
+      return formatByDialCode(`1${digits}`)
+    }
+  }
+
+  // Fallback intermediate grouping while typing
+  return {
+    formatted: (digits.match(/.{1,2}/g) || [digits]).join(" "),
+    countryTag: "",
+  }
 }
 
 interface ColorOption {
@@ -2167,11 +2385,53 @@ export default function Home() {
   const [contactName, setContactName] = useState<string>("")
   const [contactEmail, setContactEmail] = useState<string>("")
   const [contactPhone, setContactPhone] = useState<string>("")
+  const [contactPhoneCountry, setContactPhoneCountry] = useState<string>("")
+  const [eventPhoneCountry, setEventPhoneCountry] = useState<string>("")
   const [contactOccasion, setContactOccasion] = useState<string>("")
   const [contactSubject, setContactSubject] = useState<string>("Robe de Mariée Sur-Mesure")
   const [contactMessage, setContactMessage] = useState<string>("")
   const [contactSubmitState, setContactSubmitState] = useState<"idle" | "sending" | "sent">("idle")
   const [contactError, setContactError] = useState<string>("")
+
+  // Aligne précisément les motifs SVG d'une section à l'autre (aucun décalage visuel aux frontières)
+  useEffect(() => {
+    const syncBackgroundPatternOffsets = () => {
+      const pageEl = container.current
+      if (!pageEl) return
+      const pageTop = pageEl.getBoundingClientRect().top + window.scrollY
+
+      const targets: { selector: string; varName: string }[] = [
+        { selector: ".testimonials-container", varName: "--testimonials-offset-y" },
+        { selector: ".events-pinned-section", varName: "--events-offset-y" },
+        { selector: ".site-footer", varName: "--footer-offset-y" },
+      ]
+
+      targets.forEach(({ selector, varName }) => {
+        const el = pageEl.querySelector(selector) as HTMLElement | null
+        if (!el) return
+        const anchorEl = el.parentElement?.classList.contains("pin-spacer")
+          ? el.parentElement
+          : el
+        const offsetFromPageTop = anchorEl.getBoundingClientRect().top + window.scrollY - pageTop
+        const tileMod = ((offsetFromPageTop % 140) + 140) % 140
+        el.style.setProperty(varName, `${tileMod.toFixed(2)}px`)
+      })
+    }
+
+    syncBackgroundPatternOffsets()
+    const rafId = requestAnimationFrame(syncBackgroundPatternOffsets)
+    const timer = window.setTimeout(syncBackgroundPatternOffsets, 450)
+    const ro = new ResizeObserver(syncBackgroundPatternOffsets)
+    if (container.current) ro.observe(container.current)
+    window.addEventListener("resize", syncBackgroundPatternOffsets, { passive: true })
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.clearTimeout(timer)
+      ro.disconnect()
+      window.removeEventListener("resize", syncBackgroundPatternOffsets)
+    }
+  }, [showAllProducts, activeCategoryIdx, activeStudioId, contactSubmitState])
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -2192,6 +2452,7 @@ export default function Home() {
     setContactName("")
     setContactEmail("")
     setContactPhone("")
+    setContactPhoneCountry("")
     setContactOccasion("")
     setContactMessage("")
     setContactError("")
@@ -4604,16 +4865,21 @@ export default function Home() {
 
                 {/* Atelier Direct Coordinate Cards */}
                 <div className="contact-coords-stack">
-                  <div className="contact-coord-card">
+                  <a
+                    href="https://wa.me/236640927576"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-coord-card contact-coord-link"
+                  >
                     <div className="contact-coord-icon">
-                      <FontAwesomeIcon icon={faLocationDot} />
+                      <FontAwesomeIcon icon={faPhone} />
                     </div>
                     <div className="contact-coord-text">
-                      <span className="contact-coord-label">SALON PRIVÉ &amp; CABINE D'ESSAYAGE</span>
-                      <strong className="contact-coord-val">Atelier Maison Soie &amp; Couture · Sur Rendez-Vous</strong>
-                      <span className="contact-coord-sub">Accueil privatisé pour la future mariée et ses proches</span>
+                      <span className="contact-coord-label">WHATSAPP &amp; LIGNE DIRECTE ATELIER</span>
+                      <strong className="contact-coord-val">+236 6 40 92 75 76</strong>
+                      <span className="contact-coord-sub">Échangez directement sur WhatsApp pour croquis &amp; devis</span>
                     </div>
-                  </div>
+                  </a>
 
                   <div className="contact-coord-card">
                     <div className="contact-coord-icon">
@@ -4628,12 +4894,12 @@ export default function Home() {
 
                   <div className="contact-coord-card">
                     <div className="contact-coord-icon">
-                      <FontAwesomeIcon icon={faClock} />
+                      <FontAwesomeIcon icon={faLocationDot} />
                     </div>
                     <div className="contact-coord-text">
-                      <span className="contact-coord-label">HORAIRES DES ESSAYAGES</span>
+                      <span className="contact-coord-label">SALON PRIVÉ &amp; CABINE D'ESSAYAGE</span>
                       <strong className="contact-coord-val">Mardi au Samedi · 10:00 — 19:30</strong>
-                      <span className="contact-coord-sub">Séances individuelles d'1h30 avec carnet d'étoffes</span>
+                      <span className="contact-coord-sub">Séances individuelles d'1h30 sur rendez-vous</span>
                     </div>
                   </div>
                 </div>
@@ -4725,7 +4991,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Téléphone - Effect 21 */}
+                    {/* Téléphone avec formatage automatique + indicatif pays détecté - Effect 21 */}
                     <div className="input-effect-wrap">
                       <div className="effect-21-icon">
                         <FontAwesomeIcon icon={faPhone} />
@@ -4733,24 +4999,37 @@ export default function Home() {
                       <div className="input-effect">
                         <input
                           type="tel"
-                          className={`effect-21 ${contactPhone ? "has-content" : ""}`}
+                          inputMode="tel"
+                          className={`effect-21 ${contactPhone ? "has-content" : ""} ${contactPhoneCountry ? "has-country-tag" : ""}`}
                           value={contactPhone}
-                          onChange={(e) => setContactPhone(e.target.value)}
+                          onChange={(e) => {
+                            const { formatted, countryTag } = formatPhoneWithAutoCountry(
+                              e.target.value,
+                              contactPhone
+                            )
+                            setContactPhone(formatted)
+                            setContactPhoneCountry(countryTag)
+                          }}
                           placeholder=""
                           disabled={contactSubmitState === "sent"}
-                          aria-label="Téléphone ou WhatsApp"
+                          aria-label="Téléphone ou WhatsApp (indicatif automatique)"
                         />
                         <label>Téléphone / WhatsApp</label>
+                        {contactPhoneCountry && (
+                          <span className="phone-country-pill" title="Indicatif pays détecté automatiquement">
+                            {contactPhoneCountry}
+                          </span>
+                        )}
                         <span className="focus-border">
                           <i />
                         </span>
                       </div>
                     </div>
 
-                    {/* Date ou Étoffe souhaitée - Effect 21 */}
+                    {/* Date souhaitée de votre événement - Effect 21 */}
                     <div className="input-effect-wrap">
                       <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faGem} />
+                        <FontAwesomeIcon icon={faCalendarDays} />
                       </div>
                       <div className="input-effect">
                         <input
@@ -4760,9 +5039,9 @@ export default function Home() {
                           onChange={(e) => setContactOccasion(e.target.value)}
                           placeholder=""
                           disabled={contactSubmitState === "sent"}
-                          aria-label="Date de l'événement ou tissu souhaité"
+                          aria-label="Date prévue de votre événement"
                         />
-                        <label>Date de cérémonie ou tissu</label>
+                        <label>Date de votre événement</label>
                         <span className="focus-border">
                           <i />
                         </span>
@@ -4786,9 +5065,9 @@ export default function Home() {
                         }}
                         placeholder=""
                         disabled={contactSubmitState === "sent"}
-                        aria-label="Votre message et vos inspirations"
+                        aria-label="Votre message et vos inspirations couture"
                       />
-                      <label>Vos envies de coupe, coupe souhaitée &amp; message *</label>
+                      <label>Votre message &amp; inspirations *</label>
                       <span className="focus-border">
                         <i />
                       </span>
@@ -4974,24 +5253,31 @@ export default function Home() {
           {/* Column 4: Atelier Contact & Hours */}
           <div className="footer-nav-col">
             <h4 className="footer-col-title">L'ATELIER SUR RENDEZ-VOUS</h4>
-            <div className="footer-contact-details">
-              <div className="footer-contact-line">
-                <FontAwesomeIcon icon={faLocationDot} className="footer-contact-ic" />
-                <span>Salon Privé de Couture · Sur Rendez-Vous Uniquement</span>
+              <div className="footer-contact-details">
+                <div className="footer-contact-line">
+                  <FontAwesomeIcon icon={faPhone} className="footer-contact-ic" />
+                  <a
+                    href="https://wa.me/236640927576"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-contact-link"
+                  >
+                    +236 6 40 92 75 76 (WhatsApp)
+                  </a>
+                </div>
+                <div className="footer-contact-line">
+                  <FontAwesomeIcon icon={faEnvelope} className="footer-contact-ic" />
+                  <span>atelier@maisonsoiecouture.com</span>
+                </div>
+                <div className="footer-contact-line">
+                  <FontAwesomeIcon icon={faClock} className="footer-contact-ic" />
+                  <span>Mardi — Samedi · 10h00 à 19h30</span>
+                </div>
+                <div className="footer-contact-line">
+                  <FontAwesomeIcon icon={faLocationDot} className="footer-contact-ic" />
+                  <span>Salon Privé · Sur Rendez-Vous Uniquement</span>
+                </div>
               </div>
-              <div className="footer-contact-line">
-                <FontAwesomeIcon icon={faEnvelope} className="footer-contact-ic" />
-                <span>atelier@maisonsoiecouture.com</span>
-              </div>
-              <div className="footer-contact-line">
-                <FontAwesomeIcon icon={faClock} className="footer-contact-ic" />
-                <span>Mardi — Samedi · 10h00 à 19h30</span>
-              </div>
-              <div className="footer-contact-line">
-                <FontAwesomeIcon icon={faCalendarDays} className="footer-contact-ic" />
-                <span>Essayages Individuels de 1h30 Offerts</span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -5402,20 +5688,33 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Téléphone with effect-21 */}
+                    {/* Téléphone avec formatage automatique + indicatif pays - Effect 21 */}
                     <div className="input-effect-wrap">
                       <div className="effect-21-icon">
                         <FontAwesomeIcon icon={faPhone} />
                       </div>
                       <div className="input-effect">
                         <input
-                          className={`effect-21 ${eventClientPhone ? "has-content" : ""}`}
+                          className={`effect-21 ${eventClientPhone ? "has-content" : ""} ${eventPhoneCountry ? "has-country-tag" : ""}`}
                           type="tel"
+                          inputMode="tel"
                           placeholder=""
                           value={eventClientPhone}
-                          onChange={(e) => setEventClientPhone(e.target.value)}
+                          onChange={(e) => {
+                            const { formatted, countryTag } = formatPhoneWithAutoCountry(
+                              e.target.value,
+                              eventClientPhone
+                            )
+                            setEventClientPhone(formatted)
+                            setEventPhoneCountry(countryTag)
+                          }}
                         />
                         <label>Numéro de Téléphone Mobile</label>
+                        {eventPhoneCountry && (
+                          <span className="phone-country-pill" title="Indicatif pays détecté">
+                            {eventPhoneCountry}
+                          </span>
+                        )}
                         <span className="focus-border"><i></i></span>
                       </div>
                     </div>
@@ -5867,13 +6166,19 @@ export default function Home() {
         </div>
       )}
 
-      {/* Floating Customer Service Button */}
-      <button className="home-fab">
+      {/* Floating Customer Service / WhatsApp Button */}
+      <a
+        href="https://wa.me/236640927576"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="home-fab"
+        aria-label="Contacter l'atelier sur WhatsApp au +236 6 40 92 75 76"
+      >
         <HeadphonesIcon size={24} />
         <span className="home-fab-tooltip">
-          Besoin d'aide ?
+          WhatsApp Atelier · +236 6 40 92 75 76
         </span>
-      </button>
+      </a>
     </div>
   )
 }
