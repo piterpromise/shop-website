@@ -2371,6 +2371,8 @@ export default function Home() {
   const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(0)
   const [showAllProducts, setShowAllProducts] = useState<boolean>(false)
   const [activeTestimonialId, setActiveTestimonialId] = useState<number>(1)
+  const testimonialMobileCardRef = useRef<HTMLDivElement>(null)
+  const testimonialDirectionRef = useRef<number>(1)
   const testimonialsAvatarsBarRef = useRef<HTMLDivElement>(null)
   const testimonialsThumbRefs = useRef<(HTMLButtonElement | null)[]>([])
   const [avatarsViewportWidth, setAvatarsViewportWidth] = useState<number | null>(null)
@@ -2683,6 +2685,11 @@ export default function Home() {
       const idx = FLAGSHIP_STUDIOS.findIndex((s) => s.id === activeStudioId)
       const activeBtn = flagshipBtnRefs.current[idx >= 0 ? idx : 0] || null
       setFlagshipGlider(measureButtonRect(flagshipNavRef.current, activeBtn, true))
+      if (activeBtn && flagshipNavRef.current) {
+        const nav = flagshipNavRef.current
+        const targetScroll = activeBtn.offsetLeft - nav.clientWidth / 2 + activeBtn.offsetWidth / 2
+        nav.scrollTo({ left: Math.max(0, targetScroll), behavior: "smooth" })
+      }
     }
 
     syncFlagshipGlider()
@@ -2704,6 +2711,11 @@ export default function Home() {
       )
       const activeBtn = contactSubjectBtnRefs.current[idx >= 0 ? idx : 0] || null
       setContactSubjectGlider(measureButtonRect(contactSubjectNavRef.current, activeBtn, true))
+      if (activeBtn && contactSubjectNavRef.current) {
+        const nav = contactSubjectNavRef.current
+        const targetScroll = activeBtn.offsetLeft - nav.clientWidth / 2 + activeBtn.offsetWidth / 2
+        nav.scrollTo({ left: Math.max(0, targetScroll), behavior: "smooth" })
+      }
     }
 
     syncContactSubjectGlider()
@@ -2866,16 +2878,64 @@ export default function Home() {
     }
   }, [activeTestimonialId])
 
+  // Animation GSAP fluide de la carte témoignage mobile lors des changements Next / Prev / vignette
   useEffect(() => {
-    if (selectedProduct || selectedEvent) {
-      document.body.style.overflow = "hidden"
-    } else {
+    const cardEl = testimonialMobileCardRef.current
+    if (!cardEl) return
+    const dir = testimonialDirectionRef.current || 1
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardEl,
+        { x: dir * 26, opacity: 0.45, scale: 0.98 },
+        {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.44,
+          ease: "power3.out",
+          clearProps: "transform",
+          overwrite: "auto",
+        }
+      )
+      gsap.fromTo(
+        cardEl.querySelectorAll(".testimonial-mobile-top, .testimonial-mobile-quote"),
+        { y: 10, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.055,
+          ease: "power2.out",
+          clearProps: "transform,opacity",
+          overwrite: "auto",
+        }
+      )
+    }, cardEl)
+    return () => ctx.revert()
+  }, [activeTestimonialId])
+
+  useEffect(() => {
+    const isAnyModalOpen = Boolean(selectedProduct || selectedEvent || selectedWhyModal)
+    if (!isAnyModalOpen) {
+      document.documentElement.style.overflow = ""
+      document.documentElement.style.overscrollBehavior = ""
       document.body.style.overflow = ""
+      document.body.style.overscrollBehavior = ""
+      return
     }
+
+    document.documentElement.style.overflow = "hidden"
+    document.documentElement.style.overscrollBehavior = "none"
+    document.body.style.overflow = "hidden"
+    document.body.style.overscrollBehavior = "none"
+
     return () => {
+      document.documentElement.style.overflow = ""
+      document.documentElement.style.overscrollBehavior = ""
       document.body.style.overflow = ""
+      document.body.style.overscrollBehavior = ""
     }
-  }, [selectedProduct, selectedEvent])
+  }, [selectedProduct, selectedEvent, selectedWhyModal])
 
   const openEventModal = (evt: EventItem, e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -3316,7 +3376,7 @@ export default function Home() {
       width: originRect.width,
       height: originRect.height,
       borderRadius: isStacked ? "28px" : "44px",
-      overflowY: "hidden",
+      overflowY: isStacked ? "auto" : "hidden",
     })
     gsap.set(imageColEl, {
       width: originRect.width,
@@ -3748,7 +3808,7 @@ export default function Home() {
       width: productModalOrigin.width,
       height: productModalOrigin.height,
       borderRadius: "24px",
-      overflowY: "hidden",
+      overflowY: isStacked ? "auto" : "hidden",
     })
     gsap.set(imageColEl, {
       width: productModalOrigin.width,
@@ -5166,7 +5226,7 @@ export default function Home() {
 
             {/* Showcase Témoignages Dédié & Aéré Spécial Mobile */}
             <div className="testimonials-mobile-showcase mobile-only">
-              <div className="testimonial-mobile-card">
+              <div ref={testimonialMobileCardRef} className="testimonial-mobile-card">
                 <div className="testimonial-mobile-top">
                   <div className="testimonial-mobile-user">
                     <img
@@ -5199,6 +5259,7 @@ export default function Home() {
                       type="button"
                       className="testimonial-mobile-arrow-btn"
                       onClick={() => {
+                        testimonialDirectionRef.current = -1
                         const currentIdx = testimonials.findIndex((t) => t.id === activeTestimonialId)
                         const prevIdx = (currentIdx - 1 + testimonials.length) % testimonials.length
                         setActiveTestimonialId(testimonials[prevIdx].id)
@@ -5211,6 +5272,7 @@ export default function Home() {
                       type="button"
                       className="testimonial-mobile-arrow-btn"
                       onClick={() => {
+                        testimonialDirectionRef.current = 1
                         const currentIdx = testimonials.findIndex((t) => t.id === activeTestimonialId)
                         const nextIdx = (currentIdx + 1) % testimonials.length
                         setActiveTestimonialId(testimonials[nextIdx].id)
@@ -5239,7 +5301,11 @@ export default function Home() {
                       }}
                       type="button"
                       className={`testimonials-mobile-thumb-btn ${isActive ? "active" : ""}`}
-                      onClick={() => setActiveTestimonialId(item.id)}
+                      onClick={() => {
+                        const currentIdx = testimonials.findIndex((t) => t.id === activeTestimonialId)
+                        testimonialDirectionRef.current = idx >= currentIdx ? 1 : -1
+                        setActiveTestimonialId(item.id)
+                      }}
                       aria-label={`Voir le témoignage de ${item.name}`}
                     >
                       <img
@@ -5279,9 +5345,6 @@ export default function Home() {
                         <p className="mzaCard-kicker">{col.kicker}</p>
                       </header>
                       <p className="mzaCard-text mzaPar-2">{col.text}</p>
-                      <footer className="mzaCard-actions mzaPar-3">
-                        <button className="mzaBtn">{col.btnText}</button>
-                      </footer>
                     </div>
                   </article>
                 ))}
@@ -5341,17 +5404,6 @@ export default function Home() {
                         <span className="exclusive-mobile-kicker">{currentEx.kicker}</span>
                         <h3 className="exclusive-mobile-title">{currentEx.title}</h3>
                         <p className="exclusive-mobile-desc">{currentEx.text}</p>
-                        <button
-                          type="button"
-                          className="exclusive-mobile-btn"
-                          onClick={(e) => {
-                            const matchedProduct = products.find((p) => p.name.toLowerCase().includes(currentEx.title.toLowerCase())) || products[0]
-                            openProductModal(matchedProduct, e)
-                          }}
-                        >
-                          <span>{currentEx.btnText}</span>
-                          <ArrowUpRight size={16} />
-                        </button>
                       </div>
                     </motion.div>
                   </AnimatePresence>
@@ -6426,13 +6478,15 @@ export default function Home() {
               className="product-modal-card product-modal-card-ext"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="product-modal-close"
-                onClick={closeProductModal}
-                aria-label="Fermer"
-              >
-                <X size={20} />
-              </button>
+              <div className="modal-close-sticky-anchor">
+                <button
+                  className="product-modal-close"
+                  onClick={closeProductModal}
+                  aria-label="Fermer"
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
               <div className="product-modal-body product-modal-body-ext">
                 {/* Left Column: Huge Full-Bleed Image with Extension Animation */}
@@ -6806,15 +6860,17 @@ export default function Home() {
             className="why-modal-popup"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Minimalist Close Button */}
-            <button
-              type="button"
-              className="why-modal-close-btn"
-              onClick={closeWhyCardModal}
-              aria-label="Fermer"
-            >
-              <X size={18} strokeWidth={1.75} />
-            </button>
+            {/* Minimalist Sticky Close Button */}
+            <div className="modal-close-sticky-anchor">
+              <button
+                type="button"
+                className="why-modal-close-btn"
+                onClick={closeWhyCardModal}
+                aria-label="Fermer"
+              >
+                <X size={18} strokeWidth={1.75} />
+              </button>
+            </div>
 
             {/* Left Column: Image that travels & expands from clicked card with top-left & bottom-left rounded, top-right & bottom-right square (0px) */}
             <div ref={whyModalImageColRef} className="why-modal-left-image">
