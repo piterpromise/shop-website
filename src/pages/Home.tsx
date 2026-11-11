@@ -6942,15 +6942,20 @@ export default function Home() {
                 >
                   {bookedWhySessions.includes(selectedWhyModal.card.id) ? (
                     <>
-                      <span>Session réservée • {selectedWhySlot}</span>
+                      <span className="why-modal-btn-booked-text">Session réservée • {selectedWhySlot}</span>
                       <span className="why-modal-btn-Check">✓</span>
                     </>
                   ) : (
                     <>
-                      <span>Réserver la session</span>
+                      <span className="why-modal-btn-verb">
+                        <span className="why-verb-full">Réserver la session</span>
+                        <span className="why-verb-short">Réserver</span>
+                      </span>
                       <span className="why-modal-btn-right">
-                        {selectedWhySlot} — {selectedWhyModal.card.price}
-                        <ArrowRight size={17} />
+                        <span className="why-modal-btn-slot">{selectedWhySlot}</span>
+                        <span aria-hidden="true">—</span>
+                        <span>{selectedWhyModal.card.price.replace(/\s+/g, "\u00A0")}</span>
+                        <ArrowRight size={16} />
                       </span>
                     </>
                   )}
