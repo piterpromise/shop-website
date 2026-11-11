@@ -44,6 +44,9 @@ import {
   faCommentDots,
   faLocationDot,
   faScissors,
+  faChevronLeft,
+  faChevronRight,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -1218,6 +1221,67 @@ const EXCLUSIVE_COLLECTIONS: ExclusiveCollectionItem[] = [
   },
 ]
 
+const BESPOKE_MONTH_NAMES = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre",
+]
+
+const BESPOKE_WEEKDAYS = ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"]
+
+const formatBespokeDate = (date: Date): string => {
+  const day = date.getDate()
+  const month = BESPOKE_MONTH_NAMES[date.getMonth()]
+  const year = date.getFullYear()
+  return `${day} ${month} ${year}`
+}
+
+const isSameCalendarDay = (a: Date | null, b: Date): boolean => {
+  if (!a) return false
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
+}
+
+interface CalendarDayCell {
+  date: Date
+  isCurrentMonth: boolean
+  isPast: boolean
+}
+
+const getMonthCalendarDays = (year: number, month: number): CalendarDayCell[] => {
+  const firstDayOfMonth = new Date(year, month, 1)
+  const totalDays = new Date(year, month + 1, 0).getDate()
+  const startWeekday = (firstDayOfMonth.getDay() + 6) % 7
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const cells: CalendarDayCell[] = []
+  for (let i = 0; i < startWeekday; i++) {
+    cells.push({ date: new Date(year, month, 0), isCurrentMonth: false, isPast: true })
+  }
+  for (let d = 1; d <= totalDays; d++) {
+    const cellDate = new Date(year, month, d)
+    cells.push({
+      date: cellDate,
+      isCurrentMonth: true,
+      isPast: cellDate < today,
+    })
+  }
+  return cells
+}
+
 interface CarouselShoe {
   name: string
   image: string
@@ -2301,10 +2365,32 @@ export default function Home() {
   const [contactPhone, setContactPhone] = useState<string>("")
   const [contactPhoneCountry, setContactPhoneCountry] = useState<string>("")
   const [contactOccasion, setContactOccasion] = useState<string>("")
+  const [contactSelectedDate, setContactSelectedDate] = useState<Date | null>(null)
+  const [isContactDatePickerOpen, setIsContactDatePickerOpen] = useState<boolean>(false)
+  const [contactCalendarMonth, setContactCalendarMonth] = useState<Date>(() => {
+    const d = new Date()
+    d.setDate(1)
+    return d
+  })
+  const contactDateDropdownRef = useRef<HTMLDivElement>(null)
   const [contactSubject, setContactSubject] = useState<string>("Robe de Mariée Sur-Mesure")
   const [contactMessage, setContactMessage] = useState<string>("")
   const [contactSubmitState, setContactSubmitState] = useState<"idle" | "sending" | "sent">("idle")
   const [contactError, setContactError] = useState<string>("")
+
+  useEffect(() => {
+    if (!isContactDatePickerOpen) return
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        contactDateDropdownRef.current &&
+        !contactDateDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsContactDatePickerOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick)
+    return () => document.removeEventListener("mousedown", handleOutsideClick)
+  }, [isContactDatePickerOpen])
 
   // Aligne précisément les motifs SVG d'une section à l'autre (aucun décalage visuel aux frontières)
   useEffect(() => {
@@ -2314,6 +2400,7 @@ export default function Home() {
       const pageTop = pageEl.getBoundingClientRect().top + window.scrollY
 
       const targets: { selector: string; varName: string }[] = [
+        { selector: ".home-hero", varName: "--hero-offset-y" },
         { selector: ".testimonials-container", varName: "--testimonials-offset-y" },
         { selector: ".events-pinned-section", varName: "--events-offset-y" },
         { selector: ".site-footer", varName: "--footer-offset-y" },
@@ -2367,6 +2454,8 @@ export default function Home() {
     setContactPhone("")
     setContactPhoneCountry("")
     setContactOccasion("")
+    setContactSelectedDate(null)
+    setIsContactDatePickerOpen(false)
     setContactMessage("")
     setContactError("")
     setContactSubmitState("idle")
@@ -3971,6 +4060,7 @@ export default function Home() {
       className="home-page"
       style={{
         "--hero-diamond-color": CAROUSEL_SHOES[k].bg,
+        "--hero-next-color": CAROUSEL_SHOES[(k + 1) % CAROUSEL_SHOES.length].bg,
         "--hero-accent-light": CAROUSEL_SHOES[k].accentLight,
         "--hero-accent-glow": CAROUSEL_SHOES[k].accentGlow,
         "--hero-contrast-text": CAROUSEL_SHOES[k].contrastText,
@@ -5175,26 +5265,136 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Date souhaitée de votre événement - Effect 21 */}
-                    <div className="input-effect-wrap">
-                      <div className="effect-21-icon">
-                        <FontAwesomeIcon icon={faCalendarDays} />
+                    {/* Date souhaitée de votre événement - Calendrier Personnalisé + Effect 21 */}
+                    <div className="custom-picker-container" ref={contactDateDropdownRef}>
+                      <div
+                        className="input-effect-wrap clickable-picker"
+                        onClick={() => {
+                          if (contactSubmitState === "sent") return
+                          setIsContactDatePickerOpen((prev) => !prev)
+                        }}
+                      >
+                        <div className="effect-21-icon">
+                          <FontAwesomeIcon icon={faCalendarDays} />
+                        </div>
+                        <div className="input-effect">
+                          <input
+                            type="text"
+                            readOnly
+                            className={`effect-21 ${contactOccasion || isContactDatePickerOpen ? "has-content" : ""}`}
+                            value={contactOccasion}
+                            onKeyDown={(e) => {
+                              if (contactSubmitState === "sent") return
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault()
+                                setIsContactDatePickerOpen((prev) => !prev)
+                              } else if (e.key === "Escape") {
+                                setIsContactDatePickerOpen(false)
+                              }
+                            }}
+                            placeholder=""
+                            disabled={contactSubmitState === "sent"}
+                            aria-label="Date prévue de votre événement"
+                            aria-expanded={isContactDatePickerOpen}
+                            aria-haspopup="dialog"
+                          />
+                          <label>Date de votre événement</label>
+                          <span className="focus-border">
+                            <i />
+                          </span>
+                        </div>
                       </div>
-                      <div className="input-effect">
-                        <input
-                          type="text"
-                          className={`effect-21 ${contactOccasion ? "has-content" : ""}`}
-                          value={contactOccasion}
-                          onChange={(e) => setContactOccasion(e.target.value)}
-                          placeholder=""
-                          disabled={contactSubmitState === "sent"}
-                          aria-label="Date prévue de votre événement"
-                        />
-                        <label>Date de votre événement</label>
-                        <span className="focus-border">
-                          <i />
-                        </span>
-                      </div>
+
+                      {isContactDatePickerOpen && contactSubmitState !== "sent" && (
+                        <div
+                          className="custom-calendar-dropdown contact-calendar-dropdown"
+                          role="dialog"
+                          aria-label="Choisir la date de votre événement"
+                        >
+                          <div className="calendar-dropdown-header">
+                            <button
+                              type="button"
+                              className="calendar-nav-btn"
+                              onClick={() =>
+                                setContactCalendarMonth(
+                                  (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+                                )
+                              }
+                              aria-label="Mois précédent"
+                            >
+                              <FontAwesomeIcon icon={faChevronLeft} />
+                            </button>
+                            <span className="calendar-month-label">
+                              {BESPOKE_MONTH_NAMES[contactCalendarMonth.getMonth()]}{" "}
+                              {contactCalendarMonth.getFullYear()}
+                            </span>
+                            <div className="calendar-header-actions">
+                              {contactSelectedDate && (
+                                <button
+                                  type="button"
+                                  className="calendar-nav-btn"
+                                  onClick={() => {
+                                    setContactSelectedDate(null)
+                                    setContactOccasion("")
+                                    setIsContactDatePickerOpen(false)
+                                  }}
+                                  aria-label="Effacer la date sélectionnée"
+                                  title="Effacer la date"
+                                >
+                                  <FontAwesomeIcon icon={faXmark} />
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                className="calendar-nav-btn"
+                                onClick={() =>
+                                  setContactCalendarMonth(
+                                    (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+                                  )
+                                }
+                                aria-label="Mois suivant"
+                              >
+                                <FontAwesomeIcon icon={faChevronRight} />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="calendar-weekdays-row">
+                            {BESPOKE_WEEKDAYS.map((wd) => (
+                              <span key={wd} className="calendar-weekday-cell">
+                                {wd}
+                              </span>
+                            ))}
+                          </div>
+
+                          <div className="calendar-days-grid">
+                            {getMonthCalendarDays(
+                              contactCalendarMonth.getFullYear(),
+                              contactCalendarMonth.getMonth()
+                            ).map((cell, idx) =>
+                              !cell.isCurrentMonth ? (
+                                <span key={`empty-${idx}`} className="calendar-empty-cell" />
+                              ) : (
+                                <button
+                                  key={cell.date.toISOString()}
+                                  type="button"
+                                  disabled={cell.isPast}
+                                  className={`calendar-day-btn ${
+                                    isSameCalendarDay(contactSelectedDate, cell.date) ? "selected" : ""
+                                  }`}
+                                  onClick={() => {
+                                    setContactSelectedDate(cell.date)
+                                    setContactOccasion(formatBespokeDate(cell.date))
+                                    setIsContactDatePickerOpen(false)
+                                  }}
+                                >
+                                  {cell.date.getDate()}
+                                </button>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
