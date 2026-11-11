@@ -2335,9 +2335,18 @@ export default function Home() {
 
   const currentCategory = DRESS_CATEGORIES[activeCategoryIdx] || DRESS_CATEGORIES[0]
   const activeTrendingTab = showAllProducts ? DRESS_CATEGORIES.length : activeCategoryIdx
-  const displayedProducts = showAllProducts
-    ? products
-    : products.filter((p) => p.categoryKey === currentCategory.key)
+  const normalizedSearch = searchQuery.trim().toLowerCase()
+  const displayedProducts = normalizedSearch
+    ? products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(normalizedSearch) ||
+          p.category.toLowerCase().includes(normalizedSearch) ||
+          p.description.toLowerCase().includes(normalizedSearch) ||
+          (p.badge && p.badge.toLowerCase().includes(normalizedSearch))
+      )
+    : showAllProducts
+      ? products
+      : products.filter((p) => p.categoryKey === currentCategory.key)
 
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null)
   const [eventModalOrigin, setEventModalOrigin] = useState<{
@@ -2490,20 +2499,6 @@ export default function Home() {
     const numeric = parseFloat(item.product.price.replace(/[^\d.,]/g, "").replace(",", ".")) || 0
     return sum + numeric * item.qty
   }, 0)
-
-  const headerSearchResults = (() => {
-    const q = searchQuery.trim().toLowerCase()
-    if (!q) return products.slice(0, 3)
-    return products
-      .filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q) ||
-          (p.badge && p.badge.toLowerCase().includes(q))
-      )
-      .slice(0, 4)
-  })()
 
   useEffect(() => {
     if (!activeHeaderMenu) return
@@ -4355,7 +4350,9 @@ export default function Home() {
             {activeHeaderMenu && (
               <div
                 ref={headerPopoverRef}
-                className="header-bubble-popover"
+                className={`header-bubble-popover ${
+                  activeHeaderMenu === "search" ? "header-search-only-popover" : ""
+                }`}
                 role="dialog"
                 aria-label={
                   activeHeaderMenu === "search"
@@ -4368,104 +4365,42 @@ export default function Home() {
                 <span ref={headerArrowRef} className="header-bubble-arrow" aria-hidden="true" />
 
                 {activeHeaderMenu === "search" && (
-                  <div className="header-bubble-inner">
-                    <div className="header-bubble-stagger header-search-field-wrap">
-                      <div className="input-effect header-effect-21-wrap">
-                        <input
-                          ref={searchInputRef}
-                          type="text"
-                          className={`effect-21 header-effect-21 ${searchQuery ? "has-content" : ""}`}
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder="Robe sirène, dentelle de Calais..."
-                          aria-label="Rechercher une création couture"
-                        />
-                        <label className="header-effect-21-label">Recherche Atelier</label>
-                        <span className="focus-border">
-                          <i />
-                        </span>
-                        {searchQuery && (
-                          <button
-                            type="button"
-                            className="header-search-clear-btn"
-                            onClick={() => {
-                              setSearchQuery("")
-                              searchInputRef.current?.focus()
-                            }}
-                            aria-label="Effacer la recherche"
-                          >
-                            <X size={14} />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="header-bubble-stagger header-search-tags">
-                      {["Mariée", "Soirée", "Dentelle", "Cocktail"].map((tag) => (
-                        <button
-                          key={tag}
-                          type="button"
-                          className={`header-search-tag-pill ${
-                            searchQuery.toLowerCase() === tag.toLowerCase() ? "active" : ""
-                          }`}
-                          onClick={() => setSearchQuery(tag)}
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="header-bubble-stagger header-search-results">
-                      <span className="header-bubble-kicker">
-                        {searchQuery.trim()
-                          ? `${headerSearchResults.length} création(s) correspondante(s)`
-                          : "Inspirations du Salon"}
+                  <div className="header-bubble-stagger header-search-field-wrap">
+                    <div className="input-effect header-effect-21-wrap">
+                      <input
+                        ref={searchInputRef}
+                        type="text"
+                        className={`effect-21 header-effect-21 ${searchQuery ? "has-content" : ""}`}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && searchQuery.trim()) {
+                            e.preventDefault()
+                            closeHeaderMenu()
+                            scrollToSection("catalogue-creations")
+                          }
+                        }}
+                        placeholder="Rechercher une création..."
+                        aria-label="Rechercher une création couture"
+                      />
+                      <label className="header-effect-21-label">Recherche Atelier</label>
+                      <span className="focus-border">
+                        <i />
                       </span>
-
-                      {headerSearchResults.length > 0 ? (
-                        <div className="header-search-list">
-                          {headerSearchResults.map((item) => (
-                            <button
-                              key={item.id}
-                              type="button"
-                              className="header-search-result-row"
-                              onClick={() => {
-                                setActiveHeaderMenu(null)
-                                openProductModal(item)
-                              }}
-                            >
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="header-search-thumb"
-                              />
-                              <div className="header-search-meta">
-                                <span className="header-search-cat">{item.category}</span>
-                                <strong className="header-search-name">{item.name}</strong>
-                              </div>
-                              <span className="header-search-price">{item.price}</span>
-                            </button>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="header-bubble-empty">
-                          Aucune silhouette ne correspond à « {searchQuery} ».
-                        </p>
+                      {searchQuery && (
+                        <button
+                          type="button"
+                          className="header-search-clear-btn"
+                          onClick={() => {
+                            setSearchQuery("")
+                            searchInputRef.current?.focus()
+                          }}
+                          aria-label="Effacer la recherche"
+                        >
+                          <X size={14} />
+                        </button>
                       )}
                     </div>
-
-                    <button
-                      type="button"
-                      className="header-bubble-stagger header-bubble-footer-btn"
-                      onClick={() => {
-                        setShowAllProducts(true)
-                        setActiveHeaderMenu(null)
-                        scrollToSection("catalogue-creations")
-                      }}
-                    >
-                      <span>Explorer tout le catalogue</span>
-                      <ArrowRight size={15} />
-                    </button>
                   </div>
                 )}
 
