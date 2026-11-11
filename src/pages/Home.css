@@ -994,6 +994,8 @@
   display: inline-flex;
   flex-wrap: nowrap;
   align-items: center;
+  align-self: flex-start;
+  width: fit-content;
   max-width: 100%;
   gap: 0.15rem;
   padding: 0.34rem;
@@ -4948,6 +4950,8 @@
   display: inline-flex;
   flex-wrap: nowrap;
   align-items: center;
+  align-self: flex-start;
+  width: fit-content;
   max-width: 100%;
   gap: 0.18rem;
   padding: 0.36rem;
@@ -9356,6 +9360,8 @@
   display: inline-flex;
   flex-wrap: nowrap;
   align-items: center;
+  align-self: flex-start;
+  width: fit-content;
   max-width: 100%;
   gap: 0.18rem;
   padding: 0.36rem;
