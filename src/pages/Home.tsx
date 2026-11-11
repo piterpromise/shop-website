@@ -2699,7 +2699,7 @@ export default function Home() {
         contactSubject as (typeof CONTACT_SUBJECT_OPTIONS)[number]
       )
       const activeBtn = contactSubjectBtnRefs.current[idx >= 0 ? idx : 0] || null
-      setContactSubjectGlider(measureButtonRect(contactSubjectNavRef.current, activeBtn, false))
+      setContactSubjectGlider(measureButtonRect(contactSubjectNavRef.current, activeBtn, true))
     }
 
     syncContactSubjectGlider()
@@ -5535,6 +5535,11 @@ export default function Home() {
                   ref={flagshipNavRef}
                   role="tablist"
                   aria-label="Étapes de création sur-mesure"
+                  onWheel={(e) => {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                      e.currentTarget.scrollLeft += e.deltaY
+                    }
+                  }}
                 >
                   <span
                     className="segmented-pill-glider flagship-city-glider"
@@ -5801,6 +5806,11 @@ export default function Home() {
                   ref={contactSubjectNavRef}
                   role="radiogroup"
                   aria-label="Objet de votre demande"
+                  onWheel={(e) => {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                      e.currentTarget.scrollLeft += e.deltaY
+                    }
+                  }}
                 >
                   <span
                     className="segmented-pill-glider contact-subject-glider"
