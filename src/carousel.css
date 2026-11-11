@@ -19,9 +19,9 @@
 	--v: var(--k);
 	--abs-v: abs(var(--v) - var(--p));
 	--prg: calc(var(--abs-v)/(1 - var(--end) + var(--end)*(var(--n) - 1)));
-	grid-gap: 0.65rem;
+	grid-gap: 0.5em;
 	grid-template:
-		clamp(320px, 46vh, 460px)
+		340px
 		/* Row 1: Image stack */
 		max-content
 		/* Row 2: Title */
@@ -36,7 +36,7 @@
 	transition: --p 0s 0.8s, --v 0.8s;
 	display: grid;
 	width: 100%;
-	max-width: 500px;
+	max-width: 440px;
 }
 
 @supports not (scale: Abs(-2)) {
@@ -86,13 +86,12 @@
 .carousel-section h2 {
 	grid-area: 2/ 1;
 	font-family: var(--font-calligraphy, 'Pinyon Script', 'Great Vibes', cursive);
-	font-size: clamp(2.4rem, 3.6vw, 3.2rem);
+	font-size: 3.15rem;
 	font-weight: 400;
 	letter-spacing: 0.02em;
 	color: #d8c8b8;
-	margin-top: 1.15rem;
+	margin-top: 12rem;
 	line-height: 1.1;
-	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .carousel-section em {
@@ -103,24 +102,21 @@
 	font-weight: 600;
 	letter-spacing: 0.22em;
 	text-transform: uppercase;
-	color: rgba(216, 200, 184, 0.9);
-	margin-top: 0.25rem;
+	color: rgba(216, 200, 184, 0.85);
 }
 
 .carousel-section img {
 	--sin: sin(var(--prg)*.5turn);
 	grid-area: 1/ 1;
 	border: none;
-	height: 100%;
-	width: 100%;
-	max-width: 480px;
-	max-height: clamp(320px, 46vh, 460px);
-	justify-self: center;
+	height: clamp(340px, 38vw, 480px);
+	width: clamp(285px, 35vw, 500px);
+	max-width: 100%;
 	object-fit: cover;
+	object-position: top center;
 	border-radius: 1.5em;
-	translate: calc(-150%*var(--mov)*sqrt(var(--sin)));
+	translate: calc(-140%*var(--mov)*sqrt(var(--sin)));
 	rotate: calc((1 - var(--sin))*var(--a));
-	box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
 }
 
 .carousel-dots-container {
@@ -179,40 +175,60 @@
 	transform: scale(0.92);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1180px) and (min-width: 769px) {
 	.carousel-section {
 		grid-template:
-			335px
+			clamp(320px, 38vw, 430px)
 			max-content
 			max-content
 			max-content / 1fr;
-		grid-gap: 1.1rem;
-		max-width: 100%;
-		margin-top: 0.75rem;
-		padding-top: 0.5rem;
+		grid-gap: 0.9rem;
 	}
 
 	.carousel-section img {
-		width: min(285px, 78vw);
-		height: 305px;
-		place-self: center;
-		border-radius: 1.35em;
+		translate: calc(-115%*var(--mov)*sqrt(var(--sin)));
 	}
 
 	.carousel-section h2 {
-		font-size: 2.35rem;
-		margin-top: 0.75rem;
+		font-size: clamp(2.05rem, 3.6vw, 3.1rem);
+	}
+}
+
+@media (max-width: 768px) {
+	.carousel-section {
+		grid-template:
+			clamp(270px, 72vw, 330px)
+			max-content
+			max-content
+			max-content / 1fr;
+		grid-gap: 0.95rem;
+		max-width: 100%;
+		margin-top: 0.5rem;
+		padding-top: 0.25rem;
+	}
+
+	.carousel-section img {
+		width: min(275px, 72vw);
+		height: clamp(255px, 68vw, 305px);
+		place-self: center;
+		border-radius: 1.35em;
+		translate: calc(-95%*var(--mov)*sqrt(var(--sin)));
+	}
+
+	.carousel-section h2 {
+		font-size: clamp(1.85rem, 6.8vw, 2.35rem);
+		margin-top: 0.55rem;
 		margin-bottom: 0;
 	}
 
 	.carousel-section em {
-		font-size: 0.88rem;
-		letter-spacing: 0.18em;
-		margin-top: 0.15rem;
+		font-size: 0.84rem;
+		letter-spacing: 0.16em;
+		margin-top: 0.12rem;
 	}
 
 	.carousel-dots-container {
-		gap: 0.65rem;
+		gap: 0.55rem;
 		margin: 0.35rem 0;
 	}
 }

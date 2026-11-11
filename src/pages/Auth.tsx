@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft, Sun, Moon } from "lucide-react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faUser,
@@ -144,6 +144,11 @@ const AnimatedInput = ({
 }
 
 export default function Auth() {
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window === "undefined") return "dark"
+    const saved = window.localStorage.getItem("atelier-theme")
+    return saved === "light" ? "light" : "dark"
+  })
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -153,6 +158,12 @@ export default function Auth() {
   const [rememberSession, setRememberSession] = useState(false)
   const [submitPhase, setSubmitPhase] = useState<"idle" | "loading" | "success">("idle")
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("atelier-theme", theme)
+    }
+  }, [theme])
 
   // Validation dynamique de la concordance des données saisies
   const getNameValidation = (): { state: ValidationState; hint: string } => {
@@ -216,7 +227,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="auth-page">
+    <div className="auth-page" data-theme={theme}>
       {/* Background Photo Global pour tout l'ecran */}
       <div className="auth-bg">
         <img
@@ -236,7 +247,7 @@ export default function Auth() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className={`auth-form-card ${isLogin ? "is-login-mode" : "is-register-mode"}`}
         >
-          {/* Barre supérieure interne : Flèche de retour intégrée dans le formulaire + Badge statut */}
+          {/* Barre supérieure interne : Flèche de retour + Switch Sign In/Sign Up + Toggle Thème */}
           <div className="auth-card-topbar">
             <motion.button
               type="button"
@@ -249,41 +260,54 @@ export default function Auth() {
               <ArrowLeft size={19} />
             </motion.button>
 
-            <div className="auth-mode-pill-switch">
-              <button
+            <div className="auth-topbar-right">
+              <div className="auth-mode-pill-switch">
+                <button
+                  type="button"
+                  className={`auth-mode-pill-tab ${isLogin ? "active" : ""}`}
+                  onClick={() => {
+                    setIsLogin(true)
+                    setSubmitPhase("idle")
+                  }}
+                >
+                  {isLogin && (
+                    <motion.span
+                      layoutId="authModePillBg"
+                      className="auth-mode-pill-slider"
+                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    />
+                  )}
+                  <span className="auth-mode-pill-label">Sign In</span>
+                </button>
+                <button
+                  type="button"
+                  className={`auth-mode-pill-tab ${!isLogin ? "active" : ""}`}
+                  onClick={() => {
+                    setIsLogin(false)
+                    setSubmitPhase("idle")
+                  }}
+                >
+                  {!isLogin && (
+                    <motion.span
+                      layoutId="authModePillBg"
+                      className="auth-mode-pill-slider"
+                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    />
+                  )}
+                  <span className="auth-mode-pill-label">Create Account</span>
+                </button>
+              </div>
+
+              <motion.button
                 type="button"
-                className={`auth-mode-pill-tab ${isLogin ? "active" : ""}`}
-                onClick={() => {
-                  setIsLogin(true)
-                  setSubmitPhase("idle")
-                }}
+                onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
+                className="auth-theme-toggle-btn"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.94 }}
+                aria-label={theme === "dark" ? "Passer au thème clair" : "Passer au thème sombre"}
               >
-                {isLogin && (
-                  <motion.span
-                    layoutId="authModePillBg"
-                    className="auth-mode-pill-slider"
-                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  />
-                )}
-                <span className="auth-mode-pill-label">Sign In</span>
-              </button>
-              <button
-                type="button"
-                className={`auth-mode-pill-tab ${!isLogin ? "active" : ""}`}
-                onClick={() => {
-                  setIsLogin(false)
-                  setSubmitPhase("idle")
-                }}
-              >
-                {!isLogin && (
-                  <motion.span
-                    layoutId="authModePillBg"
-                    className="auth-mode-pill-slider"
-                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  />
-                )}
-                <span className="auth-mode-pill-label">Create Account</span>
-              </button>
+                {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+              </motion.button>
             </div>
           </div>
 
@@ -386,7 +410,7 @@ export default function Auth() {
                     <div className="auth-toggle-text">
                       <span className="auth-toggle-title">Accept Terms &amp; Privacy Policy</span>
                       <span className="auth-toggle-sub">
-                        Agree to Kicks&amp;Co member guidelines &amp; data protection
+                        Agree to Maison Soie &amp; Couture member guidelines &amp; data protection
                       </span>
                     </div>
                     <span className={`auth-switch-track ${acceptedTerms ? "active" : ""}`}>

@@ -2771,12 +2771,14 @@ export default function Home() {
     const ro = new ResizeObserver(syncBackgroundPatternOffsets)
     if (container.current) ro.observe(container.current)
     window.addEventListener("resize", syncBackgroundPatternOffsets, { passive: true })
+    ScrollTrigger.addEventListener("refresh", syncBackgroundPatternOffsets)
 
     return () => {
       cancelAnimationFrame(rafId)
       window.clearTimeout(timer)
       ro.disconnect()
       window.removeEventListener("resize", syncBackgroundPatternOffsets)
+      ScrollTrigger.removeEventListener("refresh", syncBackgroundPatternOffsets)
     }
   }, [showAllProducts, activeCategoryIdx, activeStudioId, contactSubmitState])
 
@@ -2961,11 +2963,11 @@ export default function Home() {
 
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const isMobile = vw <= 768
+    const isCompact = vw <= 900
 
     // +130px wider than previous 680px -> 810px on desktop
-    const targetW = isMobile ? Math.round(vw * 0.95) : Math.min(810, Math.round(vw - 48))
-    const targetH = isMobile ? Math.round(vh * 0.92) : Math.round(vh * 0.9)
+    const targetW = isCompact ? Math.round(vw * 0.94) : Math.min(810, Math.round(vw - 48))
+    const targetH = isCompact ? Math.round(vh * 0.91) : Math.round(vh * 0.9)
     const targetLeft = Math.round((vw - targetW) / 2)
     const targetTop = Math.round((vh - targetH) / 2)
     const closeBtn = popupEl.querySelector(".product-modal-close")
@@ -2979,7 +2981,7 @@ export default function Home() {
       top: eventModalOrigin.top,
       width: eventModalOrigin.width,
       height: eventModalOrigin.height,
-      borderRadius: isMobile ? "24px" : "2rem",
+      borderRadius: isCompact ? "24px" : "2rem",
       overflowY: "hidden",
     })
 
@@ -3020,7 +3022,7 @@ export default function Home() {
         top: targetTop,
         width: targetW,
         height: targetH,
-        borderRadius: isMobile ? "26px" : "2.25rem",
+        borderRadius: isCompact ? "24px" : "2.25rem",
         duration: 0.74,
         ease: "expo.inOut",
       },
@@ -3122,8 +3124,11 @@ export default function Home() {
       return
     }
 
+    const isCompactClose = window.innerWidth <= 900
     const imgBadge = popupEl.querySelector(".why-modal-img-floating-badge")
     const closeBtn = popupEl.querySelector(".why-modal-close-btn")
+    popupEl.scrollTop = 0
+    popupEl.style.overflowY = "hidden"
 
     const closeTl = gsap.timeline({
       onComplete: () => {
@@ -3158,7 +3163,7 @@ export default function Home() {
         top: liveRect.top,
         width: liveRect.width,
         height: liveRect.height,
-        borderRadius: "44px",
+        borderRadius: isCompactClose ? "28px" : "44px",
         boxShadow: "0 22px 55px rgba(0, 0, 0, 0.12)",
         duration: 0.48,
         ease: "power3.inOut",
@@ -3171,10 +3176,10 @@ export default function Home() {
       {
         width: liveRect.width,
         height: liveRect.height,
-        borderTopLeftRadius: "44px",
-        borderBottomLeftRadius: "44px",
-        borderTopRightRadius: "44px",
-        borderBottomRightRadius: "44px",
+        borderTopLeftRadius: isCompactClose ? "28px" : "44px",
+        borderBottomLeftRadius: isCompactClose ? "28px" : "44px",
+        borderTopRightRadius: isCompactClose ? "28px" : "44px",
+        borderBottomRightRadius: isCompactClose ? "28px" : "44px",
         duration: 0.48,
         ease: "power3.inOut",
       },
@@ -3236,17 +3241,17 @@ export default function Home() {
 
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const isMobile = vw <= 768
-    // 95% de largeur sur mobile, 80% sur desktop
-    const targetW = isMobile ? Math.round(vw * 0.95) : Math.round(vw * 0.8)
-    const targetH = isMobile ? Math.round(vh * 0.92) : Math.round(Math.min(vh * 0.85, 750))
+    const isStacked = vw <= 900
+    // 94% de largeur empilée sur mobile/tablette portrait, ~82% côte-à-côte sur desktop
+    const targetW = isStacked ? Math.round(vw * 0.94) : Math.min(Math.round(vw * 0.84), 1140)
+    const targetH = isStacked ? Math.round(vh * 0.91) : Math.round(Math.min(vh * 0.86, 760))
     const targetLeft = Math.round((vw - targetW) / 2)
     const targetTop = Math.round((vh - targetH) / 2)
 
-    const targetImgW = isMobile ? targetW : Math.round(targetW * 0.44)
-    const targetImgH = isMobile ? Math.round(targetH * 0.38) : targetH
-    const targetRightW = isMobile ? targetW : targetW - targetImgW
-    const targetRightH = isMobile ? targetH - targetImgH : targetH
+    const targetImgW = isStacked ? targetW : Math.round(targetW * 0.43)
+    const targetImgH = isStacked ? Math.round(Math.min(320, targetH * 0.36)) : targetH
+    const targetRightW = isStacked ? targetW : targetW - targetImgW
+    const targetRightH = isStacked ? targetH - targetImgH : targetH
 
     // Lock right column width from frame 0 to prevent any text reflow while container expands
     gsap.set(rightColEl, {
@@ -3264,15 +3269,16 @@ export default function Home() {
       top: originRect.top,
       width: originRect.width,
       height: originRect.height,
-      borderRadius: isMobile ? "28px" : "44px",
+      borderRadius: isStacked ? "28px" : "44px",
+      overflowY: "hidden",
     })
     gsap.set(imageColEl, {
       width: originRect.width,
       height: originRect.height,
-      borderTopLeftRadius: isMobile ? "28px" : "44px",
-      borderBottomLeftRadius: isMobile ? "28px" : "44px",
-      borderTopRightRadius: isMobile ? "28px" : "44px",
-      borderBottomRightRadius: isMobile ? "28px" : "44px",
+      borderTopLeftRadius: isStacked ? "28px" : "44px",
+      borderBottomLeftRadius: isStacked ? "28px" : "44px",
+      borderTopRightRadius: isStacked ? "28px" : "44px",
+      borderBottomRightRadius: isStacked ? "28px" : "44px",
     })
     if (imgEl) {
       gsap.set(imgEl, { scale: 1.08 })
@@ -3291,7 +3297,19 @@ export default function Home() {
     if (imgBadge) gsap.set(imgBadge, { opacity: 0, y: 16 })
     if (closeBtn) gsap.set(closeBtn, { opacity: 0, scale: 0.8 })
 
-    const openTl = gsap.timeline()
+    const openTl = gsap.timeline({
+      onComplete: () => {
+        if (isStacked) {
+          popupEl.style.overflowY = "auto"
+          gsap.set(rightColEl, {
+            width: "100%",
+            minWidth: "100%",
+            maxWidth: "100%",
+            height: "auto",
+          })
+        }
+      },
+    })
 
     // 1. Blur overlay fade in
     openTl.to(
@@ -3312,22 +3330,22 @@ export default function Home() {
         top: targetTop,
         width: targetW,
         height: targetH,
-        borderRadius: isMobile ? "28px" : "44px",
+        borderRadius: isStacked ? "28px" : "44px",
         duration: 0.76,
         ease: "expo.inOut",
       },
       0
     )
 
-    // 3. Image morphs width & height cleanly for desktop or mobile
+    // 3. Image morphs width & height cleanly for desktop or stacked
     openTl.to(
       imageColEl,
       {
         width: targetImgW,
         height: targetImgH,
-        borderTopLeftRadius: isMobile ? "28px" : "44px",
-        borderBottomLeftRadius: isMobile ? "0px" : "44px",
-        borderTopRightRadius: isMobile ? "28px" : "0px",
+        borderTopLeftRadius: isStacked ? "28px" : "44px",
+        borderBottomLeftRadius: isStacked ? "0px" : "44px",
+        borderTopRightRadius: isStacked ? "28px" : "0px",
         borderBottomRightRadius: "0px",
         duration: 0.76,
         ease: "expo.inOut",
@@ -3497,7 +3515,7 @@ export default function Home() {
     let cardEl: HTMLElement | null = null
 
     if (e && e.currentTarget) {
-      cardEl = (e.currentTarget as HTMLElement).closest(".product-card") as HTMLElement | null
+      cardEl = (e.currentTarget as HTMLElement).closest(".product-card, .exclusive-mobile-card") as HTMLElement | null
       const imgContainerEl =
         (cardEl?.querySelector(".product-image-container") as HTMLElement | null) ||
         cardEl ||
@@ -3561,6 +3579,8 @@ export default function Home() {
 
     const floatingBadges = popupEl.querySelectorAll(".product-modal-badge, .product-modal-img-caption")
     const closeBtn = popupEl.querySelector(".product-modal-close")
+    popupEl.scrollTop = 0
+    popupEl.style.overflowY = "hidden"
 
     const closeTl = gsap.timeline({
       onComplete: () => {
@@ -3649,21 +3669,21 @@ export default function Home() {
 
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const isMobile = vw <= 768
-    // 95% de largeur sur mobile, 80% sur desktop
-    const targetW = isMobile
-      ? Math.round(vw * 0.95)
-      : Math.round(Math.min(vw * 0.84, Math.max(vw * 0.8, 1080)))
-    const targetH = isMobile
-      ? Math.round(vh * 0.92)
+    const isStacked = vw <= 900
+    // 94% de largeur empilée sur mobile/tablette portrait, 80-86% côte-à-côte sur desktop
+    const targetW = isStacked
+      ? Math.round(vw * 0.94)
+      : Math.round(Math.min(vw * 0.86, Math.max(vw * 0.8, 1020)))
+    const targetH = isStacked
+      ? Math.round(vh * 0.91)
       : Math.round(Math.min(vh * 0.88, 860))
     const targetLeft = Math.round((vw - targetW) / 2)
     const targetTop = Math.round((vh - targetH) / 2)
 
-    const targetImgW = isMobile ? targetW : Math.round(targetW * 0.5)
-    const targetImgH = isMobile ? Math.round(targetH * 0.44) : targetH
-    const targetRightW = isMobile ? targetW : targetW - targetImgW
-    const targetRightH = isMobile ? targetH - targetImgH : targetH
+    const targetImgW = isStacked ? targetW : Math.round(targetW * 0.49)
+    const targetImgH = isStacked ? Math.round(Math.min(350, targetH * 0.39)) : targetH
+    const targetRightW = isStacked ? targetW : targetW - targetImgW
+    const targetRightH = isStacked ? targetH - targetImgH : targetH
 
     gsap.set(detailsColEl, {
       width: targetRightW,
@@ -3682,6 +3702,7 @@ export default function Home() {
       width: productModalOrigin.width,
       height: productModalOrigin.height,
       borderRadius: "24px",
+      overflowY: "hidden",
     })
     gsap.set(imageColEl, {
       width: productModalOrigin.width,
@@ -3707,7 +3728,19 @@ export default function Home() {
     if (floatingBadges.length > 0) gsap.set(floatingBadges, { opacity: 0, y: 14 })
     if (closeBtn) gsap.set(closeBtn, { opacity: 0, scale: 0.8 })
 
-    const openTl = gsap.timeline()
+    const openTl = gsap.timeline({
+      onComplete: () => {
+        if (isStacked) {
+          popupEl.style.overflowY = "auto"
+          gsap.set(detailsColEl, {
+            width: "100%",
+            minWidth: "100%",
+            maxWidth: "100%",
+            height: "auto",
+          })
+        }
+      },
+    })
 
     openTl.to(
       backdropEl,
@@ -3727,7 +3760,7 @@ export default function Home() {
         top: targetTop,
         width: targetW,
         height: targetH,
-        borderRadius: isMobile ? "28px" : "36px",
+        borderRadius: isStacked ? "28px" : "36px",
         duration: 0.78,
         ease: "expo.inOut",
       },
@@ -3739,9 +3772,9 @@ export default function Home() {
       {
         width: targetImgW,
         height: targetImgH,
-        borderTopLeftRadius: isMobile ? "28px" : "36px",
-        borderBottomLeftRadius: isMobile ? "0px" : "36px",
-        borderTopRightRadius: isMobile ? "28px" : "0px",
+        borderTopLeftRadius: isStacked ? "28px" : "36px",
+        borderBottomLeftRadius: isStacked ? "0px" : "36px",
+        borderTopRightRadius: isStacked ? "28px" : "0px",
         borderBottomRightRadius: "0px",
         duration: 0.78,
         ease: "expo.inOut",
@@ -4021,20 +4054,20 @@ export default function Home() {
         )
 
         const getScrollAmount = () => {
-          return cardsTrack.scrollWidth - window.innerWidth + 120
+          return Math.max(0, cardsTrack.scrollWidth - window.innerWidth)
         }
 
         updateEventCardsVisibility = () => {
-          if (window.innerWidth <= 768) return
           const vw = window.innerWidth
           const vh = window.innerHeight
+          const isCompact = vw <= 768
           const easeOut = gsap.parseEase("power2.out")
           const secRect = pinnedSection.getBoundingClientRect()
 
           // Vertical visibility when scrolling down into section (bottom edge) or scrolling up into section (top edge)
-          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.92 - secRect.top) / (vh * 0.78))
+          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.94 - secRect.top) / (vh * 0.72))
           const bottomVis = easeOut(rawEnterBottom)
-          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.08) / (vh * 0.78))
+          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.06) / (vh * 0.72))
           const topVis = easeOut(rawEnterTop)
           const vertVis = Math.min(bottomVis, topVis)
 
@@ -4043,38 +4076,40 @@ export default function Home() {
 
           // Staggered vertical reveal for left text panel items on scroll-down / scroll-up
           leftPanelItems.forEach((item, idx) => {
-            const staggerStart = idx * 0.1
+            const staggerStart = idx * 0.09
             const itemRaw = gsap.utils.clamp(0, 1, (rawEnterBottom - staggerStart) / (1 - staggerStart))
             const itemVis = easeOut(itemRaw) * topVis
             gsap.set(item, {
               opacity: itemVis,
-              y: 42 * (1 - itemVis) * (vertDir || 1),
-              scale: 0.95 + 0.05 * itemVis,
+              y: (isCompact ? 28 : 42) * (1 - itemVis) * (vertDir || 1),
+              scale: 0.96 + 0.04 * itemVis,
             })
           })
 
           if (progressBarContainer) {
             gsap.set(progressBarContainer, {
               opacity: vertVis,
-              y: 24 * (1 - vertVis),
+              y: 22 * (1 - vertVis),
             })
           }
 
           eventCards.forEach((card) => {
             const el = card as HTMLElement
             const rect = el.getBoundingClientRect()
-            // Horizontal visibility (left & right viewport edges)
-            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - vw * 0.1) / (vw * 0.35))
+            const leftThreshold = isCompact ? vw * 0.06 : vw * 0.1
+            const rightThreshold = isCompact ? vw * 0.68 : vw * 0.55
+            const span = vw * 0.32
+            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - leftThreshold) / span)
             const leftVis = easeOut(rawLeft)
-            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - vw * 0.55) / (vw * 0.35))
+            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - rightThreshold) / span)
             const rightVis = easeOut(rawRight)
             const horizVis = Math.min(leftVis, rightVis)
 
             // Combined Horizontal + Vertical visibility
-            const horizY = 40 * (1 - horizVis)
-            const vertY = 55 * (1 - vertVis) * vertDir
-            const finalOpacity = (0.3 + 0.7 * horizVis) * (0.15 + 0.85 * vertVis)
-            const finalScale = (0.95 + 0.05 * horizVis) * (0.92 + 0.08 * vertVis)
+            const horizY = (isCompact ? 24 : 40) * (1 - horizVis)
+            const vertY = (isCompact ? 34 : 55) * (1 - vertVis) * vertDir
+            const finalOpacity = (isCompact ? 0.45 + 0.55 * horizVis : 0.3 + 0.7 * horizVis) * (0.18 + 0.82 * vertVis)
+            const finalScale = (0.94 + 0.06 * horizVis) * (0.93 + 0.07 * vertVis)
 
             gsap.set(el, {
               opacity: finalOpacity,
@@ -4195,20 +4230,20 @@ export default function Home() {
         )
 
         const getWhyScrollAmount = () => {
-          return whyCardsTrack.scrollWidth - window.innerWidth + 120
+          return Math.max(0, whyCardsTrack.scrollWidth - window.innerWidth)
         }
 
         updateWhyCardsVisibility = () => {
-          if (window.innerWidth <= 768) return
           const vw = window.innerWidth
           const vh = window.innerHeight
+          const isCompact = vw <= 768
           const easeOut = gsap.parseEase("power2.out")
           const secRect = whyChooseSec.getBoundingClientRect()
 
           // Vertical visibility when scrolling down into section (bottom edge) or scrolling up into section (top edge)
-          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.92 - secRect.top) / (vh * 0.78))
+          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.94 - secRect.top) / (vh * 0.72))
           const bottomVis = easeOut(rawEnterBottom)
-          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.08) / (vh * 0.78))
+          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.06) / (vh * 0.72))
           const topVis = easeOut(rawEnterTop)
           const vertVis = Math.min(bottomVis, topVis)
 
@@ -4221,7 +4256,7 @@ export default function Home() {
             const itemVis = easeOut(itemRaw) * topVis
             gsap.set(item, {
               opacity: itemVis,
-              y: 38 * (1 - itemVis) * (vertDir || 1),
+              y: (isCompact ? 26 : 38) * (1 - itemVis) * (vertDir || 1),
               scale: 0.96 + 0.04 * itemVis,
             })
           })
@@ -4229,7 +4264,7 @@ export default function Home() {
           if (whyProgressBarContainer) {
             gsap.set(whyProgressBarContainer, {
               opacity: vertVis,
-              y: 24 * (1 - vertVis),
+              y: 22 * (1 - vertVis),
             })
           }
 
@@ -4237,18 +4272,20 @@ export default function Home() {
             const el = card as HTMLElement
             if (el.classList.contains("why-card-modal-active")) return
             const rect = el.getBoundingClientRect()
-            // Horizontal visibility (left & right viewport edges)
-            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - vw * 0.1) / (vw * 0.35))
+            const leftThreshold = isCompact ? vw * 0.06 : vw * 0.1
+            const rightThreshold = isCompact ? vw * 0.68 : vw * 0.55
+            const span = vw * 0.32
+            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - leftThreshold) / span)
             const leftVis = easeOut(rawLeft)
-            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - vw * 0.55) / (vw * 0.35))
+            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - rightThreshold) / span)
             const rightVis = easeOut(rawRight)
             const horizVis = Math.min(leftVis, rightVis)
 
             // Combined Horizontal + Vertical visibility
-            const horizY = 40 * (1 - horizVis)
-            const vertY = 55 * (1 - vertVis) * vertDir
-            const finalOpacity = (0.3 + 0.7 * horizVis) * (0.15 + 0.85 * vertVis)
-            const finalScale = (0.95 + 0.05 * horizVis) * (0.92 + 0.08 * vertVis)
+            const horizY = (isCompact ? 24 : 40) * (1 - horizVis)
+            const vertY = (isCompact ? 34 : 55) * (1 - vertVis) * vertDir
+            const finalOpacity = (isCompact ? 0.45 + 0.55 * horizVis : 0.3 + 0.7 * horizVis) * (0.18 + 0.82 * vertVis)
+            const finalScale = (0.94 + 0.06 * horizVis) * (0.93 + 0.07 * vertVis)
 
             gsap.set(el, {
               opacity: finalOpacity,
@@ -4315,10 +4352,9 @@ export default function Home() {
         )
       }
 
-      // Continuous vertical scroll listener so scroll-down and scroll-up entry/exit before & after pinning is 100% real-time (throttled with rAF)
+      // Continuous vertical scroll listener across ALL breakpoints so scroll-down and scroll-up entry/exit before & after pinning is 100% real-time (throttled with rAF)
       let rAFId: number | null = null
       const handleVerticalScrollReveal = () => {
-        if (window.innerWidth <= 768) return
         if (rAFId !== null) return
         rAFId = requestAnimationFrame(() => {
           updateEventCardsVisibility()
@@ -5228,33 +5264,42 @@ export default function Home() {
               const currentEx = EXCLUSIVE_COLLECTIONS[activeExclusiveIdx] || EXCLUSIVE_COLLECTIONS[0]
               return (
                 <>
-                  <div className="exclusive-mobile-card">
-                    <img
-                      src={currentEx.bg}
-                      alt={currentEx.title}
-                      className="exclusive-mobile-card-img"
-                    />
-                    <div className="exclusive-mobile-badge">
-                      PIÈCE D'ATELIER 0{activeExclusiveIdx + 1} / {EXCLUSIVE_COLLECTIONS.length}
-                    </div>
-                    <div className="exclusive-mobile-scrim" />
-                    <div className="exclusive-mobile-content">
-                      <span className="exclusive-mobile-kicker">{currentEx.kicker}</span>
-                      <h3 className="exclusive-mobile-title">{currentEx.title}</h3>
-                      <p className="exclusive-mobile-desc">{currentEx.text}</p>
-                      <button
-                        type="button"
-                        className="exclusive-mobile-btn"
-                        onClick={() => {
-                          const matchedProduct = products.find((p) => p.name.toLowerCase().includes(currentEx.title.toLowerCase())) || products[0]
-                          openProductModal(matchedProduct)
-                        }}
-                      >
-                        <span>{currentEx.btnText}</span>
-                        <ArrowUpRight size={16} />
-                      </button>
-                    </div>
-                  </div>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentEx.title}
+                      className="exclusive-mobile-card"
+                      initial={{ opacity: 0, y: 14, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                      transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <img
+                        src={currentEx.bg}
+                        alt={currentEx.title}
+                        className="exclusive-mobile-card-img"
+                      />
+                      <div className="exclusive-mobile-badge">
+                        PIÈCE D'ATELIER 0{activeExclusiveIdx + 1} / {EXCLUSIVE_COLLECTIONS.length}
+                      </div>
+                      <div className="exclusive-mobile-scrim" />
+                      <div className="exclusive-mobile-content">
+                        <span className="exclusive-mobile-kicker">{currentEx.kicker}</span>
+                        <h3 className="exclusive-mobile-title">{currentEx.title}</h3>
+                        <p className="exclusive-mobile-desc">{currentEx.text}</p>
+                        <button
+                          type="button"
+                          className="exclusive-mobile-btn"
+                          onClick={(e) => {
+                            const matchedProduct = products.find((p) => p.name.toLowerCase().includes(currentEx.title.toLowerCase())) || products[0]
+                            openProductModal(matchedProduct, e)
+                          }}
+                        >
+                          <span>{currentEx.btnText}</span>
+                          <ArrowUpRight size={16} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
 
                   <div className="exclusive-mobile-controls">
                     <button
