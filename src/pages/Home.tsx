@@ -1263,6 +1263,46 @@ interface CalendarDayCell {
   isPast: boolean
 }
 
+interface GliderRect {
+  left: number
+  top: number
+  width: number
+  height: number
+  ready: boolean
+}
+
+function measureButtonRect(
+  navEl: HTMLElement | null,
+  activeBtn: HTMLElement | null,
+  autoCenterScroll = false
+): GliderRect {
+  if (!activeBtn) {
+    return { left: 0, top: 0, width: 0, height: 0, ready: false }
+  }
+  if (autoCenterScroll && navEl && navEl.scrollWidth > navEl.clientWidth + 2) {
+    const targetScrollLeft =
+      activeBtn.offsetLeft - navEl.clientWidth / 2 + activeBtn.offsetWidth / 2
+    navEl.scrollTo({
+      left: Math.max(0, targetScrollLeft),
+      behavior: "smooth",
+    })
+  }
+  return {
+    left: activeBtn.offsetLeft,
+    top: activeBtn.offsetTop,
+    width: activeBtn.offsetWidth,
+    height: activeBtn.offsetHeight,
+    ready: true,
+  }
+}
+
+const CONTACT_SUBJECT_OPTIONS = [
+  "Robe de Mariée Sur-Mesure",
+  "Tenue de Gala & Soirée",
+  "Robes de Cortège",
+  "Retouche & Essayage Privé",
+] as const
+
 const getMonthCalendarDays = (year: number, month: number): CalendarDayCell[] => {
   const firstDayOfMonth = new Date(year, month, 1)
   const totalDays = new Date(year, month + 1, 0).getDate()
@@ -2403,6 +2443,37 @@ export default function Home() {
   const [activeStudioId, setActiveStudioId] = useState<number>(1)
   const [reservedStudioVisits, setReservedStudioVisits] = useState<number[]>([])
 
+  // Unified Segmented Toggle Gliders (Product Sizes, Index 06 Flagship Stages, Contact Subject)
+  const sizeNavRef = useRef<HTMLDivElement>(null)
+  const sizeBtnRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [sizeGlider, setSizeGlider] = useState<GliderRect>({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    ready: false,
+  })
+
+  const flagshipNavRef = useRef<HTMLDivElement>(null)
+  const flagshipBtnRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [flagshipGlider, setFlagshipGlider] = useState<GliderRect>({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    ready: false,
+  })
+
+  const contactSubjectNavRef = useRef<HTMLDivElement>(null)
+  const contactSubjectBtnRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [contactSubjectGlider, setContactSubjectGlider] = useState<GliderRect>({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    ready: false,
+  })
+
   // Contact section state (adapts seamlessly to active Hero silhouette palette)
   const [contactName, setContactName] = useState<string>("")
   const [contactEmail, setContactEmail] = useState<string>("")
@@ -2601,6 +2672,72 @@ export default function Home() {
     document.addEventListener("mousedown", handleOutsideClick)
     return () => document.removeEventListener("mousedown", handleOutsideClick)
   }, [isContactDatePickerOpen])
+
+  // Synchronise les gliders des 3 groupes toggle (Tailles Modale, Parcours Atelier, Sujet Contact)
+  useEffect(() => {
+    const syncFlagshipGlider = () => {
+      const idx = FLAGSHIP_STUDIOS.findIndex((s) => s.id === activeStudioId)
+      const activeBtn = flagshipBtnRefs.current[idx >= 0 ? idx : 0] || null
+      setFlagshipGlider(measureButtonRect(flagshipNavRef.current, activeBtn, true))
+    }
+
+    syncFlagshipGlider()
+    const rafId = requestAnimationFrame(syncFlagshipGlider)
+    const ro = new ResizeObserver(syncFlagshipGlider)
+    if (flagshipNavRef.current) ro.observe(flagshipNavRef.current)
+    window.addEventListener("resize", syncFlagshipGlider, { passive: true })
+    return () => {
+      cancelAnimationFrame(rafId)
+      ro.disconnect()
+      window.removeEventListener("resize", syncFlagshipGlider)
+    }
+  }, [activeStudioId, theme])
+
+  useEffect(() => {
+    const syncContactSubjectGlider = () => {
+      const idx = CONTACT_SUBJECT_OPTIONS.indexOf(
+        contactSubject as (typeof CONTACT_SUBJECT_OPTIONS)[number]
+      )
+      const activeBtn = contactSubjectBtnRefs.current[idx >= 0 ? idx : 0] || null
+      setContactSubjectGlider(measureButtonRect(contactSubjectNavRef.current, activeBtn, false))
+    }
+
+    syncContactSubjectGlider()
+    const rafId = requestAnimationFrame(syncContactSubjectGlider)
+    const ro = new ResizeObserver(syncContactSubjectGlider)
+    if (contactSubjectNavRef.current) ro.observe(contactSubjectNavRef.current)
+    window.addEventListener("resize", syncContactSubjectGlider, { passive: true })
+    return () => {
+      cancelAnimationFrame(rafId)
+      ro.disconnect()
+      window.removeEventListener("resize", syncContactSubjectGlider)
+    }
+  }, [contactSubject, contactSubmitState, theme])
+
+  useEffect(() => {
+    if (!selectedProduct) {
+      setSizeGlider((prev) => ({ ...prev, ready: false }))
+      return
+    }
+    const syncSizeGlider = () => {
+      const idx = selectedProduct.sizes.indexOf(selectedSize)
+      const activeBtn = sizeBtnRefs.current[idx >= 0 ? idx : 0] || null
+      setSizeGlider(measureButtonRect(sizeNavRef.current, activeBtn, true))
+    }
+
+    syncSizeGlider()
+    const rafId = requestAnimationFrame(syncSizeGlider)
+    const timer = window.setTimeout(syncSizeGlider, 140)
+    const ro = new ResizeObserver(syncSizeGlider)
+    if (sizeNavRef.current) ro.observe(sizeNavRef.current)
+    window.addEventListener("resize", syncSizeGlider, { passive: true })
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.clearTimeout(timer)
+      ro.disconnect()
+      window.removeEventListener("resize", syncSizeGlider)
+    }
+  }, [selectedSize, selectedProduct, theme])
 
   // Aligne précisément les motifs SVG d'une section à l'autre (aucun décalage visuel aux frontières)
   useEffect(() => {
@@ -5393,19 +5530,36 @@ export default function Home() {
                 <p className="flagship-header-desc">
                   Cinq étapes d'accompagnement sur-mesure au cœur de notre maison de couture. Du premier croquis aquarellé jusqu'à l'essayage final, chaque robe naît d'un dialogue intime entre vos envies et la main de l'artisane.
                 </p>
-                <div className="flagship-city-pills">
-                  {FLAGSHIP_STUDIOS.map((studio) => (
+                <div
+                  className="flagship-city-pills"
+                  ref={flagshipNavRef}
+                  role="tablist"
+                  aria-label="Étapes de création sur-mesure"
+                >
+                  <span
+                    className="segmented-pill-glider flagship-city-glider"
+                    aria-hidden="true"
+                    style={{
+                      opacity: flagshipGlider.ready ? 1 : 0,
+                      transform: `translate3d(${flagshipGlider.left}px, ${flagshipGlider.top}px, 0)`,
+                      width: `${flagshipGlider.width}px`,
+                      height: `${flagshipGlider.height}px`,
+                    }}
+                  />
+                  {FLAGSHIP_STUDIOS.map((studio, sIdx) => (
                     <button
                       key={studio.id}
+                      ref={(el) => {
+                        flagshipBtnRefs.current[sIdx] = el
+                      }}
                       type="button"
-                      className={`flagship-city-pill sliding-bg-btn ${activeStudioId === studio.id ? "active" : ""}`}
+                      role="tab"
+                      aria-selected={activeStudioId === studio.id}
+                      className={`flagship-city-pill ${activeStudioId === studio.id ? "active" : ""}`}
                       onClick={() => setActiveStudioId(studio.id)}
                     >
-                      <span className="btn-sliding-bg" />
-                      <span className="btn-sliding-content">
-                        <span>{studio.code}</span>
-                        <span className="flagship-pill-city-name">{studio.city}</span>
-                      </span>
+                      <span>{studio.code}</span>
+                      <span className="flagship-pill-city-name">{studio.city}</span>
                     </button>
                   ))}
                 </div>
@@ -5641,17 +5795,32 @@ export default function Home() {
                   Partagez votre souhait d'atelier
                 </h3>
 
-                {/* Quick Subject Selector Chips */}
-                <div className="contact-subject-pills" role="group" aria-label="Objet de votre demande">
-                  {[
-                    "Robe de Mariée Sur-Mesure",
-                    "Tenue de Gala & Soirée",
-                    "Robes de Cortège",
-                    "Retouche & Essayage Privé",
-                  ].map((subj) => (
+                {/* Quick Subject Selector Segmented Toggle */}
+                <div
+                  className="contact-subject-pills"
+                  ref={contactSubjectNavRef}
+                  role="radiogroup"
+                  aria-label="Objet de votre demande"
+                >
+                  <span
+                    className="segmented-pill-glider contact-subject-glider"
+                    aria-hidden="true"
+                    style={{
+                      opacity: contactSubjectGlider.ready ? 1 : 0,
+                      transform: `translate3d(${contactSubjectGlider.left}px, ${contactSubjectGlider.top}px, 0)`,
+                      width: `${contactSubjectGlider.width}px`,
+                      height: `${contactSubjectGlider.height}px`,
+                    }}
+                  />
+                  {CONTACT_SUBJECT_OPTIONS.map((subj, idx) => (
                     <button
                       key={subj}
+                      ref={(el) => {
+                        contactSubjectBtnRefs.current[idx] = el
+                      }}
                       type="button"
+                      role="radio"
+                      aria-checked={contactSubject === subj}
                       className={`contact-subject-pill ${contactSubject === subj ? "active" : ""}`}
                       onClick={() => setContactSubject(subj)}
                     >
@@ -6259,11 +6428,31 @@ export default function Home() {
                       <label className="product-modal-option-label">
                         Taille / Coupe : <strong>{selectedSize}</strong>
                       </label>
-                      <div className="product-modal-size-grid">
-                        {selectedProduct.sizes.map((size) => (
+                      <div
+                        className="product-modal-size-grid"
+                        ref={sizeNavRef}
+                        role="radiogroup"
+                        aria-label="Taille ou Coupe"
+                      >
+                        <span
+                          className="segmented-pill-glider product-modal-size-glider"
+                          aria-hidden="true"
+                          style={{
+                            opacity: sizeGlider.ready ? 1 : 0,
+                            transform: `translate3d(${sizeGlider.left}px, ${sizeGlider.top}px, 0)`,
+                            width: `${sizeGlider.width}px`,
+                            height: `${sizeGlider.height}px`,
+                          }}
+                        />
+                        {selectedProduct.sizes.map((size, sIdx) => (
                           <button
                             key={size}
+                            ref={(el) => {
+                              sizeBtnRefs.current[sIdx] = el
+                            }}
                             type="button"
+                            role="radio"
+                            aria-checked={selectedSize === size}
                             className={`size-option-btn ${selectedSize === size ? "active" : ""}`}
                             onClick={() => setSelectedSize(size)}
                           >
