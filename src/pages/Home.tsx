@@ -2370,6 +2370,9 @@ export default function Home() {
   const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(0)
   const [showAllProducts, setShowAllProducts] = useState<boolean>(false)
   const [activeTestimonialId, setActiveTestimonialId] = useState<number>(1)
+  const testimonialsAvatarsBarRef = useRef<HTMLDivElement>(null)
+  const testimonialsThumbRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [avatarsViewportWidth, setAvatarsViewportWidth] = useState<number | null>(null)
   const [activeExclusiveIdx, setActiveExclusiveIdx] = useState<number>(0)
   const [touchStartX, setTouchStartX] = useState<number | null>(null)
 
@@ -2819,6 +2822,48 @@ export default function Home() {
 
   const activeTestimonial = testimonials.find((t) => t.id === activeTestimonialId) || testimonials[0]
   const n = CAROUSEL_SHOES.length
+
+  // Fenêtre glissante automatique pour les avatars de témoignages mobiles (zéro image coupée, slide Next/Prev fluide)
+  useEffect(() => {
+    const syncAvatarsStrip = () => {
+      const bar = testimonialsAvatarsBarRef.current
+      if (!bar) return
+      const parentW = bar.parentElement?.clientWidth || window.innerWidth
+      const thumbSize = 44
+      const gap = 12
+      const padH = 6
+      const visibleCount = Math.max(4, Math.floor((parentW - padH * 2 + gap) / (thumbSize + gap)))
+      const exactViewportW = Math.min(parentW, visibleCount * thumbSize + (visibleCount - 1) * gap + padH * 2)
+      setAvatarsViewportWidth(exactViewportW)
+
+      requestAnimationFrame(() => {
+        const liveBar = testimonialsAvatarsBarRef.current
+        if (!liveBar) return
+        const activeIdx = testimonials.findIndex((t) => t.id === activeTestimonialId)
+        const activeBtn = testimonialsThumbRefs.current[activeIdx >= 0 ? activeIdx : 0]
+        if (!activeBtn) return
+        const maxScroll = Math.max(0, liveBar.scrollWidth - exactViewportW)
+        const targetLeft = Math.min(maxScroll, Math.max(0, activeBtn.offsetLeft - padH))
+        gsap.to(liveBar, {
+          scrollLeft: targetLeft,
+          duration: 0.44,
+          ease: "power3.out",
+          overwrite: "auto",
+        })
+      })
+    }
+
+    syncAvatarsStrip()
+    const ro = new ResizeObserver(syncAvatarsStrip)
+    if (testimonialsAvatarsBarRef.current?.parentElement) {
+      ro.observe(testimonialsAvatarsBarRef.current.parentElement)
+    }
+    window.addEventListener("resize", syncAvatarsStrip, { passive: true })
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("resize", syncAvatarsStrip)
+    }
+  }, [activeTestimonialId])
 
   useEffect(() => {
     if (selectedProduct || selectedEvent) {
@@ -5175,13 +5220,20 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Barre de sélection d'avatars tactile fluide */}
-              <div className="testimonials-mobile-avatars-bar">
-                {testimonials.map((item) => {
+              {/* Barre de sélection d'avatars tactile fluide à fenêtre glissante */}
+              <div
+                ref={testimonialsAvatarsBarRef}
+                className="testimonials-mobile-avatars-bar"
+                style={avatarsViewportWidth ? { width: `${avatarsViewportWidth}px`, maxWidth: "100%" } : undefined}
+              >
+                {testimonials.map((item, idx) => {
                   const isActive = item.id === activeTestimonialId
                   return (
                     <button
                       key={item.id}
+                      ref={(el) => {
+                        testimonialsThumbRefs.current[idx] = el
+                      }}
                       type="button"
                       className={`testimonials-mobile-thumb-btn ${isActive ? "active" : ""}`}
                       onClick={() => setActiveTestimonialId(item.id)}
@@ -6608,13 +6660,15 @@ export default function Home() {
               })
             }}
           >
-            <button
-              className="product-modal-close"
-              onClick={closeEventModal}
-              aria-label="Fermer"
-            >
-              <X size={20} />
-            </button>
+            <div className="event-modal-close-sticky">
+              <button
+                className="product-modal-close"
+                onClick={closeEventModal}
+                aria-label="Fermer"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
             {/* Event Hero Cover Header (Occupies 100% of initial popup fold, exact original design) */}
             <div className="event-modal-hero">
