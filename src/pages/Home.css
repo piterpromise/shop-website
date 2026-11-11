@@ -8420,9 +8420,12 @@
   }
 
   .testimonial-mobile-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
     color: #f59e0b;
-    font-size: 0.95rem;
-    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    flex-shrink: 0;
   }
 
   .testimonial-mobile-quote {

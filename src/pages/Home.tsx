@@ -50,6 +50,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faXmark,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -5179,7 +5180,9 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="testimonial-mobile-stars" aria-label="5 étoiles">
-                    ★★★★★
+                    {[0, 1, 2, 3, 4].map((starIdx) => (
+                      <FontAwesomeIcon key={starIdx} icon={faStar} />
+                    ))}
                   </div>
                 </div>
 
@@ -6476,7 +6479,9 @@ export default function Home() {
                   <div className="product-modal-price-row product-modal-stagger-item">
                     <span className="product-modal-price">{selectedProduct.price}</span>
                     <div className="product-modal-rating">
-                      <span className="star">★</span>
+                      <span className="star">
+                        <FontAwesomeIcon icon={faStar} />
+                      </span>
                       <span className="rating-score">{selectedProduct.rating}</span>
                       <span className="rating-count">({selectedProduct.reviewsCount} avis vérifiés)</span>
                     </div>
@@ -6837,7 +6842,8 @@ export default function Home() {
                   N° 0{selectedWhyModal.card.id} / 07 — {selectedWhyModal.card.category}
                 </span>
                 <span className="why-modal-edition-loc">
-                  <span className="loc-dot" /> {selectedWhyModal.card.locationCode} · {selectedWhyModal.card.rating} ★
+                  <span className="loc-dot" /> {selectedWhyModal.card.locationCode} · {selectedWhyModal.card.rating}{" "}
+                  <FontAwesomeIcon icon={faStar} />
                 </span>
               </div>
 
