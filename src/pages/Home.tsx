@@ -26,6 +26,9 @@ import {
   Minus,
   Heart,
   Tag,
+  Sun,
+  Moon,
+  Trash2,
 } from "lucide-react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -2275,6 +2278,38 @@ export default function Home() {
     width: 110,
   })
   const [k, setK] = useState(0)
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    try {
+      const saved = window.localStorage.getItem("atelier-theme")
+      return saved === "light" || saved === "dark" ? saved : "dark"
+    } catch {
+      return "dark"
+    }
+  })
+
+  type HeaderMenuType = "search" | "notifications" | "bag"
+  interface CartItem {
+    id: string
+    product: Product
+    colorName: string
+    size: string
+    qty: number
+  }
+
+  const [activeHeaderMenu, setActiveHeaderMenu] = useState<HeaderMenuType | null>(null)
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState<boolean>(true)
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
+
+  const headerActionsContainerRef = useRef<HTMLDivElement>(null)
+  const headerPopoverRef = useRef<HTMLDivElement>(null)
+  const headerArrowRef = useRef<HTMLSpanElement>(null)
+  const searchBtnRef = useRef<HTMLButtonElement>(null)
+  const bellBtnRef = useRef<HTMLButtonElement>(null)
+  const bagBtnRef = useRef<HTMLButtonElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const isClosingHeaderRef = useRef<boolean>(false)
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [productModalOrigin, setProductModalOrigin] = useState<{
     left: number
@@ -2377,6 +2412,186 @@ export default function Home() {
   const [contactMessage, setContactMessage] = useState<string>("")
   const [contactSubmitState, setContactSubmitState] = useState<"idle" | "sending" | "sent">("idle")
   const [contactError, setContactError] = useState<string>("")
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme)
+    document.body.style.backgroundColor = theme === "dark" ? "#0b0b0a" : "#f8f1ea"
+    document.body.style.color = theme === "dark" ? "#f4ece1" : "#111312"
+    try {
+      window.localStorage.setItem("atelier-theme", theme)
+    } catch {
+      // ignore storage quota errors
+    }
+  }, [theme])
+
+  const closeHeaderMenu = () => {
+    if (!activeHeaderMenu || isClosingHeaderRef.current) return
+    const popEl = headerPopoverRef.current
+    if (!popEl) {
+      setActiveHeaderMenu(null)
+      return
+    }
+    isClosingHeaderRef.current = true
+    gsap.killTweensOf(popEl)
+    gsap.to(popEl, {
+      opacity: 0,
+      y: -8,
+      scale: 0.96,
+      duration: 0.2,
+      ease: "power2.in",
+      onComplete: () => {
+        isClosingHeaderRef.current = false
+        setActiveHeaderMenu(null)
+      },
+    })
+  }
+
+  const toggleHeaderMenu = (target: HeaderMenuType) => {
+    if (activeHeaderMenu === target) {
+      closeHeaderMenu()
+      return
+    }
+    isClosingHeaderRef.current = false
+    if (target === "notifications") {
+      setHasUnreadNotifications(false)
+    }
+    setActiveHeaderMenu(target)
+  }
+
+  const addToCart = (product: Product, colorName: string, size: string) => {
+    const itemId = `${product.id}-${colorName}-${size}`
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === itemId)
+      if (existing) {
+        return prev.map((item) =>
+          item.id === itemId ? { ...item, qty: item.qty + 1 } : item
+        )
+      }
+      return [...prev, { id: itemId, product, colorName, size, qty: 1 }]
+    })
+  }
+
+  const updateCartQty = (itemId: string, delta: number) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) =>
+          item.id === itemId ? { ...item, qty: item.qty + delta } : item
+        )
+        .filter((item) => item.qty > 0)
+    )
+  }
+
+  const removeFromCart = (itemId: string) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== itemId))
+  }
+
+  const totalCartCount = cartItems.reduce((sum, item) => sum + item.qty, 0)
+  const totalCartAmount = cartItems.reduce((sum, item) => {
+    const numeric = parseFloat(item.product.price.replace(/[^\d.,]/g, "").replace(",", ".")) || 0
+    return sum + numeric * item.qty
+  }, 0)
+
+  const headerSearchResults = (() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) return products.slice(0, 3)
+    return products
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          (p.badge && p.badge.toLowerCase().includes(q))
+      )
+      .slice(0, 4)
+  })()
+
+  useEffect(() => {
+    if (!activeHeaderMenu) return
+    const handleOutsideOrEsc = (event: MouseEvent | KeyboardEvent) => {
+      if (event instanceof KeyboardEvent) {
+        if (event.key === "Escape") closeHeaderMenu()
+        return
+      }
+      if (
+        headerActionsContainerRef.current &&
+        !headerActionsContainerRef.current.contains(event.target as Node)
+      ) {
+        closeHeaderMenu()
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideOrEsc)
+    document.addEventListener("keydown", handleOutsideOrEsc)
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideOrEsc)
+      document.removeEventListener("keydown", handleOutsideOrEsc)
+    }
+  }, [activeHeaderMenu])
+
+  useEffect(() => {
+    if (!activeHeaderMenu) return
+    const updateBubblePointer = () => {
+      const btnMap: Record<HeaderMenuType, HTMLButtonElement | null> = {
+        search: searchBtnRef.current,
+        notifications: bellBtnRef.current,
+        bag: bagBtnRef.current,
+      }
+      const targetBtn = btnMap[activeHeaderMenu]
+      const popEl = headerPopoverRef.current
+      if (!targetBtn || !popEl) return
+      const btnRect = targetBtn.getBoundingClientRect()
+      const popRect = popEl.getBoundingClientRect()
+      const arrowX = Math.max(24, Math.min(popRect.width - 24, btnRect.left + btnRect.width / 2 - popRect.left))
+      popEl.style.setProperty("--bubble-arrow-x", `${arrowX.toFixed(1)}px`)
+    }
+
+    updateBubblePointer()
+    const rafId = requestAnimationFrame(updateBubblePointer)
+    window.addEventListener("resize", updateBubblePointer, { passive: true })
+
+    const popEl = headerPopoverRef.current
+    const arrowEl = headerArrowRef.current
+    if (popEl) {
+      gsap.killTweensOf(popEl)
+      const staggerEls = popEl.querySelectorAll(".header-bubble-stagger")
+      gsap.killTweensOf(staggerEls)
+
+      const tl = gsap.timeline()
+      tl.fromTo(
+        popEl,
+        { opacity: 0, y: -12, scale: 0.94, transformOrigin: "top right" },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "power3.out", clearProps: "transform" }
+      )
+      if (arrowEl) {
+        tl.fromTo(
+          arrowEl,
+          { opacity: 0, scale: 0.45, rotation: 45 },
+          { opacity: 1, scale: 1, rotation: 45, duration: 0.3, ease: "back.out(2)" },
+          0.04
+        )
+      }
+      if (staggerEls.length > 0) {
+        tl.fromTo(
+          staggerEls,
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.34, stagger: 0.055, ease: "power2.out", clearProps: "transform" },
+          0.08
+        )
+      }
+    }
+
+    let focusTimer: number | undefined
+    if (activeHeaderMenu === "search") {
+      focusTimer = window.setTimeout(() => {
+        searchInputRef.current?.focus()
+      }, 110)
+    }
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener("resize", updateBubblePointer)
+      if (focusTimer) window.clearTimeout(focusTimer)
+    }
+  }, [activeHeaderMenu])
 
   useEffect(() => {
     if (!isContactDatePickerOpen) return
@@ -4058,6 +4273,7 @@ export default function Home() {
     <div
       ref={container}
       className="home-page"
+      data-theme={theme}
       style={{
         "--hero-diamond-color": CAROUSEL_SHOES[k].bg,
         "--hero-next-color": CAROUSEL_SHOES[(k + 1) % CAROUSEL_SHOES.length].bg,
@@ -4076,26 +4292,357 @@ export default function Home() {
             <span className="home-logo-text">Maison Soie &amp; Couture</span>
           </div>
 
-          <div className="home-nav-actions">
-            <button className="home-nav-btn">
-              <Search size={22} />
-            </button>
-            <button className="home-nav-btn">
-              <Bell size={22} />
-              <span className="home-badge"></span>
-            </button>
-            <button className="home-nav-btn">
-              <ShoppingBag size={22} />
-            </button>
+          <div className="home-nav-actions" ref={headerActionsContainerRef}>
             <button
+              type="button"
+              className="home-nav-btn home-theme-toggle-btn"
+              onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
+              aria-label={theme === "dark" ? "Passer au thème clair" : "Passer au thème sombre"}
+              title={theme === "dark" ? "Passer au thème clair" : "Passer au thème sombre"}
+            >
+              <span className="theme-icon-wrap" aria-hidden="true">
+                {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </span>
+            </button>
+
+            <button
+              ref={searchBtnRef}
+              type="button"
+              className={`home-nav-btn ${activeHeaderMenu === "search" ? "active" : ""}`}
+              onClick={() => toggleHeaderMenu("search")}
+              aria-label="Rechercher une création"
+              aria-expanded={activeHeaderMenu === "search"}
+            >
+              <Search size={21} />
+            </button>
+
+            <button
+              ref={bellBtnRef}
+              type="button"
+              className={`home-nav-btn ${activeHeaderMenu === "notifications" ? "active" : ""}`}
+              onClick={() => toggleHeaderMenu("notifications")}
+              aria-label="Notifications de l'atelier"
+              aria-expanded={activeHeaderMenu === "notifications"}
+            >
+              <Bell size={21} />
+              {hasUnreadNotifications && <span className="home-badge" />}
+            </button>
+
+            <button
+              ref={bagBtnRef}
+              type="button"
+              className={`home-nav-btn ${activeHeaderMenu === "bag" ? "active" : ""}`}
+              onClick={() => toggleHeaderMenu("bag")}
+              aria-label="Sélection et panier Atelier"
+              aria-expanded={activeHeaderMenu === "bag"}
+            >
+              <ShoppingBag size={21} />
+              {totalCartCount > 0 && <span className="home-bag-count">{totalCartCount}</span>}
+            </button>
+
+            <button
+              type="button"
               onClick={() => (window.location.href = "/auth")}
               className="home-profile-btn"
+              aria-label="Profil Atelier"
             >
               <img
                 src="/couture/other-robes2.webp"
                 alt="Profil Atelier"
               />
             </button>
+
+            {activeHeaderMenu && (
+              <div
+                ref={headerPopoverRef}
+                className="header-bubble-popover"
+                role="dialog"
+                aria-label={
+                  activeHeaderMenu === "search"
+                    ? "Recherche Couture"
+                    : activeHeaderMenu === "notifications"
+                      ? "Notifications de la Maison"
+                      : "Sélection Atelier"
+                }
+              >
+                <span ref={headerArrowRef} className="header-bubble-arrow" aria-hidden="true" />
+
+                {activeHeaderMenu === "search" && (
+                  <div className="header-bubble-inner">
+                    <div className="header-bubble-stagger header-search-field-wrap">
+                      <div className="input-effect header-effect-21-wrap">
+                        <input
+                          ref={searchInputRef}
+                          type="text"
+                          className={`effect-21 header-effect-21 ${searchQuery ? "has-content" : ""}`}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Robe sirène, dentelle de Calais..."
+                          aria-label="Rechercher une création couture"
+                        />
+                        <label className="header-effect-21-label">Recherche Atelier</label>
+                        <span className="focus-border">
+                          <i />
+                        </span>
+                        {searchQuery && (
+                          <button
+                            type="button"
+                            className="header-search-clear-btn"
+                            onClick={() => {
+                              setSearchQuery("")
+                              searchInputRef.current?.focus()
+                            }}
+                            aria-label="Effacer la recherche"
+                          >
+                            <X size={14} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="header-bubble-stagger header-search-tags">
+                      {["Mariée", "Soirée", "Dentelle", "Cocktail"].map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          className={`header-search-tag-pill ${
+                            searchQuery.toLowerCase() === tag.toLowerCase() ? "active" : ""
+                          }`}
+                          onClick={() => setSearchQuery(tag)}
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="header-bubble-stagger header-search-results">
+                      <span className="header-bubble-kicker">
+                        {searchQuery.trim()
+                          ? `${headerSearchResults.length} création(s) correspondante(s)`
+                          : "Inspirations du Salon"}
+                      </span>
+
+                      {headerSearchResults.length > 0 ? (
+                        <div className="header-search-list">
+                          {headerSearchResults.map((item) => (
+                            <button
+                              key={item.id}
+                              type="button"
+                              className="header-search-result-row"
+                              onClick={() => {
+                                setActiveHeaderMenu(null)
+                                openProductModal(item)
+                              }}
+                            >
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="header-search-thumb"
+                              />
+                              <div className="header-search-meta">
+                                <span className="header-search-cat">{item.category}</span>
+                                <strong className="header-search-name">{item.name}</strong>
+                              </div>
+                              <span className="header-search-price">{item.price}</span>
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="header-bubble-empty">
+                          Aucune silhouette ne correspond à « {searchQuery} ».
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="header-bubble-stagger header-bubble-footer-btn"
+                      onClick={() => {
+                        setShowAllProducts(true)
+                        setActiveHeaderMenu(null)
+                        scrollToSection("catalogue-creations")
+                      }}
+                    >
+                      <span>Explorer tout le catalogue</span>
+                      <ArrowRight size={15} />
+                    </button>
+                  </div>
+                )}
+
+                {activeHeaderMenu === "notifications" && (
+                  <div className="header-bubble-inner">
+                    <div className="header-bubble-stagger header-bubble-top-row">
+                      <span className="header-bubble-kicker">Alertes &amp; Salons Privés</span>
+                      <span className="header-bubble-pill-status">À jour</span>
+                    </div>
+
+                    <div className="header-notif-list">
+                      <button
+                        type="button"
+                        className="header-bubble-stagger header-notif-item"
+                        onClick={() => {
+                          setActiveHeaderMenu(null)
+                          scrollToSection("catalogue-creations")
+                        }}
+                      >
+                        <span className="header-notif-dot" />
+                        <div className="header-notif-body">
+                          <strong>Nouvelle Capsule Dentelle d&apos;Or</strong>
+                          <span>4 nouvelles robes nuptiales ajoutées à la vitrine couture.</span>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="header-bubble-stagger header-notif-item"
+                        onClick={() => {
+                          setActiveHeaderMenu(null)
+                          scrollToSection("salons-prives")
+                        }}
+                      >
+                        <span className="header-notif-dot" />
+                        <div className="header-notif-body">
+                          <strong>Salon Privé des Futures Mariées</strong>
+                          <span>18 Novembre 2026 • Dernières places sur rendez-vous.</span>
+                        </div>
+                      </button>
+
+                      {bookedFittingIds.length > 0 && (
+                        <button
+                          type="button"
+                          className="header-bubble-stagger header-notif-item"
+                          onClick={() => {
+                            setActiveHeaderMenu(null)
+                            scrollToSection("contact-atelier")
+                          }}
+                        >
+                          <span className="header-notif-dot" />
+                          <div className="header-notif-body">
+                            <strong>{bookedFittingIds.length} Essayage(s) enregistré(s)</strong>
+                            <span>Finalisez vos disponibilités avec notre Première d&apos;Atelier.</span>
+                          </div>
+                        </button>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="header-bubble-stagger header-bubble-footer-btn"
+                      onClick={() => {
+                        setActiveHeaderMenu(null)
+                        scrollToSection("contact-atelier")
+                      }}
+                    >
+                      <span>Planifier un essayage privé</span>
+                      <ArrowRight size={15} />
+                    </button>
+                  </div>
+                )}
+
+                {activeHeaderMenu === "bag" && (
+                  <div className="header-bubble-inner">
+                    <div className="header-bubble-stagger header-bubble-top-row">
+                      <span className="header-bubble-kicker">
+                        Sélection Atelier ({totalCartCount})
+                      </span>
+                      {totalCartCount > 0 && (
+                        <strong className="header-bag-total">
+                          {totalCartAmount.toLocaleString("fr-FR")} €
+                        </strong>
+                      )}
+                    </div>
+
+                    {cartItems.length === 0 ? (
+                      <div className="header-bubble-stagger header-bag-empty-box">
+                        <p className="header-bubble-empty">
+                          Votre sélection sur-mesure est actuellement vide.
+                        </p>
+                        <button
+                          type="button"
+                          className="header-bubble-footer-btn"
+                          onClick={() => {
+                            setActiveHeaderMenu(null)
+                            scrollToSection("catalogue-creations")
+                          }}
+                        >
+                          <span>Découvrir les créations</span>
+                          <ArrowRight size={15} />
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="header-bag-list">
+                          {cartItems.map((entry) => (
+                            <div key={entry.id} className="header-bubble-stagger header-bag-row">
+                              <img
+                                src={entry.product.image}
+                                alt={entry.product.name}
+                                className="header-search-thumb"
+                              />
+                              <div className="header-bag-info">
+                                <strong>{entry.product.name}</strong>
+                                <span>
+                                  {entry.colorName} • {entry.size}
+                                </span>
+                                <span className="header-bag-unit-price">{entry.product.price}</span>
+                              </div>
+                              <div className="header-bag-controls">
+                                <button
+                                  type="button"
+                                  className="header-bag-qty-btn"
+                                  onClick={() => updateCartQty(entry.id, -1)}
+                                  aria-label="Diminuer la quantité"
+                                >
+                                  <Minus size={12} />
+                                </button>
+                                <span className="header-bag-qty-val">{entry.qty}</span>
+                                <button
+                                  type="button"
+                                  className="header-bag-qty-btn"
+                                  onClick={() => updateCartQty(entry.id, 1)}
+                                  aria-label="Augmenter la quantité"
+                                >
+                                  <Plus size={12} />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="header-bag-remove-btn"
+                                  onClick={() => removeFromCart(entry.id)}
+                                  aria-label="Retirer de la sélection"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <button
+                          type="button"
+                          className="header-bubble-stagger header-bubble-footer-btn"
+                          onClick={() => {
+                            const summary = cartItems
+                              .map(
+                                (item) =>
+                                  `${item.qty}× ${item.product.name} (${item.colorName}, ${item.size})`
+                              )
+                              .join(" ; ")
+                            setContactMessage(
+                              `Bonjour l'Atelier, je souhaite commander / essayer ma sélection : ${summary}.`
+                            )
+                            setActiveHeaderMenu(null)
+                            scrollToSection("contact-atelier")
+                          }}
+                        >
+                          <span>Finaliser ma sélection en salon</span>
+                          <ArrowRight size={15} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -5814,13 +6361,17 @@ export default function Home() {
                       type="button"
                       className="product-modal-add-cart-btn"
                       onClick={() => {
-                        alert(
-                          `Ajouté au panier : ${selectedProduct.name} (${selectedProduct.colors[selectedColorIndex]?.name}, ${selectedSize})`
-                        )
+                        const chosenColor =
+                          selectedProduct.colors[selectedColorIndex]?.name || "Sur-Mesure"
+                        const chosenSize = selectedSize || selectedProduct.sizes[0] || "Sur-Mesure"
+                        addToCart(selectedProduct, chosenColor, chosenSize)
                         closeProductModal()
+                        window.setTimeout(() => {
+                          setActiveHeaderMenu("bag")
+                        }, 360)
                       }}
                     >
-                      <span>Commander cette création • {selectedProduct.price}</span>
+                      <span>Ajouter à ma sélection • {selectedProduct.price}</span>
                     </button>
 
                     <button
