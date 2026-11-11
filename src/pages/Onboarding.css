@@ -1,8 +1,14 @@
 .onboarding-page {
-  background-color: #030712;
-  min-height: 100vh;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  background-color: #050507;
   color: white;
-  overflow: hidden;
+  overflow: hidden !important;
+  overscroll-behavior: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,11 +17,11 @@
 
 .onboarding-container {
   width: 100%;
-  height: 100dvh;
+  height: 100%;
   position: relative;
   background-color: #050507;
   overflow: hidden;
-  padding: 0.55rem;
+  padding: 0.45rem;
   box-sizing: border-box;
 }
 
@@ -468,25 +474,37 @@
 
 /* Responsive mobile / tablette (95% de largeur sur téléphone) */
 @media (max-width: 768px) {
+  .onboarding-page {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 0;
+    overflow: hidden !important;
+    touch-action: pan-x;
+  }
+
   .onboarding-container {
-    width: 95%;
-    max-width: 95%;
-    margin: 0 auto;
-    padding: 0.45rem 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0.35rem;
   }
 
   .bento-cell-wrapper {
-    padding: 0.25rem;
+    padding: 0.22rem;
   }
 
   .bento-card-inner {
-    border-radius: 1.35rem;
+    border-radius: 1.25rem;
   }
 
   .onboarding-floating-dock {
-    left: 2.5%;
-    right: 2.5%;
-    bottom: 0.85rem;
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: max(0.65rem, env(safe-area-inset-bottom));
     justify-content: space-between;
     gap: 0.45rem;
   }

@@ -3991,10 +3991,9 @@ export default function Home() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: cardEl,
-          start: isMobileScreen ? "top 95%" : "top 88%",
-          end: isMobileScreen ? undefined : "bottom 12%",
-          toggleActions: isMobileScreen ? "play none none none" : "play reverse play reverse",
-          once: isMobileScreen,
+          start: isMobileScreen ? "top 92%" : "top 88%",
+          end: "bottom 10%",
+          toggleActions: "play reverse play reverse",
         },
       })
 
@@ -4069,18 +4068,150 @@ export default function Home() {
     }
   }, [activeCategoryIdx, showAllProducts])
 
+  // Recalibrage automatique des triggers GSAP après chargement d'images ou changement de layout
+  useEffect(() => {
+    const rootEl = container.current
+    if (!rootEl) return
+
+    let refreshTimer: number | null = null
+    const scheduleRefresh = () => {
+      if (refreshTimer !== null) window.clearTimeout(refreshTimer)
+      refreshTimer = window.setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 140)
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      scheduleRefresh()
+    })
+    resizeObserver.observe(rootEl)
+
+    window.addEventListener("load", scheduleRefresh)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleRefresh).catch(() => {})
+    }
+
+    return () => {
+      if (refreshTimer !== null) window.clearTimeout(refreshTimer)
+      resizeObserver.disconnect()
+      window.removeEventListener("load", scheduleRefresh)
+    }
+  }, [])
+
+  // Animation GSAP d'apparition étagée des textes sur le panneau Flagship actif (changement d'étape & scroll)
+  const prevFlagshipStudioRef = useRef<number | null>(null)
+  useEffect(() => {
+    const isTabSwitch =
+      prevFlagshipStudioRef.current !== null && prevFlagshipStudioRef.current !== activeStudioId
+    prevFlagshipStudioRef.current = activeStudioId
+
+    const getDossierEls = () => {
+      const panel = container.current?.querySelector(".flagship-monolith-panel.expanded")
+      if (!panel) return []
+      return Array.from(
+        panel.querySelectorAll(
+          ".flagship-dossier-top, .flagship-dossier-district, .flagship-dossier-city, .flagship-dossier-address, .flagship-spec-grid, .flagship-dossier-footer"
+        )
+      ) as HTMLElement[]
+    }
+
+    const playDossierStagger = (switchingTab: boolean) => {
+      const els = getDossierEls()
+      if (!els.length) return
+      const isCompact = window.innerWidth <= 768
+      // Sur desktop, la cascade CSS native gère le changement d'étape ; GSAP anime les entrées/sorties au scroll
+      if (!isCompact && switchingTab) {
+        gsap.set(els, { clearProps: "opacity,transform" })
+        return
+      }
+      gsap.killTweensOf(els)
+      gsap.fromTo(
+        els,
+        { y: -14, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.56,
+          stagger: 0.085,
+          delay: switchingTab ? 0.06 : 0.14,
+          ease: "power3.out",
+          overwrite: "auto",
+          onComplete: () => {
+            if (window.innerWidth > 768) {
+              gsap.set(els, { clearProps: "opacity,transform" })
+            }
+          },
+        }
+      )
+    }
+
+    const hideDossierStagger = () => {
+      const els = getDossierEls()
+      if (!els.length) return
+      gsap.killTweensOf(els)
+      gsap.to(els, {
+        y: 10,
+        opacity: 0,
+        duration: 0.3,
+        stagger: 0.03,
+        ease: "power2.in",
+        overwrite: "auto",
+      })
+    }
+
+    const track = container.current?.querySelector(".flagship-accordion-track") as HTMLElement | null
+    if (isTabSwitch) {
+      playDossierStagger(true)
+    } else if (track && window.innerWidth <= 768) {
+      const rect = track.getBoundingClientRect()
+      const vh = window.innerHeight || 800
+      if (rect.top <= vh * 0.84 && rect.bottom >= vh * 0.12) {
+        playDossierStagger(false)
+      } else {
+        const els = getDossierEls()
+        if (els.length) gsap.set(els, { y: -14, opacity: 0 })
+      }
+    }
+
+    if (!track) return
+
+    const st = ScrollTrigger.create({
+      trigger: track,
+      start: "top 84%",
+      end: "bottom 12%",
+      onEnter: () => playDossierStagger(false),
+      onEnterBack: () => playDossierStagger(false),
+      onLeave: hideDossierStagger,
+      onLeaveBack: hideDossierStagger,
+    })
+
+    return () => {
+      st.kill()
+    }
+  }, [activeStudioId])
+
   useGSAP(
     () => {
-      ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true })
-      // Hero Animation
-      gsap.from(".hero-element", {
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-        delay: 0.2,
-      })
+      ScrollTrigger.config({ ignoreMobileResize: true })
+      // Hero Animation — bidirectionnelle (chargement + scroll-down / scroll-up)
+      gsap.fromTo(
+        ".hero-element",
+        { y: 28, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: {
+            trigger: ".home-hero",
+            start: "top 95%",
+            end: "bottom 10%",
+            toggleActions: "play reverse play reverse",
+          },
+        }
+      )
 
       // Scroll-Down & Scroll-Up Animation for Trending Now Header
       const trendingHeader = document.querySelector(".home-section-header")
@@ -4128,20 +4259,25 @@ export default function Home() {
         )
       }
 
-      gsap.from(".testimonial-avatar-wrapper", {
-        scrollTrigger: {
-          trigger: ".testimonials-container",
-          start: "top 85%",
-          end: "bottom 15%",
-          toggleActions: "play reverse play reverse",
-        },
-        scale: 0.85,
-        opacity: 0,
-        y: 35,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: "back.out(1.4)",
-      })
+      gsap.fromTo(
+        ".testimonial-avatar-wrapper",
+        { scale: 0.85, opacity: 0, y: 35 },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "back.out(1.4)",
+          clearProps: "transform",
+          scrollTrigger: {
+            trigger: ".testimonials-container",
+            start: "top 88%",
+            end: "bottom 12%",
+            toggleActions: "play reverse play reverse",
+          },
+        }
+      )
 
       // GSAP Pinned Horizontal Scroll Section ("Workshops & Events") with Horizontal + Vertical (Scroll-Down / Scroll-Up) Reveal
       const pinnedSection = document.querySelector(".events-pinned-section") as HTMLElement
