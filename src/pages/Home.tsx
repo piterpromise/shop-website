@@ -3348,9 +3348,9 @@ export default function Home() {
     const vw = window.innerWidth
     const vh = window.innerHeight
     const isStacked = vw <= 900
-    // 94% de largeur empilée sur mobile/tablette portrait, ~82% côte-à-côte sur desktop
-    const targetW = isStacked ? Math.round(vw * 0.94) : Math.min(Math.round(vw * 0.84), 1140)
-    const targetH = isStacked ? Math.round(vh * 0.91) : Math.round(Math.min(vh * 0.86, 760))
+    // 94% de largeur empilée sur mobile/tablette portrait, 80vw sur desktop
+    const targetW = isStacked ? Math.round(vw * 0.94) : Math.round(vw * 0.8)
+    const targetH = isStacked ? Math.round(vh * 0.91) : Math.round(Math.min(vh * 0.86, 820))
     const targetLeft = Math.round((vw - targetW) / 2)
     const targetTop = Math.round((vh - targetH) / 2)
 
@@ -3973,85 +3973,94 @@ export default function Home() {
     }
   }, [activeTrendingTab])
 
-  // Animation GSAP ScrollTrigger (scroll-down ET scroll-up) appliquée à TOUTES les images de Trending Now
+  // Animation GSAP ScrollTrigger des cartes Trending Now — dissociée Desktop (>= 769px) vs Mobile (<= 768px)
   useEffect(() => {
     const gridEl = productGridRef.current
     if (!gridEl) return
     const cards = Array.from(gridEl.querySelectorAll<HTMLElement>(".product-card"))
-    const createdTimelines: gsap.core.Timeline[] = []
 
-    cards.forEach((cardEl, idx) => {
-      const imgEl = cardEl.querySelector<HTMLElement>(".product-image")
-      const overlayEl = cardEl.querySelector<HTMLElement>(".product-overlay-info")
-      const colStagger = (idx % 4) * 0.08
+    const mm = gsap.matchMedia()
 
-      gsap.killTweensOf([cardEl, imgEl, overlayEl].filter(Boolean))
+    const animateCards = (isCompact: boolean) => {
+      const createdTimelines: gsap.core.Timeline[] = []
 
-      const isMobileScreen = window.innerWidth <= 768
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: cardEl,
-          start: isMobileScreen ? "top 92%" : "top 88%",
-          end: "bottom 10%",
-          toggleActions: "play reverse play reverse",
-        },
-      })
+      cards.forEach((cardEl, idx) => {
+        const imgEl = cardEl.querySelector<HTMLElement>(".product-image")
+        const overlayEl = cardEl.querySelector<HTMLElement>(".product-overlay-info")
+        const colStagger = isCompact ? (idx % 2) * 0.07 : (idx % 4) * 0.08
 
-      tl.fromTo(
-        cardEl,
-        {
-          opacity: 0,
-          y: 56,
-          scale: 0.92,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.72,
-          delay: colStagger,
-          ease: "back.out(1.4)",
-        },
-        0
-      )
+        gsap.killTweensOf([cardEl, imgEl, overlayEl].filter(Boolean))
 
-      if (imgEl) {
-        tl.fromTo(
-          imgEl,
-          {
-            scale: 1.18,
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: cardEl,
+            start: isCompact ? "top 92%" : "top 88%",
+            end: "bottom 10%",
+            toggleActions: "play reverse play reverse",
           },
-          {
-            scale: 1,
-            duration: 0.85,
-            delay: colStagger,
-            ease: "power3.out",
-            clearProps: "transform",
-          },
-          0
-        )
-      }
+        })
 
-      if (overlayEl) {
         tl.fromTo(
-          overlayEl,
+          cardEl,
           {
             opacity: 0,
-            y: 16,
+            y: isCompact ? 34 : 56,
+            scale: isCompact ? 0.95 : 0.92,
           },
           {
             opacity: 1,
             y: 0,
-            duration: 0.52,
-            delay: colStagger + 0.1,
-            ease: "power2.out",
+            scale: 1,
+            duration: isCompact ? 0.62 : 0.72,
+            delay: colStagger,
+            ease: isCompact ? "power3.out" : "back.out(1.4)",
           },
           0
         )
-      }
 
-      createdTimelines.push(tl)
-    })
+        if (imgEl) {
+          tl.fromTo(
+            imgEl,
+            { scale: isCompact ? 1.1 : 1.18 },
+            {
+              scale: 1,
+              duration: isCompact ? 0.7 : 0.85,
+              delay: colStagger,
+              ease: "power3.out",
+              clearProps: "transform",
+            },
+            0
+          )
+        }
+
+        if (overlayEl) {
+          tl.fromTo(
+            overlayEl,
+            { opacity: 0, y: isCompact ? 12 : 16 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.48,
+              delay: colStagger + 0.08,
+              ease: "power2.out",
+            },
+            0
+          )
+        }
+
+        createdTimelines.push(tl)
+      })
+
+      return () => {
+        createdTimelines.forEach((tl) => {
+          if (tl.scrollTrigger) tl.scrollTrigger.kill()
+          tl.kill()
+        })
+      }
+    }
+
+    mm.add("(min-width: 769px)", () => animateCards(false))
+    mm.add("(max-width: 768px)", () => animateCards(true))
 
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh()
@@ -4059,12 +4068,7 @@ export default function Home() {
 
     return () => {
       clearTimeout(refreshTimer)
-      createdTimelines.forEach((tl) => {
-        if (tl.scrollTrigger) {
-          tl.scrollTrigger.kill()
-        }
-        tl.kill()
-      })
+      mm.revert()
     }
   }, [activeCategoryIdx, showAllProducts])
 
@@ -4098,572 +4102,758 @@ export default function Home() {
     }
   }, [])
 
-  // Animation GSAP d'apparition étagée des textes sur le panneau Flagship actif (changement d'étape & scroll)
+  // Animation GSAP Flagship STRICTEMENT réservée au mode Mobile (<= 768px) — ne touche jamais le Desktop
   const prevFlagshipStudioRef = useRef<number | null>(null)
   useEffect(() => {
     const isTabSwitch =
       prevFlagshipStudioRef.current !== null && prevFlagshipStudioRef.current !== activeStudioId
     prevFlagshipStudioRef.current = activeStudioId
 
-    const getDossierEls = () => {
-      const panel = container.current?.querySelector(".flagship-monolith-panel.expanded")
-      if (!panel) return []
-      return Array.from(
-        panel.querySelectorAll(
-          ".flagship-dossier-top, .flagship-dossier-district, .flagship-dossier-city, .flagship-dossier-address, .flagship-spec-grid, .flagship-dossier-footer"
+    const mm = gsap.matchMedia()
+    mm.add("(max-width: 768px)", () => {
+      const getMobileDossierEls = () => {
+        const panel = container.current?.querySelector(".flagship-monolith-panel.expanded")
+        if (!panel) return []
+        return Array.from(
+          panel.querySelectorAll(
+            ".flagship-dossier-top, .flagship-dossier-district, .flagship-dossier-city, .flagship-spec-grid, .flagship-dossier-footer"
+          )
+        ) as HTMLElement[]
+      }
+
+      const playMobileDossier = (delaySec: number) => {
+        const els = getMobileDossierEls()
+        if (!els.length) return
+        gsap.killTweensOf(els)
+        gsap.fromTo(
+          els,
+          { y: -12, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.08,
+            delay: delaySec,
+            ease: "power3.out",
+            overwrite: "auto",
+          }
         )
-      ) as HTMLElement[]
-    }
-
-    const playDossierStagger = (switchingTab: boolean) => {
-      const els = getDossierEls()
-      if (!els.length) return
-      const isCompact = window.innerWidth <= 768
-      // Sur desktop, la cascade CSS native gère le changement d'étape ; GSAP anime les entrées/sorties au scroll
-      if (!isCompact && switchingTab) {
-        gsap.set(els, { clearProps: "opacity,transform" })
-        return
       }
-      gsap.killTweensOf(els)
-      gsap.fromTo(
-        els,
-        { y: -14, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.56,
-          stagger: 0.085,
-          delay: switchingTab ? 0.06 : 0.14,
-          ease: "power3.out",
+
+      const hideMobileDossier = () => {
+        const els = getMobileDossierEls()
+        if (!els.length) return
+        gsap.killTweensOf(els)
+        gsap.to(els, {
+          y: 10,
+          opacity: 0,
+          duration: 0.25,
+          stagger: 0.03,
+          ease: "power2.in",
           overwrite: "auto",
-          onComplete: () => {
-            if (window.innerWidth > 768) {
-              gsap.set(els, { clearProps: "opacity,transform" })
-            }
-          },
-        }
-      )
-    }
-
-    const hideDossierStagger = () => {
-      const els = getDossierEls()
-      if (!els.length) return
-      gsap.killTweensOf(els)
-      gsap.to(els, {
-        y: 10,
-        opacity: 0,
-        duration: 0.3,
-        stagger: 0.03,
-        ease: "power2.in",
-        overwrite: "auto",
-      })
-    }
-
-    const track = container.current?.querySelector(".flagship-accordion-track") as HTMLElement | null
-    if (isTabSwitch) {
-      playDossierStagger(true)
-    } else if (track && window.innerWidth <= 768) {
-      const rect = track.getBoundingClientRect()
-      const vh = window.innerHeight || 800
-      if (rect.top <= vh * 0.84 && rect.bottom >= vh * 0.12) {
-        playDossierStagger(false)
-      } else {
-        const els = getDossierEls()
-        if (els.length) gsap.set(els, { y: -14, opacity: 0 })
+        })
       }
-    }
 
-    if (!track) return
+      const track = container.current?.querySelector(".flagship-accordion-track") as HTMLElement | null
+      if (isTabSwitch) {
+        playMobileDossier(0.05)
+      } else if (track) {
+        const rect = track.getBoundingClientRect()
+        const vh = window.innerHeight || 800
+        if (rect.top <= vh * 0.85 && rect.bottom >= vh * 0.12) {
+          playMobileDossier(0.1)
+        } else {
+          const els = getMobileDossierEls()
+          if (els.length) gsap.set(els, { y: -12, opacity: 0 })
+        }
+      }
 
-    const st = ScrollTrigger.create({
-      trigger: track,
-      start: "top 84%",
-      end: "bottom 12%",
-      onEnter: () => playDossierStagger(false),
-      onEnterBack: () => playDossierStagger(false),
-      onLeave: hideDossierStagger,
-      onLeaveBack: hideDossierStagger,
+      if (!track) return
+      const st = ScrollTrigger.create({
+        trigger: track,
+        start: "top 85%",
+        end: "bottom 12%",
+        onEnter: () => playMobileDossier(0.1),
+        onEnterBack: () => playMobileDossier(0.1),
+        onLeave: hideMobileDossier,
+        onLeaveBack: hideMobileDossier,
+      })
+
+      return () => {
+        st.kill()
+      }
     })
 
     return () => {
-      st.kill()
+      mm.revert()
     }
   }, [activeStudioId])
 
   useGSAP(
     () => {
       ScrollTrigger.config({ ignoreMobileResize: true })
-      // Hero Animation — bidirectionnelle (chargement + scroll-down / scroll-up)
-      gsap.fromTo(
-        ".hero-element",
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: "power3.out",
-          clearProps: "transform",
-          scrollTrigger: {
-            trigger: ".home-hero",
-            start: "top 95%",
-            end: "bottom 10%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
 
-      // Scroll-Down & Scroll-Up Animation for Trending Now Header
-      const trendingHeader = document.querySelector(".home-section-header")
-      if (trendingHeader) {
+      // Helpers partagés mais instanciés de manière isolée par breakpoint (PC vs Mobile)
+      const bindPinnedHorizontalSections = (isCompact: boolean) => {
+        const pinnedSection = document.querySelector(".events-pinned-section") as HTMLElement | null
+        const cardsTrack = document.querySelector(".events-cards-track") as HTMLElement | null
+        const leftPanel = document.querySelector(".events-left-panel") as HTMLElement | null
+        const eventCards = document.querySelectorAll(".events-cards-track .event-card")
+
+        const whyChooseSec = document.querySelector(".why-choose-section") as HTMLElement | null
+        const whyCardsTrack = document.querySelector(".why-choose-cards-track") as HTMLElement | null
+        const whyRightPanel = document.querySelector(".why-choose-right-panel") as HTMLElement | null
+        const whyCards = document.querySelectorAll(".why-choose-card-item")
+
+        let updateEventCardsVisibility = () => {}
+        let updateWhyCardsVisibility = () => {}
+
+        const updateCardTrackVisibility = (
+          sec: HTMLElement,
+          sideItems: NodeListOf<Element>,
+          progressEl: HTMLElement | null,
+          cards: NodeListOf<Element>,
+          skipActiveClass: string | null,
+          sideOffset: number,
+          cardOffset: number
+        ) => {
+          const vw = window.innerWidth
+          const vh = window.innerHeight
+          const easeOut = gsap.parseEase("power2.out")
+          const secRect = sec.getBoundingClientRect()
+
+          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.94 - secRect.top) / (vh * 0.72))
+          const bottomVis = easeOut(rawEnterBottom)
+          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.06) / (vh * 0.72))
+          const topVis = easeOut(rawEnterTop)
+          const vertVis = Math.min(bottomVis, topVis)
+          const vertDir = secRect.top > 4 ? 1 : secRect.bottom < vh - 4 ? -1 : 0
+
+          sideItems.forEach((item, idx) => {
+            const staggerStart = idx * 0.085
+            const itemRaw = gsap.utils.clamp(0, 1, (rawEnterBottom - staggerStart) / (1 - staggerStart))
+            const itemVis = easeOut(itemRaw) * topVis
+            gsap.set(item, {
+              opacity: itemVis,
+              y: sideOffset * (1 - itemVis) * (vertDir || 1),
+              scale: 0.96 + 0.04 * itemVis,
+            })
+          })
+
+          if (progressEl) {
+            gsap.set(progressEl, { opacity: vertVis, y: 20 * (1 - vertVis) })
+          }
+
+          const leftThreshold = isCompact ? vw * 0.06 : vw * 0.1
+          const rightThreshold = isCompact ? vw * 0.68 : vw * 0.55
+          const span = vw * 0.32
+
+          cards.forEach((card) => {
+            const el = card as HTMLElement
+            if (skipActiveClass && el.classList.contains(skipActiveClass)) return
+            const rect = el.getBoundingClientRect()
+            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - leftThreshold) / span)
+            const leftVis = easeOut(rawLeft)
+            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - rightThreshold) / span)
+            const rightVis = easeOut(rawRight)
+            const horizVis = Math.min(leftVis, rightVis)
+
+            const horizY = (isCompact ? 24 : 40) * (1 - horizVis)
+            const vertY = cardOffset * (1 - vertVis) * vertDir
+            const finalOpacity =
+              (isCompact ? 0.45 + 0.55 * horizVis : 0.3 + 0.7 * horizVis) * (0.18 + 0.82 * vertVis)
+            const finalScale = (0.94 + 0.06 * horizVis) * (0.93 + 0.07 * vertVis)
+
+            gsap.set(el, { opacity: finalOpacity, y: horizY + vertY, scale: finalScale })
+          })
+        }
+
+        if (pinnedSection && cardsTrack && leftPanel) {
+          const progressBarFill = document.querySelector(".events-progress-bar-fill") as HTMLElement | null
+          const progressBarContainer = document.querySelector(".events-progress-bar-container") as HTMLElement | null
+          const leftPanelItems = leftPanel.querySelectorAll(
+            ".testimonials-pill-badge, .events-left-title, .events-left-subtitle, .events-left-scroll-hint"
+          )
+          const getScrollAmount = () => Math.max(0, cardsTrack.scrollWidth - window.innerWidth)
+
+          updateEventCardsVisibility = () =>
+            updateCardTrackVisibility(
+              pinnedSection,
+              leftPanelItems,
+              progressBarContainer,
+              eventCards,
+              null,
+              isCompact ? 28 : 42,
+              isCompact ? 34 : 55
+            )
+
+          const timeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: pinnedSection,
+              pin: true,
+              scrub: 0.8,
+              start: "top top",
+              end: () => `+=${getScrollAmount() + 400}`,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onUpdate: updateEventCardsVisibility,
+              onRefresh: updateEventCardsVisibility,
+            },
+          })
+
+          timeline.to(
+            cardsTrack,
+            { x: () => -getScrollAmount(), ease: "none", onUpdate: updateEventCardsVisibility },
+            0
+          )
+          updateEventCardsVisibility()
+
+          if (progressBarFill) {
+            timeline.to(progressBarFill, { width: "100%", ease: "none" }, 0)
+          }
+          timeline.to(leftPanel, { opacity: 0, scale: 0.92, ease: "power2.out", duration: 0.25 }, 0)
+        }
+
+        if (whyChooseSec && whyCardsTrack && whyRightPanel) {
+          const whyProgressBarFill = document.querySelector(".why-choose-progress-bar-fill") as HTMLElement | null
+          const whyProgressBarContainer = document.querySelector(".why-choose-progress-bar-container") as HTMLElement | null
+          const whyRightItems = whyRightPanel.querySelectorAll(
+            ".why-choose-badge, .why-choose-title, .why-choose-list-item, .why-choose-actions-row"
+          )
+          const getWhyScrollAmount = () => Math.max(0, whyCardsTrack.scrollWidth - window.innerWidth)
+
+          updateWhyCardsVisibility = () =>
+            updateCardTrackVisibility(
+              whyChooseSec,
+              whyRightItems,
+              whyProgressBarContainer,
+              whyCards,
+              "why-card-modal-active",
+              isCompact ? 26 : 38,
+              isCompact ? 34 : 55
+            )
+
+          const whyTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: whyChooseSec,
+              pin: true,
+              scrub: 0.8,
+              start: "top top",
+              end: () => `+=${getWhyScrollAmount() + 400}`,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onUpdate: updateWhyCardsVisibility,
+              onRefresh: updateWhyCardsVisibility,
+            },
+          })
+
+          whyTimeline.fromTo(
+            whyCardsTrack,
+            { x: () => -getWhyScrollAmount() },
+            { x: 0, ease: "none", onUpdate: updateWhyCardsVisibility },
+            0
+          )
+          gsap.set(whyCardsTrack, { x: -getWhyScrollAmount() })
+          updateWhyCardsVisibility()
+
+          if (whyProgressBarFill) {
+            whyTimeline.to(whyProgressBarFill, { width: "100%", ease: "none" }, 0)
+          }
+          whyTimeline.to(whyRightPanel, { opacity: 0, scale: 0.92, ease: "power2.out", duration: 0.25 }, 0)
+        }
+
+        let rAFId: number | null = null
+        const handleVerticalScrollReveal = () => {
+          if (rAFId !== null) return
+          rAFId = requestAnimationFrame(() => {
+            updateEventCardsVisibility()
+            updateWhyCardsVisibility()
+            rAFId = null
+          })
+        }
+        window.addEventListener("scroll", handleVerticalScrollReveal, { passive: true })
+        window.addEventListener("resize", handleVerticalScrollReveal, { passive: true })
+
+        return () => {
+          if (rAFId !== null) cancelAnimationFrame(rAFId)
+          window.removeEventListener("scroll", handleVerticalScrollReveal)
+          window.removeEventListener("resize", handleVerticalScrollReveal)
+        }
+      }
+
+      const mm = gsap.matchMedia()
+
+      // =========================================================================
+      // BRANCHE DESKTOP PC (>= 769px) — Animations originales intactes, zéro collision mobile
+      // =========================================================================
+      mm.add("(min-width: 769px)", () => {
         gsap.fromTo(
-          trendingHeader,
-          { opacity: 0, y: 35 },
+          ".hero-element",
+          { y: 28, opacity: 0 },
           {
-            opacity: 1,
             y: 0,
-            duration: 0.7,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: "power3.out",
+            clearProps: "transform",
+            scrollTrigger: {
+              trigger: ".home-hero",
+              start: "top 95%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        )
+
+        const trendingHeader = document.querySelector(".home-section-header")
+        if (trendingHeader) {
+          gsap.fromTo(
+            trendingHeader,
+            { opacity: 0, y: 35 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: trendingHeader,
+                start: "top 88%",
+                end: "bottom 12%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        const ribbonSec = document.querySelector(".section-separator-ribbon")
+        if (ribbonSec) {
+          gsap.fromTo(
+            ribbonSec,
+            { opacity: 0, y: 26 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ribbonSec,
+                start: "top 90%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        const testimonialsHeaderItems = document.querySelectorAll(
+          ".testimonials-header .testimonials-pill-badge, .testimonials-header .testimonials-title, .testimonials-header .testimonials-subtitle"
+        )
+        if (testimonialsHeaderItems.length > 0) {
+          gsap.fromTo(
+            testimonialsHeaderItems,
+            { opacity: 0, y: 35, scale: 0.96 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.7,
+              stagger: 0.1,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ".testimonials-container",
+                start: "top 82%",
+                end: "bottom 18%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        // Avatars Témoignages en UN SEUL mouvement fluide (zéro conflit translate(-50%, -50%) / CSS transition)
+        gsap.fromTo(
+          ".testimonial-avatar-wrapper",
+          { xPercent: -50, yPercent: -50, y: 28, scale: 0.85, opacity: 0 },
+          {
+            xPercent: -50,
+            yPercent: -50,
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.65,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: trendingHeader,
+              trigger: ".testimonials-container",
+              start: "top 84%",
+              end: "bottom 14%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        )
+
+        const editionsSection = document.querySelector(".featured-carousel-section") as HTMLElement | null
+        if (editionsSection) {
+          const headerElements = editionsSection.querySelectorAll(
+            ".carousel-badge, .featured-carousel-title, .featured-carousel-subtitle"
+          )
+          gsap.fromTo(
+            headerElements,
+            { opacity: 0, y: 35 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: editionsSection,
+                start: "top 82%",
+                end: "bottom 18%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+
+          const mzaCarousel = editionsSection.querySelector(".mzaCarousel")
+          if (mzaCarousel) {
+            gsap.fromTo(
+              mzaCarousel,
+              { opacity: 0, scale: 0.94, y: 40 },
+              {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.9,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: editionsSection,
+                  start: "top 75%",
+                  end: "bottom 20%",
+                  toggleActions: "play reverse play reverse",
+                },
+              }
+            )
+          }
+        }
+
+        const cleanupPinned = bindPinnedHorizontalSections(false)
+
+        // Flagship Studios Section Desktop — ScrollTrigger d'origine (textes animés par la cascade CSS native intacte)
+        gsap.fromTo(
+          ".flagship-reveal-header",
+          { y: 48, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".flagship-studios-section",
+              start: "top 82%",
+              end: "bottom 14%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        )
+
+        gsap.fromTo(
+          ".flagship-monolith-panel",
+          { y: 70, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.95,
+            stagger: 0.08,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".flagship-accordion-track",
+              start: "top 82%",
+              end: "bottom 12%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        )
+
+        gsap.fromTo(
+          ".contact-reveal",
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".contact-atelier-section",
+              start: "top 84%",
+              end: "bottom 12%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        )
+
+        const footerBlocks = document.querySelectorAll(".site-footer .footer-cta-banner, .site-footer .footer-main-grid > *, .site-footer .footer-bottom")
+        if (footerBlocks.length > 0) {
+          gsap.fromTo(
+            footerBlocks,
+            { y: 30, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.7,
+              stagger: 0.08,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ".site-footer",
+                start: "top 88%",
+                end: "bottom 5%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        return cleanupPinned
+      })
+
+      // =========================================================================
+      // BRANCHE RESPONSIVE MOBILE (<= 768px) — Couverture complète & isolée
+      // =========================================================================
+      mm.add("(max-width: 768px)", () => {
+        gsap.fromTo(
+          ".hero-element",
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.72,
+            stagger: 0.09,
+            ease: "power3.out",
+            clearProps: "transform",
+            scrollTrigger: {
+              trigger: ".home-hero",
+              start: "top 96%",
+              end: "bottom 8%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        )
+
+        const trendingHeader = document.querySelector(".home-section-header")
+        if (trendingHeader) {
+          gsap.fromTo(
+            trendingHeader,
+            { opacity: 0, y: 26 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: trendingHeader,
+                start: "top 90%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        const catBar = document.querySelector(".trending-categories")
+        if (catBar) {
+          gsap.fromTo(
+            catBar,
+            { opacity: 0, y: 18 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.55,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: catBar,
+                start: "top 92%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        const ribbonSec = document.querySelector(".section-separator-ribbon")
+        if (ribbonSec) {
+          gsap.fromTo(
+            ribbonSec,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ribbonSec,
+                start: "top 92%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        const mobileTestimonialsTargets = document.querySelectorAll(
+          ".testimonials-header .testimonials-pill-badge, .testimonials-header .testimonials-title, .testimonials-header .testimonials-subtitle, .testimonials-orbit-canvas, .testimonial-mobile-card"
+        )
+        if (mobileTestimonialsTargets.length > 0) {
+          gsap.fromTo(
+            mobileTestimonialsTargets,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.62,
+              stagger: 0.08,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ".testimonials-container",
+                start: "top 88%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+        }
+
+        const editionsSection = document.querySelector(".featured-carousel-section") as HTMLElement | null
+        if (editionsSection) {
+          const headerElements = editionsSection.querySelectorAll(
+            ".carousel-badge, .featured-carousel-title, .featured-carousel-subtitle"
+          )
+          gsap.fromTo(
+            headerElements,
+            { opacity: 0, y: 26 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              stagger: 0.1,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: editionsSection,
+                start: "top 88%",
+                end: "bottom 12%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          )
+
+          const mzaCarousel = editionsSection.querySelector(".mzaCarousel")
+          if (mzaCarousel) {
+            gsap.fromTo(
+              mzaCarousel,
+              { opacity: 0, scale: 0.96, y: 28 },
+              {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.72,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: editionsSection,
+                  start: "top 82%",
+                  end: "bottom 12%",
+                  toggleActions: "play reverse play reverse",
+                },
+              }
+            )
+          }
+        }
+
+        const cleanupMobilePinned = bindPinnedHorizontalSections(true)
+
+        gsap.fromTo(
+          ".flagship-reveal-header",
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.65,
+            stagger: 0.08,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".flagship-studios-section",
               start: "top 88%",
               end: "bottom 12%",
               toggleActions: "play reverse play reverse",
             },
           }
         )
-      }
 
-      // Scroll-Down & Scroll-Up Animation for Testimonials Header & Avatars
-      const testimonialsHeaderItems = document.querySelectorAll(
-        ".testimonials-header .testimonials-pill-badge, .testimonials-header .testimonials-title, .testimonials-header .testimonials-subtitle"
-      )
-      if (testimonialsHeaderItems.length > 0) {
         gsap.fromTo(
-          testimonialsHeaderItems,
-          { opacity: 0, y: 35, scale: 0.96 },
+          ".flagship-monolith-panel.expanded",
+          { y: 36, opacity: 0, scale: 0.97 },
           {
-            opacity: 1,
             y: 0,
+            opacity: 1,
             scale: 1,
-            duration: 0.75,
-            stagger: 0.12,
+            duration: 0.7,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: ".testimonials-container",
-              start: "top 82%",
-              end: "bottom 18%",
-              toggleActions: "play reverse play reverse",
-            },
-          }
-        )
-      }
-
-      gsap.fromTo(
-        ".testimonial-avatar-wrapper",
-        { scale: 0.85, opacity: 0, y: 35 },
-        {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "back.out(1.4)",
-          clearProps: "transform",
-          scrollTrigger: {
-            trigger: ".testimonials-container",
-            start: "top 88%",
-            end: "bottom 12%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      // GSAP Pinned Horizontal Scroll Section ("Workshops & Events") with Horizontal + Vertical (Scroll-Down / Scroll-Up) Reveal
-      const pinnedSection = document.querySelector(".events-pinned-section") as HTMLElement
-      const cardsTrack = document.querySelector(".events-cards-track") as HTMLElement
-      const leftPanel = document.querySelector(".events-left-panel") as HTMLElement
-      const eventCards = document.querySelectorAll(".events-cards-track .event-card")
-
-      let updateEventCardsVisibility = () => {}
-      let updateWhyCardsVisibility = () => {}
-
-      if (pinnedSection && cardsTrack && leftPanel) {
-        const progressBarFill = document.querySelector(".events-progress-bar-fill") as HTMLElement
-        const progressBarContainer = document.querySelector(".events-progress-bar-container") as HTMLElement
-        const leftPanelItems = leftPanel.querySelectorAll(
-          ".testimonials-pill-badge, .events-left-title, .events-left-subtitle, .events-left-scroll-hint"
-        )
-
-        const getScrollAmount = () => {
-          return Math.max(0, cardsTrack.scrollWidth - window.innerWidth)
-        }
-
-        updateEventCardsVisibility = () => {
-          const vw = window.innerWidth
-          const vh = window.innerHeight
-          const isCompact = vw <= 768
-          const easeOut = gsap.parseEase("power2.out")
-          const secRect = pinnedSection.getBoundingClientRect()
-
-          // Vertical visibility when scrolling down into section (bottom edge) or scrolling up into section (top edge)
-          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.94 - secRect.top) / (vh * 0.72))
-          const bottomVis = easeOut(rawEnterBottom)
-          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.06) / (vh * 0.72))
-          const topVis = easeOut(rawEnterTop)
-          const vertVis = Math.min(bottomVis, topVis)
-
-          // Direction-aware vertical offset (+y when below screen, -y when above screen)
-          const vertDir = secRect.top > 4 ? 1 : secRect.bottom < vh - 4 ? -1 : 0
-
-          // Staggered vertical reveal for left text panel items on scroll-down / scroll-up
-          leftPanelItems.forEach((item, idx) => {
-            const staggerStart = idx * 0.09
-            const itemRaw = gsap.utils.clamp(0, 1, (rawEnterBottom - staggerStart) / (1 - staggerStart))
-            const itemVis = easeOut(itemRaw) * topVis
-            gsap.set(item, {
-              opacity: itemVis,
-              y: (isCompact ? 28 : 42) * (1 - itemVis) * (vertDir || 1),
-              scale: 0.96 + 0.04 * itemVis,
-            })
-          })
-
-          if (progressBarContainer) {
-            gsap.set(progressBarContainer, {
-              opacity: vertVis,
-              y: 22 * (1 - vertVis),
-            })
-          }
-
-          eventCards.forEach((card) => {
-            const el = card as HTMLElement
-            const rect = el.getBoundingClientRect()
-            const leftThreshold = isCompact ? vw * 0.06 : vw * 0.1
-            const rightThreshold = isCompact ? vw * 0.68 : vw * 0.55
-            const span = vw * 0.32
-            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - leftThreshold) / span)
-            const leftVis = easeOut(rawLeft)
-            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - rightThreshold) / span)
-            const rightVis = easeOut(rawRight)
-            const horizVis = Math.min(leftVis, rightVis)
-
-            // Combined Horizontal + Vertical visibility
-            const horizY = (isCompact ? 24 : 40) * (1 - horizVis)
-            const vertY = (isCompact ? 34 : 55) * (1 - vertVis) * vertDir
-            const finalOpacity = (isCompact ? 0.45 + 0.55 * horizVis : 0.3 + 0.7 * horizVis) * (0.18 + 0.82 * vertVis)
-            const finalScale = (0.94 + 0.06 * horizVis) * (0.93 + 0.07 * vertVis)
-
-            gsap.set(el, {
-              opacity: finalOpacity,
-              y: horizY + vertY,
-              scale: finalScale,
-            })
-          })
-        }
-
-        const timeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: pinnedSection,
-            pin: true,
-            scrub: 0.8,
-            start: "top top",
-            end: () => `+=${getScrollAmount() + 400}`,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: updateEventCardsVisibility,
-            onRefresh: updateEventCardsVisibility,
-          },
-        })
-
-        // 1. Move horizontal cards track to the left
-        timeline.to(
-          cardsTrack,
-          {
-            x: () => -getScrollAmount(),
-            ease: "none",
-            onUpdate: updateEventCardsVisibility,
-          },
-          0
-        )
-
-        // Initial visibility state
-        updateEventCardsVisibility()
-
-        // 2. Real-time scroll progress bar fill
-        if (progressBarFill) {
-          timeline.to(
-            progressBarFill,
-            {
-              width: "100%",
-              ease: "none",
-            },
-            0
-          )
-        }
-
-        // 3. Fade out left text panel as cards glide over it
-        timeline.to(
-          leftPanel,
-          {
-            opacity: 0,
-            scale: 0.92,
-            ease: "power2.out",
-            duration: 0.25,
-          },
-          0
-        )
-      }
-
-      // GSAP Scroll-Down & Scroll-Up Animation for Éditions Limitées section
-      const editionsSection = document.querySelector(".featured-carousel-section") as HTMLElement
-      if (editionsSection) {
-        const headerElements = editionsSection.querySelectorAll(".carousel-badge, .featured-carousel-title, .featured-carousel-subtitle")
-        gsap.fromTo(
-          headerElements,
-          { opacity: 0, y: 35 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: editionsSection,
-              start: "top 82%",
-              end: "bottom 18%",
+              trigger: ".flagship-accordion-track",
+              start: "top 88%",
+              end: "bottom 10%",
               toggleActions: "play reverse play reverse",
             },
           }
         )
 
-        const mzaCarousel = editionsSection.querySelector(".mzaCarousel")
-        if (mzaCarousel) {
+        const mobileContactItems = document.querySelectorAll(
+          ".contact-atelier-section .contact-header-bar, .contact-atelier-section .contact-hero-sync-card, .contact-atelier-section .contact-coord-card, .contact-atelier-section .contact-form-card"
+        )
+        if (mobileContactItems.length > 0) {
           gsap.fromTo(
-            mzaCarousel,
-            { opacity: 0, scale: 0.94, y: 40 },
+            mobileContactItems,
+            { y: 26, opacity: 0 },
             {
-              opacity: 1,
-              scale: 1,
               y: 0,
-              duration: 0.9,
+              opacity: 1,
+              duration: 0.65,
+              stagger: 0.09,
               ease: "power3.out",
               scrollTrigger: {
-                trigger: editionsSection,
-                start: "top 75%",
-                end: "bottom 20%",
+                trigger: ".contact-atelier-section",
+                start: "top 88%",
+                end: "bottom 8%",
                 toggleActions: "play reverse play reverse",
               },
             }
           )
         }
-      }
 
-      // GSAP Pinned Horizontal Scroll for Why Choose Sunset Section (Reverse: Left to Right, Text on Right) + Vertical Scroll-Down / Scroll-Up Reveal
-      const whyChooseSec = document.querySelector(".why-choose-section") as HTMLElement
-      const whyCardsTrack = document.querySelector(".why-choose-cards-track") as HTMLElement
-      const whyRightPanel = document.querySelector(".why-choose-right-panel") as HTMLElement
-      const whyCards = document.querySelectorAll(".why-choose-card-item")
-
-      if (whyChooseSec && whyCardsTrack && whyRightPanel) {
-        const whyProgressBarFill = document.querySelector(".why-choose-progress-bar-fill") as HTMLElement
-        const whyProgressBarContainer = document.querySelector(".why-choose-progress-bar-container") as HTMLElement
-        const whyRightItems = whyRightPanel.querySelectorAll(
-          ".why-choose-badge, .why-choose-title, .why-choose-list-item, .why-choose-actions-row"
-        )
-
-        const getWhyScrollAmount = () => {
-          return Math.max(0, whyCardsTrack.scrollWidth - window.innerWidth)
-        }
-
-        updateWhyCardsVisibility = () => {
-          const vw = window.innerWidth
-          const vh = window.innerHeight
-          const isCompact = vw <= 768
-          const easeOut = gsap.parseEase("power2.out")
-          const secRect = whyChooseSec.getBoundingClientRect()
-
-          // Vertical visibility when scrolling down into section (bottom edge) or scrolling up into section (top edge)
-          const rawEnterBottom = gsap.utils.clamp(0, 1, (vh * 0.94 - secRect.top) / (vh * 0.72))
-          const bottomVis = easeOut(rawEnterBottom)
-          const rawEnterTop = gsap.utils.clamp(0, 1, (secRect.bottom - vh * 0.06) / (vh * 0.72))
-          const topVis = easeOut(rawEnterTop)
-          const vertVis = Math.min(bottomVis, topVis)
-
-          const vertDir = secRect.top > 4 ? 1 : secRect.bottom < vh - 4 ? -1 : 0
-
-          // Staggered vertical reveal for right text panel items on scroll-down / scroll-up
-          whyRightItems.forEach((item, idx) => {
-            const staggerStart = idx * 0.08
-            const itemRaw = gsap.utils.clamp(0, 1, (rawEnterBottom - staggerStart) / (1 - staggerStart))
-            const itemVis = easeOut(itemRaw) * topVis
-            gsap.set(item, {
-              opacity: itemVis,
-              y: (isCompact ? 26 : 38) * (1 - itemVis) * (vertDir || 1),
-              scale: 0.96 + 0.04 * itemVis,
-            })
-          })
-
-          if (whyProgressBarContainer) {
-            gsap.set(whyProgressBarContainer, {
-              opacity: vertVis,
-              y: 22 * (1 - vertVis),
-            })
-          }
-
-          whyCards.forEach((card) => {
-            const el = card as HTMLElement
-            if (el.classList.contains("why-card-modal-active")) return
-            const rect = el.getBoundingClientRect()
-            const leftThreshold = isCompact ? vw * 0.06 : vw * 0.1
-            const rightThreshold = isCompact ? vw * 0.68 : vw * 0.55
-            const span = vw * 0.32
-            const rawLeft = gsap.utils.clamp(0, 1, (rect.right - leftThreshold) / span)
-            const leftVis = easeOut(rawLeft)
-            const rawRight = gsap.utils.clamp(0, 1, 1 - (rect.left - rightThreshold) / span)
-            const rightVis = easeOut(rawRight)
-            const horizVis = Math.min(leftVis, rightVis)
-
-            // Combined Horizontal + Vertical visibility
-            const horizY = (isCompact ? 24 : 40) * (1 - horizVis)
-            const vertY = (isCompact ? 34 : 55) * (1 - vertVis) * vertDir
-            const finalOpacity = (isCompact ? 0.45 + 0.55 * horizVis : 0.3 + 0.7 * horizVis) * (0.18 + 0.82 * vertVis)
-            const finalScale = (0.94 + 0.06 * horizVis) * (0.93 + 0.07 * vertVis)
-
-            gsap.set(el, {
-              opacity: finalOpacity,
-              y: horizY + vertY,
-              scale: finalScale,
-            })
-          })
-        }
-
-        const whyTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: whyChooseSec,
-            pin: true,
-            scrub: 0.8,
-            start: "top top",
-            end: () => `+=${getWhyScrollAmount() + 400}`,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: updateWhyCardsVisibility,
-            onRefresh: updateWhyCardsVisibility,
-          },
-        })
-
-        // 1. Move horizontal cards track from LEFT to RIGHT
-        whyTimeline.fromTo(
-          whyCardsTrack,
-          {
-            x: () => -getWhyScrollAmount(),
-          },
-          {
-            x: 0,
-            ease: "none",
-            onUpdate: updateWhyCardsVisibility,
-          },
-          0
-        )
-
-        // Initial positioning & visibility state
-        gsap.set(whyCardsTrack, { x: -getWhyScrollAmount() })
-        updateWhyCardsVisibility()
-
-        // 2. Real-time scroll progress bar fill
-        if (whyProgressBarFill) {
-          whyTimeline.to(
-            whyProgressBarFill,
+        const footerBlocks = document.querySelectorAll(".site-footer .footer-cta-banner, .site-footer .footer-main-grid > *, .site-footer .footer-bottom")
+        if (footerBlocks.length > 0) {
+          gsap.fromTo(
+            footerBlocks,
+            { y: 24, opacity: 0 },
             {
-              width: "100%",
-              ease: "none",
-            },
-            0
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.07,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ".site-footer",
+                start: "top 92%",
+                end: "bottom 5%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
           )
         }
 
-        // 3. Fade out right text panel as cards glide over it from left to right
-        whyTimeline.to(
-          whyRightPanel,
-          {
-            opacity: 0,
-            scale: 0.92,
-            ease: "power2.out",
-            duration: 0.25,
-          },
-          0
-        )
-      }
+        return cleanupMobilePinned
+      })
 
-      // Continuous vertical scroll listener across ALL breakpoints so scroll-down and scroll-up entry/exit before & after pinning is 100% real-time (throttled with rAF)
-      let rAFId: number | null = null
-      const handleVerticalScrollReveal = () => {
-        if (rAFId !== null) return
-        rAFId = requestAnimationFrame(() => {
-          updateEventCardsVisibility()
-          updateWhyCardsVisibility()
-          rAFId = null
-        })
-      }
-      window.addEventListener("scroll", handleVerticalScrollReveal, { passive: true })
-      window.addEventListener("resize", handleVerticalScrollReveal, { passive: true })
-
-      // Flagship Studios Section — Scroll-Down & Scroll-Up Reveal
-      gsap.fromTo(
-        ".flagship-reveal-header",
-        { y: 48, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".flagship-studios-section",
-            start: "top 82%",
-            end: "bottom 14%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      gsap.fromTo(
-        ".flagship-monolith-panel",
-        { y: 70, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.95,
-          stagger: 0.08,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".flagship-accordion-track",
-            start: "top 82%",
-            end: "bottom 12%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      // Contact Atelier Section — Smooth Reveal
-      gsap.fromTo(
-        ".contact-reveal",
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.85,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".contact-atelier-section",
-            start: "top 84%",
-            end: "bottom 12%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      )
-
-      // Infinite Marquee for announcements
+      // Infinite Marquee for announcements (commun)
       gsap.to(".marquee-inner", {
         xPercent: -50,
         ease: "none",
@@ -4672,8 +4862,7 @@ export default function Home() {
       })
 
       return () => {
-        window.removeEventListener("scroll", handleVerticalScrollReveal)
-        window.removeEventListener("resize", handleVerticalScrollReveal)
+        mm.revert()
       }
     },
     { scope: container },
@@ -5771,7 +5960,17 @@ export default function Home() {
                             className="why-choose-card-cta"
                             onClick={(e) => openWhyCardModal(card, e)}
                           >
-                            {bookedWhySessions.includes(card.id) ? "Session Réservée ✓" : card.ctaText}
+                            <span className="contact-liquid-blobs why-cta-liquid-blobs" aria-hidden="true">
+                              <span className="contact-liquid-blob b-1" />
+                              <span className="contact-liquid-blob b-2" />
+                              <span className="contact-liquid-blob b-3" />
+                              <span className="contact-liquid-blob b-4" />
+                              <span className="contact-liquid-blob b-5" />
+                              <span className="contact-liquid-blob b-6" />
+                            </span>
+                            <span className="why-cta-btn-label">
+                              {bookedWhySessions.includes(card.id) ? "Session Réservée ✓" : card.ctaText}
+                            </span>
                           </button>
                           <button
                             type="button"
